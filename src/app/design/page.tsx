@@ -102,7 +102,7 @@ export default function DesignPage() {
 
         <div className="relative z-10 text-center px-6">
           <p className="text-sm uppercase tracking-[0.4em] mb-8 opacity-50">UI / UX · Figma</p>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[11rem] font-serif tracking-tighter leading-none drop-shadow-2xl">
+          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[11rem] font-semibold tracking-tighter leading-none drop-shadow-2xl">
             Design
           </h1>
           <p className="mt-8 text-base md:text-lg opacity-50 max-w-md mx-auto leading-relaxed">
@@ -116,7 +116,7 @@ export default function DesignPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-black/10 dark:border-white/20 pt-10">
             <div>
-              <h2 className="text-3xl md:text-5xl font-serif tracking-tight leading-tight text-black/90 dark:text-white/90">
+              <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight text-black/90 dark:text-white/90">
                 Interfaces pensées pour l&apos;utilisateur
               </h2>
             </div>
@@ -160,7 +160,7 @@ export default function DesignPage() {
                     </span>
                   </div>
 
-                  <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-5">
+                  <h2 className="text-4xl md:text-6xl font-semibold leading-tight mb-5">
                     {projet.name}
                   </h2>
 
@@ -266,7 +266,7 @@ export default function DesignPage() {
         <div className="max-w-5xl mx-auto">
           <div ref={addRef} className="mb-16 text-center md:text-left">
             <p className="text-sm font-medium opacity-50 tracking-widest uppercase mb-4">Outils & méthodes</p>
-            <h2 className="text-4xl md:text-6xl font-serif leading-tight">
+            <h2 className="text-4xl md:text-6xl font-semibold leading-tight">
               Stack Design
             </h2>
           </div>
@@ -287,10 +287,10 @@ export default function DesignPage() {
 
       {/* FOOTER NAV */}
       <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 bg-white dark:bg-[#050505] border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           ← Projets Perso
         </a>
-        <a href="/competences" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+        <a href="/competences" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           Compétences →
         </a>
       </section>

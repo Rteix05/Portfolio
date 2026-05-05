@@ -96,10 +96,10 @@ export default function ProjetsScolairesPage() {
         
         <div className="relative z-10 text-center">
           <p className="text-sm uppercase tracking-[0.3em] mb-6 opacity-60">BUT MMI</p>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-serif tracking-tighter leading-none drop-shadow-2xl">
+          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none drop-shadow-2xl">
             Projets
           </h1>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-serif tracking-tighter leading-none -mt-1 md:-mt-6 drop-shadow-2xl">
+          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none -mt-1 md:-mt-6 drop-shadow-2xl">
             Scolaires
           </h1>
         </div>
@@ -152,7 +152,7 @@ export default function ProjetsScolairesPage() {
                       );
                     })}
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-serif leading-tight mb-6">
+                  <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-6">
                     {projet.name}
                   </h2>
                   <p className="text-lg opacity-70 leading-relaxed mb-10">
@@ -199,10 +199,10 @@ export default function ProjetsScolairesPage() {
 
       {/* FOOTER */}
       <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 bg-gray-50 dark:bg-black border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <a href="/3d" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+        <a href="/3d" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           ← Projets 3D
         </a>
-        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-serif italic opacity-30 hover:opacity-100 transition-opacity cursor-pointer">
+        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic opacity-30 hover:opacity-100 transition-opacity cursor-pointer">
           Projets Perso →
         </a>
       </section>

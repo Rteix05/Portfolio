@@ -84,7 +84,7 @@ export default function Projets3DPage() {
         <section className="h-screen w-full relative overflow-hidden flex items-end pb-8 md:pb-16 pl-6 md:pl-10">
           <div className="max-w-4xl">
             <p className="text-sm uppercase tracking-[0.3em] text-white/60 mb-3 drop-shadow-md">3D & Interactive</p>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-serif tracking-tighter leading-none text-white drop-shadow-2xl">
+          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none text-white drop-shadow-2xl">
               Expériences 3D
             </h1>
           </div>
@@ -115,7 +115,7 @@ export default function Projets3DPage() {
             
             <div ref={addToTextRefs} className="max-w-md p-8 rounded-3xl backdrop-blur-md bg-black/40 border border-white/10 shadow-2xl">
               <p className="text-sm font-medium text-white/50 tracking-widest uppercase mb-4">Modélisation Blender</p>
-              <p className="text-3xl md:text-4xl font-serif leading-tight text-white/90 mb-6 drop-shadow-md">
+              <p className="text-3xl md:text-4xl font-semibold leading-tight text-white/90 mb-6 drop-shadow-md">
                 Reproduire fidèlement notre salle de cours de l&apos;IUT en 3D.
               </p>
               <p className="text-white/70 leading-relaxed text-lg">
@@ -125,7 +125,7 @@ export default function Projets3DPage() {
 
             <div ref={addToTextRefs} className="max-w-md p-8 rounded-3xl backdrop-blur-md bg-black/40 border border-white/10 shadow-2xl">
               <p className="text-sm font-medium text-white/50 tracking-widest uppercase mb-4">Workflow</p>
-              <p className="text-3xl md:text-4xl font-serif leading-tight text-white/90 mb-6 drop-shadow-md">
+              <p className="text-3xl md:text-4xl font-semibold leading-tight text-white/90 mb-6 drop-shadow-md">
                 Du plan papier au rendu photoréaliste.
               </p>
               <p className="text-white/70 leading-relaxed text-lg">
@@ -148,7 +148,7 @@ export default function Projets3DPage() {
         {/* 4. SECTION GRILLE — SKILLS */}
         <section className="py-24 px-6 md:px-10 border-t border-white/10 backdrop-blur-sm bg-black/30">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-serif leading-tight mb-20 max-w-4xl text-white/90 drop-shadow-xl">
+            <h2 className="text-4xl md:text-6xl font-semibold leading-tight mb-20 max-w-4xl text-white/90 drop-shadow-xl">
               De la conception dans Blender jusqu&apos;à l&apos;expérience interactive dans le navigateur.
             </h2>
 
@@ -160,7 +160,7 @@ export default function Projets3DPage() {
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 pointer-events-none">
                   <p className="text-xs uppercase tracking-widest text-white/60 mb-2 font-mono">Étape 1</p>
-                  <p className="text-2xl font-serif text-white drop-shadow-md">Modélisation & Texturing</p>
+                  <p className="text-2xl font-semibold text-white drop-shadow-md">Modélisation & Texturing</p>
                   <p className="text-sm text-white/70 mt-2">Blender · UV Unwrapping · Matériaux PBR · Export glTF</p>
                 </div>
               </div>
@@ -172,7 +172,7 @@ export default function Projets3DPage() {
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 pointer-events-none">
                   <p className="text-xs uppercase tracking-widest text-white/60 mb-2 font-mono">Étape 2</p>
-                  <p className="text-2xl font-serif text-white drop-shadow-md">Intégration Three.js</p>
+                  <p className="text-2xl font-semibold text-white drop-shadow-md">Intégration Three.js</p>
                   <p className="text-sm text-white/70 mt-2">React Three Fiber · GLSL Shaders · Post-processing · Animation</p>
                 </div>
               </div>
@@ -185,7 +185,7 @@ export default function Projets3DPage() {
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
                 <div className="w-full md:w-1/3 p-8 rounded-3xl backdrop-blur-md bg-black/40 border border-white/10 shadow-2xl">
                      <p className="text-sm font-medium text-white/50 tracking-widest uppercase mb-4 font-mono">Portfolio interactif</p>
-                     <h2 className="text-3xl md:text-5xl font-serif leading-tight text-white/90 mb-6">
+                     <h2 className="text-3xl md:text-5xl font-semibold leading-tight text-white/90 mb-6">
                         Modèles 3D intégrés via Three.js.
                      </h2>
                      <p className="text-white/70 leading-relaxed mb-4 text-lg">
@@ -213,10 +213,10 @@ export default function Projets3DPage() {
 
         {/* 6. FOOTER */}
         <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 border-t border-white/10 backdrop-blur-xl bg-black/60">
-           <a href="/a-propos" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-white/30 hover:text-white transition-colors cursor-pointer drop-shadow-lg">
+           <a href="/a-propos" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-white/30 hover:text-white transition-colors cursor-pointer drop-shadow-lg">
               ← À Propos
            </a>
-           <a href="/projets-scolaires" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-white/30 hover:text-white transition-colors cursor-pointer drop-shadow-lg">
+           <a href="/projets-scolaires" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-white/30 hover:text-white transition-colors cursor-pointer drop-shadow-lg">
               Projets Scolaires →
            </a>
         </section>

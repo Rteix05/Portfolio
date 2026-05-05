@@ -135,7 +135,7 @@ export default function AProposPage() {
 
           <div data-hero className="border-t border-black/10 dark:border-white/10 pt-8 flex items-end justify-between">
             <div>
-              <p className="text-black/60 dark:text-white/60 font-serif text-2xl md:text-3xl italic">Rafael Teixeira</p>
+              <p className="text-black/60 dark:text-white/60 font-semibold text-2xl md:text-3xl italic">Rafael Teixeira</p>
             </div>
             <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest text-right max-w-50">
               Développeur<br />Full Stack & UI/UX
@@ -149,7 +149,7 @@ export default function AProposPage() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div data-reveal>
             <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-6">À propos</p>
-            <p className="text-3xl md:text-4xl font-serif leading-snug text-black/90 dark:text-white/90">
+            <p className="text-3xl md:text-4xl font-semibold leading-snug text-black/90 dark:text-white/90">
               Développeur web Full Stack passionné par les interfaces modernes, la 3D interactive et le design UI/UX.
             </p>
           </div>
@@ -204,7 +204,7 @@ export default function AProposPage() {
           <div className="flex flex-col md:flex-row gap-12 items-start">
             <div data-reveal className="md:w-1/3">
               <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-4">En dehors du code</p>
-              <h2 className="text-4xl md:text-5xl font-serif leading-tight">Centres d&apos;intérêt</h2>
+              <h2 className="text-4xl md:text-5xl font-semibold leading-tight">Centres d&apos;intérêt</h2>
             </div>
             <div data-reveal className="flex-1 grid grid-cols-2 gap-3">
               {hobbies.map((h) => (

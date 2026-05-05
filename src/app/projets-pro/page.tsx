@@ -76,10 +76,10 @@ export default function ProjetsProPage() {
         
         <div className="relative z-10 text-center">
           <p className="text-sm uppercase tracking-[0.3em] mb-6 opacity-60">Expérience Professionnelle</p>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-serif tracking-tighter leading-none drop-shadow-2xl">
+          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none drop-shadow-2xl">
             Projets
           </h1>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-serif tracking-tighter leading-none -mt-1 md:-mt-6 drop-shadow-2xl">
+          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none -mt-1 md:-mt-6 drop-shadow-2xl">
             Professionnels
           </h1>
         </div>
@@ -90,7 +90,7 @@ export default function ProjetsProPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-black/10 dark:border-white/20 pt-10 text-sm">
             <div className="md:col-span-1">
-              <h2 className="text-3xl md:text-5xl font-serif tracking-tight leading-tight text-black/90 dark:text-white/90">
+              <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight text-black/90 dark:text-white/90">
                 Des projets réalisés en milieu professionnel
               </h2>
             </div>
@@ -130,7 +130,7 @@ export default function ProjetsProPage() {
                       );
                     })}
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-serif leading-tight mb-6">
+                  <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-6">
                     {projet.name}
                   </h2>
                   <p className="text-lg opacity-70 leading-relaxed mb-10">
@@ -182,7 +182,7 @@ export default function ProjetsProPage() {
         <div className="max-w-5xl mx-auto">
           <div ref={addRef} className="mb-16 text-center md:text-left">
             <p className="text-sm font-medium opacity-50 tracking-widest uppercase mb-4">Technologies utilisées</p>
-            <h2 className="text-4xl md:text-6xl font-serif leading-tight">
+            <h2 className="text-4xl md:text-6xl font-semibold leading-tight">
               Stack professionnelle
             </h2>
           </div>
@@ -203,10 +203,10 @@ export default function ProjetsProPage() {
 
       {/* FOOTER */}
       <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 bg-white dark:bg-[#050505] border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           ← Projets Perso
         </a>
-        <a href="/design" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+        <a href="/design" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           Design UI/UX →
         </a>
       </section>

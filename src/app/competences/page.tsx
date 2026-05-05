@@ -135,7 +135,7 @@ export default function CompetencesPage() {
       {/* INTRO */}
       <section className="relative z-10 bg-white dark:bg-black pt-24 px-6 md:px-10 pb-20 transition-colors duration-500">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-serif tracking-tight leading-tight mb-8 text-black/90 dark:text-white/90">
+          <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight mb-8 text-black/90 dark:text-white/90">
             Développeur Full Stack polyvalent
           </h2>
           <p className="text-lg text-black/60 dark:text-white/60 max-w-3xl mx-auto leading-relaxed mb-6">
@@ -168,7 +168,7 @@ export default function CompetencesPage() {
               <p className="text-sm font-medium text-black/50 dark:text-white/50 tracking-widest uppercase mb-3">
                 {section.category}
               </p>
-              <h2 className="text-4xl md:text-6xl font-serif leading-tight text-black/90 dark:text-white/90">
+              <h2 className="text-4xl md:text-6xl font-semibold leading-tight text-black/90 dark:text-white/90">
                 {section.title}
               </h2>
             </div>
@@ -208,10 +208,10 @@ export default function CompetencesPage() {
 
       {/* FOOTER */}
       <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 bg-gray-100 dark:bg-[#050505] border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <a href="/design" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+        <a href="/design" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           ← Design
         </a>
-        <a href="/a-propos" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+        <a href="/a-propos" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           À Propos →
         </a>
       </section>
