@@ -33,7 +33,7 @@ const projets = [
     name: 'PS5 Portfolio — 3D Exp',
     type: 'Three.js · R3F · GLSL · React',
     description: 'Portfolio personnel reproduisant l\'UI de la PS5 entièrement en 3D dans le navigateur. Navigation spatiale, modèles GLB animés, shaders custom (God Rays, Bokeh, Réflexions), particules et effets post-processing.',
-    link: '#',
+    link: 'https://portfolio-playstation-bp93gdmje.vercel.app/',
     image: '/play5.jpg',
     video: '/playstation.mp4',
   },
