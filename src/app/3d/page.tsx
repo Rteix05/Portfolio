@@ -3,12 +3,15 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Space_Grotesk } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import dynamic from 'next/dynamic';
 
 const CharmanderViewer = dynamic(() => import('@/components/CharmanderViewer'), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
 export default function Projets3DPage() {
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -55,7 +58,7 @@ export default function Projets3DPage() {
 
   return (
     // On enlève le fond statique pour laisser place à la vidéo
-    <main className="relative text-white min-h-screen transition-colors duration-500 bg-black">
+    <main className={`${spaceGrotesk.className} relative text-white min-h-screen transition-colors duration-500 bg-black`}>
       
       {/* BACKGROUND VIDEO 3D GLOBALE FIXE */}
       <div className="fixed inset-0 z-0 pointer-events-none">

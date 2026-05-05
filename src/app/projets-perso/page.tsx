@@ -3,10 +3,13 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Space_Grotesk } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import { getTechIcon } from '@/lib/techIcons';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
 // Données enrichies avec les images et vidéos (temporairement les mêmes vidéos PS5 partout)
 const projets = [
@@ -69,7 +72,7 @@ export default function ProjetsPersoPage() {
   };
 
   return (
-    <main className="bg-white text-black dark:bg-[#050505] dark:text-white min-h-screen transition-colors duration-500">
+    <main className={`${spaceGrotesk.className} bg-white text-black dark:bg-[#050505] dark:text-white min-h-screen transition-colors duration-500`}>
       <Navbar />
 
       {/* HERO AVEC IMAGE DE FOND */}

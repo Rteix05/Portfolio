@@ -261,8 +261,8 @@ export default function Home() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.4, delay: i * 0.05, ease: [0.76, 0, 0.24, 1] }}
                     onClick={(e) => handleProjectClick(e, project.id)}
-                    onMouseEnter={() => !isTransitioning && setHoveredProject(project.id)}
-                    onMouseLeave={() => !isTransitioning && setHoveredProject(null)}
+                    onMouseEnter={() => !isTransitioning && !isMobile && setHoveredProject(project.id)}
+                    onMouseLeave={() => !isTransitioning && !isMobile && setHoveredProject(null)}
                     className={`w-max cursor-pointer block ${isTransitioning ? 'pointer-events-none' : ''}`}
                   >
                     <div className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${hoveredProject === project.id ? 'bg-white text-black shadow-lg' : 'bg-transparent text-white/50 hover:text-white'}`}>
