@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Space_Grotesk } from 'next/font/google';
 import { useRouter } from 'next/navigation';
@@ -81,7 +81,15 @@ export default function Home() {
   const [clickedProject, setClickedProject] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const handleProjectClick = (e: React.MouseEvent, projectId: string) => {
     e.preventDefault();
@@ -151,7 +159,7 @@ export default function Home() {
               animate={{ opacity: isTransitioning ? 0 : 1, y: 0 }} 
               exit={{ opacity: 0, y: 30 }}
               transition={{ duration: 0.6, ease }}
-              className={`absolute bottom-[12vh] left-[10vw] font-semibold uppercase leading-[0.92] tracking-[-0.06em] z-10 drop-shadow-2xl ${displayData.id === 'projets-scolaires' ? 'text-[4.8rem] md:text-[6.6rem]' : 'text-[5.5rem] md:text-[7.5rem]'} ${spaceGrotesk.className}`}
+              className={`absolute font-semibold uppercase leading-[0.92] tracking-[-0.06em] z-10 drop-shadow-2xl ${isMobile ? 'bottom-[8vh] left-[5vw] right-[5vw]' : 'bottom-[12vh] left-[10vw]'} ${displayData.id === 'projets-scolaires' ? 'text-[2.8rem] md:text-[6.6rem]' : 'text-[3.2rem] md:text-[7.5rem]'} ${spaceGrotesk.className}`}
             >
               {displayData.id === 'projets-scolaires' ? (
                 <>
@@ -166,8 +174,9 @@ export default function Home() {
 
             <motion.div
               initial={{ 
-                width: '45vw', height: '50vh', right: '8vw', top: '18vh', borderRadius: '1rem', 
-                opacity: 0, y: 40
+                width: isMobile ? '90vw' : '45vw', height: isMobile ? '30vh' : '50vh',
+                right: isMobile ? '5vw' : '8vw', top: isMobile ? '12vh' : '18vh',
+                borderRadius: '1rem', opacity: 0, y: 40
               }}
               animate={
                 isTransitioning 
@@ -176,8 +185,9 @@ export default function Home() {
                     zIndex: 50
                   } 
                 : { 
-                    width: '45vw', height: '50vh', right: '8vw', top: '18vh', borderRadius: '1rem', opacity: 1, y: 0,
-                    zIndex: 20
+                    width: isMobile ? '90vw' : '45vw', height: isMobile ? '30vh' : '50vh',
+                    right: isMobile ? '5vw' : '8vw', top: isMobile ? '12vh' : '18vh',
+                    borderRadius: '1rem', opacity: 1, y: 0, zIndex: 20
                   }
               }
               exit={{ opacity: 0, y: 20 }}
@@ -204,7 +214,7 @@ export default function Home() {
             <motion.div 
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: isTransitioning ? 0 : 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
               transition={{ duration: 0.5, ease, delay: 0.1 }}
-              className={`absolute right-[8vw] bottom-[15vh] max-w-62.5 text-[0.95rem] font-medium leading-relaxed tracking-[-0.02em] text-white/70 ${spaceGrotesk.className}`}
+              className={`absolute ${isMobile ? 'hidden' : 'right-[8vw] bottom-[15vh]'} max-w-62.5 text-[0.95rem] font-medium leading-relaxed tracking-[-0.02em] text-white/70 ${spaceGrotesk.className}`}
             >
               {displayData.description}
             </motion.div>
