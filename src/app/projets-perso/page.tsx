@@ -213,8 +213,8 @@ export default function ProjetsPersoPage() {
         <a href="/projets-scolaires" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
           ← Projets Scolaires
         </a>
-        <a href="/projets-pro" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
-          Projets Pro →
+        <a href="/design" className="text-2xl md:text-4xl lg:text-6xl font-serif italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
+          Design →
         </a>
       </section>
     </main>
