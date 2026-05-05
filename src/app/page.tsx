@@ -70,7 +70,7 @@ const projects = [
     subtitle: 'Développeur Web Full Stack',
     description: 'Rafael Teixeira — passionné par les interfaces modernes et la 3D interactive.',
     mapImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2000&auto=format&fit=crop',
-    cardImage: '/raf.jpg',
+    cardImage: '/Raf.jpg',
   },
 ];
 
