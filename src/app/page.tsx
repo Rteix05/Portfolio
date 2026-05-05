@@ -46,6 +46,7 @@ const projects = [
     mapImage: '/logo-mairie.jpg',
     cardImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',
     cardVideo: '/blender.mp4',
+    hidden: true,
   },
   { 
     id: 'design', 
@@ -251,7 +252,7 @@ export default function Home() {
               className="flex flex-1 items-center p-6 md:p-10 pt-32"
             >
               <nav className="flex w-48 flex-col space-y-1 pointer-events-auto">
-                {projects.map((project, i) => (
+                {projects.filter(p => !p.hidden).map((project, i) => (
                   <motion.a
                     key={project.id}
                     href={`/${project.id}`}
