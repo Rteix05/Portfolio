@@ -9,9 +9,6 @@ const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfa
 export const metadata: Metadata = {
   title: 'Rteixeira - Portfolio',
   description: 'Portfolio Personnel',
-  icons: {
-    icon: '/R.jpg',
-  },
 };
 
 export default function RootLayout({
