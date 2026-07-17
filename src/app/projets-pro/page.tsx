@@ -14,12 +14,56 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 const projets = [
   {
     id: 1,
-    name: 'Projet Pro 1',
-    type: 'React · Next.js · TypeScript',
-    description: 'Description du premier projet professionnel. Remplace ce texte par les détails de ton expérience.',
-    link: '#',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop',
-    video: 'https://cdn.coverr.co/videos/coverr-typing-on-a-laptop-4409/1080p.mp4',
+    name: 'La Montagne de la Prière',
+    type: 'Next.js · React · Symfony · MySQL · Tailwind CSS · Framer Motion · JWT · Cloudflare R2 · Vercel',
+    description: 'Plateforme web sur-mesure (architecture Headless) pour une association religieuse. Gestion des inscriptions, dons, ressources PDF et espace membre sécurisé.',
+    link: 'https://www.samuelpanzutv.com',
+    image: '/mdlp.jpg',
+    video: '/mdlpfav.png',
+    videoIsImage: true,
+    role: 'Développeur Fullstack (Conception, Développement, Déploiement)',
+    projectType: 'Application Web sur-mesure (Architecture Headless)',
+    details: {
+      context: "L'association \"La Montagne de la Prière\" avait besoin d'une présence numérique moderne et évolutive pour centraliser sa communication et interagir avec sa communauté. Au-delà d'un simple site vitrine, l'objectif était de concevoir une véritable application métier capable de gérer des inscriptions, des dons, et la diffusion de ressources éducatives (cours au format PDF), le tout en anticipant des pics de trafic importants lors des événements dominicaux.",
+      architecture: [
+        {
+          label: 'Frontend',
+          subtitle: 'Interface & Vitesse',
+          tech: 'Next.js / React',
+          points: [
+            'Génération de pages statiques et dynamiques (SSR/SSG) pour un SEO optimisé.',
+            'Design system sur-mesure avec Tailwind CSS et animations fluides via Framer Motion.',
+            'Déploiement sur le réseau mondial (Edge Network) de Vercel pour des temps de chargement instantanés.',
+          ],
+        },
+        {
+          label: 'Backend',
+          subtitle: 'Logique & API',
+          tech: 'Framework Symfony (PHP)',
+          points: [
+            'Création d\'une API RESTful sécurisée connectée à une base de données MySQL.',
+            'Gestion de l\'authentification sécurisée par token (JWT).',
+            'Hébergement sur un serveur VPS dédié via Cloudways (DigitalOcean), configuré pour absorber les forts pics de connexions simultanées sans latence.',
+          ],
+        },
+        {
+          label: 'Infrastructure',
+          subtitle: 'Stockage',
+          tech: 'Cloudflare R2',
+          points: [
+            "Mise en place d'un Object Storage externe pour alléger le serveur principal.",
+            "L'upload et le téléchargement des cours PDF se font via le réseau Cloudflare, garantissant une bande passante illimitée.",
+          ],
+        },
+      ],
+      features: [
+        { title: "Système d'Authentification", desc: "Espace membre sécurisé avec inscription, connexion et gestion des accès (Utilisateur vs Administrateur)." },
+        { title: "Dashboard Administrateur Sur-Mesure", desc: "Interface privée permettant aux responsables d'uploader et de gérer les cours de l'église en toute autonomie." },
+        { title: "Tunnel d'Interaction", desc: "Systèmes de formulaires dynamiques pour la prise de rendez-vous, l'inscription au baptême, et le recrutement de bénévoles." },
+        { title: "Optimisation SEO Dynamique", desc: "Implémentation du système generateMetadata de Next.js pour que chaque page (et chaque cours) soit parfaitement indexée par Google et esthétique lors des partages sur les réseaux sociaux (Open Graph)." },
+      ],
+      conclusion: "Ce projet m'a permis de maîtriser l'ensemble du cycle de vie d'une application complexe. De la maquette initiale jusqu'à la mise en production sur des serveurs distants, en passant par la configuration DNS et la sécurisation des données. J'ai livré une plateforme évolutive (prête à accueillir une application mobile connectée à la même API) et de qualité professionnelle, dotée des mêmes standards technologiques que les grandes startups actuelles.",
+    },
   },
   {
     id: 2,
@@ -130,18 +174,67 @@ export default function ProjetsProPage() {
                       );
                     })}
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-6">
+                  <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-3">
                     {projet.name}
                   </h2>
-                  <p className="text-lg opacity-70 leading-relaxed mb-10">
+                  {'role' in projet && (
+                    <p className="text-xs uppercase tracking-widest opacity-50 mb-6">{(projet as any).role}</p>
+                  )}
+                  <p className="text-lg opacity-70 leading-relaxed mb-6">
                     {projet.description}
                   </p>
+                  {'details' in projet && (() => {
+                    const d = (projet as any).details;
+                    return (
+                      <div className="space-y-6 text-sm">
+                        <div>
+                          <p className="text-xs uppercase tracking-widest opacity-40 mb-2">Contexte</p>
+                          <p className="opacity-60 leading-relaxed">{d.context}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs uppercase tracking-widest opacity-40 mb-3">Architecture Technique</p>
+                          <div className="space-y-3">
+                            {d.architecture.map((layer: any) => (
+                              <div key={layer.label} className="rounded-xl border border-black/10 dark:border-white/10 p-4">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="font-semibold">{layer.label}</span>
+                                  <span className="opacity-40">·</span>
+                                  <span className="opacity-50 text-xs">{layer.subtitle}</span>
+                                  <span className="ml-auto opacity-60 font-mono text-xs">{layer.tech}</span>
+                                </div>
+                                <ul className="space-y-1">
+                                  {layer.points.map((pt: string, i: number) => (
+                                    <li key={i} className="opacity-60 leading-relaxed flex gap-2"><span className="opacity-40 mt-0.5">›</span>{pt}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs uppercase tracking-widest opacity-40 mb-3">Fonctionnalités Clés</p>
+                          <ul className="space-y-2">
+                            {d.features.map((f: any, i: number) => (
+                              <li key={i} className="flex gap-2 opacity-70 leading-relaxed">
+                                <span className="opacity-50 mt-0.5">▸</span>
+                                <span><span className="font-semibold">{f.title} : </span>{f.desc}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="rounded-xl bg-black/5 dark:bg-white/5 p-4">
+                          <p className="text-xs uppercase tracking-widest opacity-40 mb-2">Bilan</p>
+                          <p className="opacity-60 leading-relaxed">{d.conclusion}</p>
+                        </div>
+                      </div>
+                    );
+                  })()}
                   {projet.link !== '#' && (
                     <a
                       href={projet.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-black/20 dark:border-white/20 px-6 py-3 text-sm font-medium hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
+                      className="mt-8 inline-flex items-center gap-2 rounded-full border border-black/20 dark:border-white/20 px-6 py-3 text-sm font-medium hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
                     >
                       Voir le projet <span>↗</span>
                     </a>
@@ -156,18 +249,26 @@ export default function ProjetsProPage() {
                     <img 
                       src={projet.image} 
                       alt={projet.name} 
-                      className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                      className="w-full h-full object-cover opacity-90"
                     />
                   </div>
 
-                  {/* Petite Vidéo (Superposée) */}
+                  {/* Petite Vidéo ou Image (Superposée) */}
                   <div className={`absolute ${isEven ? 'left-0' : 'right-0'} bottom-0 w-[55%] aspect-4/3 rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-black/5 dark:border-white/10 z-20 bg-black`}>
+                    {(projet as any).videoIsImage ? (
+                      <img
+                        src={projet.video}
+                        alt={projet.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
                     <video 
                       autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback 
                       className="w-full h-full object-cover pointer-events-none"
                     >
                       <source src={projet.video} type="video/mp4" />
                     </video>
+                    )}
                   </div>
 
                 </div>

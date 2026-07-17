@@ -2,11 +2,11 @@
   "name": "portfoliov4",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+ "scripts": {
+    "dev": "set NODE_OPTIONS=--max-old-space-size=8192 && next dev",
+    "build": "set NODE_OPTIONS=--max-old-space-size=8192 && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
 import { LuCamera, LuDumbbell, LuPersonStanding, LuSwords } from 'react-icons/lu';
 import Navbar from '@/components/Navbar';
+import { TbMotorbike } from 'react-icons/tb';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
@@ -13,15 +14,23 @@ gsap.registerPlugin(ScrollTrigger);
 
 const experiences = [
   {
+    period: 'Maintenant - Sept. 2026',
+    role: 'En Recherche d\'une alternance',
+    company: 'Aucune entreprise pour le moment',
+    description:
+      "Actuellement à la recherche d'une alternance pour la 3ème et dernière année du BUT MMI.",
+    tag: 'Alternance',
+  },
+  {
     period: 'Avr. 2026 — Juin 2026',
     role: 'Développeur Full Stack — Stage',
     company: 'MDLP',
     description:
-      "Conception d'une application SaaS fullstack avec Next.js et Symfony. Architecture, base de données, API REST et interface utilisateur.",
+      "Stage de 2 mois et demi en développement web Full Stack — React, Next.js, Symfony, Docker.",
     tag: 'Stage',
   },
   {
-    period: '2023 — Présent',
+    period: '2024 — Présent',
     role: 'Étudiant BUT MMI',
     company: 'IUT de Troyes',
     description:
@@ -42,7 +51,8 @@ const hobbies = [
   { icon: <LuCamera size={22} strokeWidth={1.5} />, label: 'Photo & Vidéo' },
   { icon: <LuSwords size={22} strokeWidth={1.5} />, label: 'Kick Boxing' },
   { icon: <LuDumbbell size={22} strokeWidth={1.5} />, label: 'Musculation' },
-  { icon: <LuPersonStanding size={22} strokeWidth={1.5} />, label: 'Course à pied' },
+  { icon: <LuPersonStanding size={22} strokeWidth={1.5} />, label: 'Course à pied' }, // La virgule manquante était ici
+  { icon: <TbMotorbike size={22} strokeWidth={1.5} />, label: 'Moto cross' },
 ];
 
 const links = [
@@ -54,7 +64,8 @@ const links = [
     arrow: '→',
   },
   { label: 'Email', value: 'contact@rafaelteixeira.fr', href: 'mailto:contact@rafaelteixeira.fr', arrow: '→' },
-  { label: 'CV', value: 'Télécharger', href: '/CV_Rafael_Teixeira (3).pdf', arrow: '↓' },
+  { label: 'CV Profil Développeur Fullstack', value: 'Rafael Teixeira', href: '/CV_Rafael_Teixeira.pdf', arrow: '↓' },
+  { label: 'CV Profil UX/UI Designer', value: 'Teixeira Rafael', href: '/CV_Teixeira_Rafael.pdf', arrow: '↓' },
 ];
 
 export default function AProposPage() {
@@ -120,9 +131,9 @@ export default function AProposPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-auto pt-8 border-t border-black/10 dark:border-white/10">
                 {[
                   ['Rôle', 'Développeur Full Stack'],
-                  ['Stack', 'React · Next · Symfony'],
+                  ['Stack', 'React · Next · Symfony · TypeScript · Docker'],
                   ['Formation', 'BUT MMI · IUT Troyes'],
-                  ['Stage', 'MDLP · Avr–Juin 2026'],
+                  ['Poste', 'Pas d\'entreprise pour le moment'],
                 ].map(([k, v]) => (
                   <div key={k}>
                     <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-1">{k}</p>
@@ -227,7 +238,7 @@ export default function AProposPage() {
           <p data-reveal className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-12">
             Me contacter
           </p>
-          <div data-reveal className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+          <div data-reveal className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {links.map((l) => (
               <a
                 key={l.label}
