@@ -68,10 +68,10 @@ const projects = [
   { 
     id: 'a-propos', 
     name: 'À Propos',
-    subtitle: 'Développeur Web Full Stack',
+    subtitle: 'Développeur Web Full Stack - UX/UI Designer',
     description: 'Rafael Teixeira — passionné par les interfaces modernes et la 3D interactive.',
     mapImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2000&auto=format&fit=crop',
-    cardImage: '/Raf.jpg',
+    cardImage: '/competences.jpg',
   },
 ];
 
