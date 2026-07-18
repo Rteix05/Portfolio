@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🚀 Portfolio Personnel
+Bienvenue sur le dépôt de mon portfolio personnel ! Ce projet est une vitrine de mes compétences en développement Full Stack, UI/UX Design et intégration 3D.
 
-## Getting Started
+🛠️ Stack Technique
+Ce projet utilise des technologies modernes pour offrir une expérience fluide et interactive :
 
-First, run the development server:
+Framework: Next.js (App Router)
 
-```bash
+Langage: TypeScript
+
+Style: Tailwind CSS
+
+Animations: GSAP (GreenSock Animation Platform)
+
+3D / Interactif: Three.js & React Three Fiber
+
+Déploiement: Vercel
+
+📂 Structure du Projet
+Plaintext
+├── app/              # Pages et routage (App Router)
+├── components/       # Composants réutilisables (Navbar, 3D Viewers, etc.)
+├── lib/              # Fonctions utilitaires et configuration
+├── public/           # Assets (vidéos, images, PDF)
+└── styles/           # Fichiers CSS globaux
+🚀 Installation
+Pour lancer le projet en local :
+
+Cloner le dépôt :
+
+Bash
+git clone https://github.com/Rteix05/ton-repo.git
+Installer les dépendances :
+
+Bash
+npm install
+# ou
+yarn install
+Lancer le serveur de développement :
+
+Bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Ouvrez http://localhost:3000 dans votre navigateur.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🎨 Fonctionnalités
+Mode Sombre/Clair automatique : Adaptation dynamique selon les préférences système.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Animations fluides : Utilisation de GSAP pour le reveal au scroll et les transitions de page.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Intégration 3D : Visualisation de modèles 3D directement dans le navigateur via R3F.
 
-## Learn More
+Responsive Design : Optimisé pour Desktop, Tablette et Mobile.
 
-To learn more about Next.js, take a look at the following resources:
+📫 Contact
+Email: contact@rafaelteixeira.fr
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+LinkedIn: Rafael Teixeira
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+GitHub: Rteix05
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Fait avec ❤️ par Rafael Teixeira.
