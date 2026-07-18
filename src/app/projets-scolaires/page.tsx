@@ -11,12 +11,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
-// J'ai ajouté les champs 'image' et 'video' pour que tu puisses mettre tes propres mockups !
 const projets = [
   {
     id: 1,
     name: 'Pokémon — SAE 203',
-    type: 'PHP · SQL · Base de données',
+    type: 'PHP · SQL · Base de données · HTML/CSS',
     description: 'Site en PHP permettant d\'apprendre à créer et manipuler des bases de données en PHP et SQL. Interface pokédex avec recherche, filtres et affichage dynamique.',
     link: 'https://sae203.mmi24h04.mmi-troyes.fr',
     image: 'https://images.unsplash.com/photo-1613909207039-6b173b755cc1?q=80&w=2000&auto=format&fit=crop',
@@ -25,7 +24,7 @@ const projets = [
   {
     id: 2,
     name: "Carb'On — SAE 401",
-    type: 'Mobile First · Vue · Symfony · TailwindCSS',
+    type: 'Vue.js · Symfony · TailwindCSS · Mobile First',
     description: "Application mobile-first de gestion de l'empreinte carbone sous forme de gamification. Backoffice administrable via EasyAdmin, frontend Vue 3 avec Tailwind CSS.",
     link: 'https://sae401.mmi24b07.mmi-troyes.fr',
     image: '/carbon.png', 
@@ -34,7 +33,7 @@ const projets = [
   {
     id: 3,
     name: 'Alpha Murder Party',
-    type: 'MVC · Authentification',
+    type: 'PHP · MVC · MySQL · Authentification · Gestion des rôles',
     description: 'Site en architecture MVC avec base de données, intégrant l\'inscription, la connexion, la déconnexion, une messagerie interne et un système administrateur complet.',
     link: 'https://sae202.mmi24h04.mmi-troyes.fr',
     image: '/murderbg.png', 
@@ -43,11 +42,20 @@ const projets = [
   {
     id: 4,
     name: 'Mairie de Sommeval',
-    type: 'Symfony · Next.js · Reverse Proxy',
+    type: 'Symfony · React · API Platform · Docker · MySQL · RGAA',
     description: 'Refonte du site d\'une mairie avec une architecture headless Symfony en back + React en front. Gestion de contenu découplée et interface moderne.',
     link: 'http://sae301.mmi24b11.mmi-troyes.fr/',
     image: '/logo-mairie.jpg', 
     video: '/sommeval.mp4', 
+  },
+  {
+    id: 5,
+    name: 'Montagne de la Prière',
+    type: 'Symfony · Next.js · Stripe · PayPal · Dashboard Admin · CRUD',
+    description: 'Refonte complète d\'un site CMS vers une application SaaS fullstack développée lors de mon stage. Système de prise de rendez-vous, intégration de paiements en ligne et mailing automatisé.',
+    link: '#', 
+    image: '/mdlp.jpg', // À remplacer par ton image
+    video: '/mdlp.mp4', // À remplacer par ta vidéo
   },
 ];
 
@@ -84,9 +92,8 @@ export default function ProjetsScolairesPage() {
     <main className={`${spaceGrotesk.className} bg-white text-black dark:bg-[#050505] dark:text-white min-h-screen transition-colors duration-500`}>
       <Navbar />
 
-      {/* HERO AVEC IMAGE DE FOND (Façon Uber) */}
+      {/* HERO AVEC IMAGE DE FOND */}
       <section className="h-screen w-full relative flex items-center justify-center overflow-hidden">
-        {/* Placeholder Image Hero - À remplacer par ton propre visuel d'ambiance */}
         <img 
           src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop" 
           alt="Hero Background" 
@@ -115,11 +122,11 @@ export default function ProjetsScolairesPage() {
             </div>
             <div>
               <p className="opacity-50 mb-2 uppercase tracking-widest text-xs">Projets</p>
-              <p className="font-medium text-lg">{projets.length} SAE réalisées</p>
+              <p className="font-medium text-lg">{projets.length} Projets & SAE réalisés</p>
             </div>
             <div>
               <p className="opacity-50 mb-2 uppercase tracking-widest text-xs">Technologies</p>
-              <p className="font-medium text-lg leading-relaxed">PHP · SQL · Symfony · Next.js · Vue · React · TailwindCSS · Docker · Figma · MVC</p>
+              <p className="font-medium text-lg leading-relaxed">PHP · SQL · Symfony · Next.js · Vue · React · TailwindCSS · Docker · Stripe · Figma</p>
             </div>
           </div>
         </div>
@@ -140,6 +147,8 @@ export default function ProjetsScolairesPage() {
                   <div className="flex items-center gap-4 mb-4">
                     <span className="text-sm opacity-50 uppercase tracking-widest font-mono">0{projet.id}</span>
                   </div>
+                  
+                  {/* BADGES COMPÉTENCES */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {projet.type.split('·').map((tech) => {
                       const name = tech.trim();
@@ -152,6 +161,7 @@ export default function ProjetsScolairesPage() {
                       );
                     })}
                   </div>
+
                   <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-6">
                     {projet.name}
                   </h2>
@@ -197,15 +207,29 @@ export default function ProjetsScolairesPage() {
         })}
       </div>
 
-      {/* FOOTER */}
-      <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 bg-gray-50 dark:bg-black border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <a href="/3d" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
-          ← Projets 3D
-        </a>
-        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic opacity-30 hover:opacity-100 transition-opacity cursor-pointer">
-          Projets Perso →
-        </a>
-      </section>
+      {/* FOOTER NAV + COPYRIGHT */}
+      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
+        <div className="flex items-center justify-between px-6 md:px-16 py-16">
+          <a
+            href="/3d"
+            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
+          >
+            &larr; Projets 3D
+          </a>
+          <a
+            href="/projets-perso"
+            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
+          >
+            Projets Perso &rarr;
+          </a>
+        </div>
+        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">
+          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
+            &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
+          </p>
+          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">Développeur Full Stack &amp; UI/UX</p>
+        </div>
+      </footer>
     </main>
   );
 }

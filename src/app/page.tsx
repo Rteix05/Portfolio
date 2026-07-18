@@ -63,7 +63,7 @@ const projects = [
     subtitle: 'Front-End, Back-End, Outils',
     description: 'Stack technique complète : React, Vue, Symfony, Three.js et plus encore.',
     mapImage: '/competences.jpg',
-    cardImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop',
+    cardVideo: '/figma2.mp4',
   },
   { 
     id: 'a-propos', 

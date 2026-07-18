@@ -285,15 +285,29 @@ export default function DesignPage() {
         </div>
       </section>
 
-      {/* FOOTER NAV */}
-      <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 bg-white dark:bg-[#050505] border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
-          ← Projets Perso
-        </a>
-        <a href="/competences" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
-          Compétences →
-        </a>
-      </section>
+      {/* FOOTER NAV + COPYRIGHT */}
+      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
+        <div className="flex items-center justify-between px-6 md:px-16 py-16">
+          <a
+            href="/projets-perso"
+            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
+          >
+            &larr; Projets Perso
+          </a>
+          <a
+            href="/competences"
+            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
+          >
+            Compétences &rarr;
+          </a>
+        </div>
+        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">
+          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
+            &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
+          </p>
+          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">Développeur Full Stack &amp; UI/UX</p>
+        </div>
+      </footer>
     </main>
   );
 }
