@@ -53,7 +53,7 @@ const projets = [
     name: 'Montagne de la Prière',
     type: 'Symfony · Next.js · Stripe · PayPal · Dashboard Admin · CRUD',
     description: 'Refonte complète d\'un site CMS vers une application SaaS fullstack développée lors de mon stage. Système de prise de rendez-vous, intégration de paiements en ligne et mailing automatisé.',
-    link: '#', 
+    link: 'https://samuelpanzutv.com', 
     image: '/mdlp.jpg', // À remplacer par ton image
     video: '/mdlp.mp4', // À remplacer par ta vidéo
   },

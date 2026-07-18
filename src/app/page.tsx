@@ -150,7 +150,7 @@ export default function Home() {
 
 
 
-      {/* 3. LE LAYOUT PROJET (Apparait au survol) */}
+      {/* 3. LE LAYOUT PROJET (Apparait au survol / au clic) */}
       <AnimatePresence>
         {(hoveredProject || isTransitioning) && displayData && (
           <motion.div key={displayData.id + '-layout'} className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
@@ -230,14 +230,14 @@ export default function Home() {
         <Navbar isHidden={isTransitioning} onMenuClick={() => setMenuOpen(prev => !prev)} />
 
         {/* SOCIAL ICONS */}
-        <div className="absolute bottom-8 right-8 flex items-center gap-4 pointer-events-auto z-50">
-          <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors duration-300">
+        <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex items-center gap-4 pointer-events-auto z-50">
+          <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
             <SiGithub size={20} />
           </a>
-          <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors duration-300">
+          <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
             <LuLinkedin size={20} />
           </a>
-          <a href="/contact" className="text-white/40 hover:text-white transition-colors duration-300">
+          <a href="/contact" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
             <LuMail size={20} />
           </a>
         </div>
@@ -249,23 +249,23 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
-              className="flex flex-1 items-center p-6 md:p-10 pt-32"
+              className="flex flex-1 flex-col items-center justify-center px-6 pt-24 pb-24 md:flex-row md:items-center md:justify-start md:p-10 md:pt-32"
             >
-              <nav className="flex w-48 flex-col space-y-1 pointer-events-auto">
+              <nav className="flex w-full max-w-xs flex-col items-stretch gap-2.5 pointer-events-auto md:w-48 md:items-start md:gap-0 md:space-y-1">
                 {projects.filter(p => !p.hidden).map((project, i) => (
                   <motion.a
                     key={project.id}
                     href={`/${project.id}`}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
                     transition={{ duration: 0.4, delay: i * 0.05, ease: [0.76, 0, 0.24, 1] }}
                     onClick={(e) => handleProjectClick(e, project.id)}
                     onMouseEnter={() => !isTransitioning && !isMobile && setHoveredProject(project.id)}
                     onMouseLeave={() => !isTransitioning && !isMobile && setHoveredProject(null)}
-                    className={`w-max cursor-pointer block ${isTransitioning ? 'pointer-events-none' : ''}`}
+                    className={`w-full md:w-max cursor-pointer block ${isTransitioning ? 'pointer-events-none' : ''}`}
                   >
-                    <div className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${hoveredProject === project.id ? 'bg-white text-black shadow-lg' : 'bg-transparent text-white/50 hover:text-white'}`}>
+                    <div className={`w-full md:w-auto rounded-full px-6 py-3.5 md:px-5 md:py-2.5 text-center text-base md:text-left md:text-sm font-medium transition-all duration-300 ${hoveredProject === project.id ? 'bg-white text-black shadow-lg' : 'bg-white/5 text-white/70 md:bg-transparent md:text-white/50 hover:text-white active:bg-white active:text-black'}`}>
                       {project.name}
                     </div>
                   </motion.a>
