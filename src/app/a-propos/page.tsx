@@ -116,7 +116,7 @@ export default function AProposPage() {
               className="w-48 h-60 md:w-64 md:h-80 rounded-2xl overflow-hidden shrink-0 border border-black/10 dark:border-white/10"
               data-hero
             >
-              <img src="/Raf.jpg" alt="Rafael Teixeira" className="w-full h-full object-cover object-top" />
+              <img src="/Raf.webp" alt="Rafael Teixeira" className="w-full h-full object-cover object-top" />
             </div>
 
             <div className="flex-1 flex flex-col gap-4" data-hero>

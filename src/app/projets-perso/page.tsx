@@ -19,7 +19,7 @@ const projets = [
     type: 'Next.js · TailwindCSS · GSAP · Three.js',
     description: "Portfolio personnel développé avec Next.js, Tailwind CSS, GSAP et React Three Fiber. Animations au scroll, viewer 3D interactif, design immersif et navigation fluide entre les pages.",
     link: 'https://rafaelteixeira.fr',
-    image: '/portfolio.png',
+    image: '/portfolio.webp',
     video: '/background.mp4', 
   },
   {
@@ -28,7 +28,7 @@ const projets = [
     type: 'Vue.js · UI Design',
     description: 'Site Vue + Tailwind imitant l\'interface utilisateur de la PlayStation 3, avec des animations atmosphériques et des transitions soignées. Navigation au clavier et interactions fidèles à l\'original.',
     link: 'https://ps3userinterface.vercel.app/',
-    image: '/ps3-bg.jpg',
+    image: '/ps3-bg.webp',
     video: '/play3.mp4',
   },
   {
@@ -37,7 +37,7 @@ const projets = [
     type: 'Three.js · R3F · GLSL · React',
     description: 'Portfolio personnel reproduisant l\'UI de la PS5 entièrement en 3D dans le navigateur. Navigation spatiale, modèles GLB animés, shaders custom (God Rays, Bokeh, Réflexions), particules et effets post-processing.',
     link: 'https://portfolio-playstation-bp93gdmje.vercel.app/',
-    image: '/play5.jpg',
+    image: '/play5.webp',
     video: '/playstation.mp4',
   },
 ];

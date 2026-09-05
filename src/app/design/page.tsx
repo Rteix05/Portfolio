@@ -21,7 +21,7 @@ const projets = [
     figmaLink: 'https://www.figma.com/design/f4zaIVAKcbR1ZSqSoDmMZU/SAE-301---Sommeval---Lou-CALMES---Lucas-CORRIERAS---Rafael-TEIXEIRA?node-id=0-1&t=GfFna88C8grUnim4-1',
     accent: '#a16207',
     screens: [
-      '/sommevalfig.jpg',
+      '/sommevalfig.webp',
       'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=800&auto=format&fit=crop',
     ],
@@ -35,7 +35,7 @@ const projets = [
     figmaLink: 'https://www.figma.com/design/X2muTfFrU4o62ABzqQwtlU/Carb-On---WS401-%7C-Lou-CALMES-%7C-Rafael-TEIXEIRA-%7C-Marwan-BOUCHEBBAT-%7C-Radouan-OURIRI-%7C-Rahman-TURKMEN?node-id=0-1&t=khOQ4HSUyCeqN3lc-1',
     accent: '#16a34a',
     screens: [
-      '/carbonfig.jpg',
+      '/carbonfig.webp',
       'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1569163139599-0f4517e36f51?q=80&w=800&auto=format&fit=crop',
     ],
@@ -49,7 +49,7 @@ const projets = [
     figmaLink: 'https://www.figma.com/design/hn98fGNUkjNcm2jeSnKCTG/WR403D---Lou-CALMES-_-Rafael-TEIXEIRA-_-Marwan-BOUCHEBBAT-_-Radouan-OURIRI?node-id=37-3&t=XR5rbCbAUBuj2eca-1',
     accent: '#7c3aed',
     screens: [
-      '/403fig.jpg',
+      '/403fig.webp',
       'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=800&auto=format&fit=crop',
     ],
