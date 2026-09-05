@@ -27,7 +27,7 @@ const projets = [
     type: 'Vue.js · Symfony · TailwindCSS · Mobile First',
     description: "Application mobile-first de gestion de l'empreinte carbone sous forme de gamification. Backoffice administrable via EasyAdmin, frontend Vue 3 avec Tailwind CSS.",
     link: 'https://sae401.mmi24b07.mmi-troyes.fr',
-    image: '/carbon.png', 
+    image: '/carbon.webp',
     video: '/carbon.mp4', 
   },
   {
@@ -36,7 +36,7 @@ const projets = [
     type: 'PHP · MVC · MySQL · Authentification · Gestion des rôles',
     description: 'Site en architecture MVC avec base de données, intégrant l\'inscription, la connexion, la déconnexion, une messagerie interne et un système administrateur complet.',
     link: 'https://sae202.mmi24h04.mmi-troyes.fr',
-    image: '/murderbg.png', 
+    image: '/murderbg.webp',
     video: '/sae202.mp4', 
   },
   {
@@ -45,7 +45,7 @@ const projets = [
     type: 'Symfony · React · API Platform · Docker · MySQL · RGAA',
     description: 'Refonte du site d\'une mairie avec une architecture headless Symfony en back + React en front. Gestion de contenu découplée et interface moderne.',
     link: 'http://sae301.mmi24b11.mmi-troyes.fr/',
-    image: '/logo-mairie.jpg', 
+    image: '/logo-mairie.webp',
     video: '/sommeval.mp4', 
   },
   {
@@ -54,7 +54,7 @@ const projets = [
     type: 'Symfony · Next.js · Stripe · PayPal · Dashboard Admin · CRUD',
     description: 'Refonte complète d\'un site CMS vers une application SaaS fullstack développée lors de mon stage. Système de prise de rendez-vous, intégration de paiements en ligne et mailing automatisé.',
     link: 'https://samuelpanzutv.com', 
-    image: '/mdlp.jpg', // À remplacer par ton image
+    image: '/mdlp.webp', // À remplacer par ton image
     video: '/mdlp.mp4', // À remplacer par ta vidéo
   },
 ];

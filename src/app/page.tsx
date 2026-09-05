@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { SiGithub } from 'react-icons/si';
 import { LuMail, LuLinkedin } from 'react-icons/lu';
+import Image from 'next/image';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
@@ -25,7 +26,7 @@ const projects = [
     name: 'Projets Scolaires',
     subtitle: 'PHP, Symfony, React, MVC',
     description: 'SAE universitaires : sites dynamiques, architectures headless et bases de données.',
-    mapImage: '/murderbg.png',
+    mapImage: '/murderbg.webp',
     cardImage: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop',
     cardVideo: '/sommeval.mp4',
   },
@@ -34,7 +35,7 @@ const projects = [
     name: 'Projets Perso',
     subtitle: 'React, Vue, Parallax, UI Design',
     description: 'Side projects créatifs : GTA VI parallax, PS3 UI, PS5 Portfolio 3D.',
-    mapImage: '/ps3-bg.jpg',
+    mapImage: '/ps3-bg.webp',
     cardImage: 'https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=1000&auto=format&fit=crop',
     cardVideo: '/playstation_2.mp4',
   },
@@ -43,7 +44,7 @@ const projects = [
     name: 'Projets Pro',
     subtitle: 'React, Next.js, Node.js',
     description: 'Missions en entreprise, stages et collaborations professionnelles.',
-    mapImage: '/logo-mairie.jpg',
+    mapImage: '/logo-mairie.webp',
     cardImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',
     cardVideo: '/blender.mp4',
     hidden: true,
@@ -53,7 +54,7 @@ const projects = [
     name: 'Design',
     subtitle: 'Figma, UI/UX, Prototypage',
     description: 'Maquettes, prototypes et parcours utilisateur pensés avec soin.',
-    mapImage: '/sommevalfig.jpg',
+    mapImage: '/sommevalfig.webp',
     cardImage: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=1000&auto=format&fit=crop',
     cardVideo: '/figma1.mp4',
   },
@@ -62,7 +63,7 @@ const projects = [
     name: 'Compétences',
     subtitle: 'Front-End, Back-End, Outils',
     description: 'Stack technique complète : React, Vue, Symfony, Three.js et plus encore.',
-    mapImage: '/competences.jpg',
+    mapImage: '/competences.webp',
     cardVideo: '/figma2.mp4',
   },
   { 
@@ -71,7 +72,7 @@ const projects = [
     subtitle: 'Développeur Web Full Stack - UX/UI Designer',
     description: 'Rafael Teixeira — passionné par les interfaces modernes et la 3D interactive.',
     mapImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2000&auto=format&fit=crop',
-    cardImage: '/competences.jpg',
+    cardImage: '/competences.webp',
   },
 ];
 
@@ -134,7 +135,7 @@ export default function Home() {
       {/* 1. BACKGROUND MAP (Passe au-dessus de la vidéo au survol) */}
       <AnimatePresence>
         {(hoveredProject || isTransitioning) && displayData && (
-          <motion.div
+            <motion.div
             key={displayData.id + '-bg'}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -142,7 +143,11 @@ export default function Home() {
             transition={{ duration: 0.5, ease }}
             className="absolute inset-0 z-10"
           >
-            <img src={displayData.mapImage} alt="Map" className="h-full w-full object-cover opacity-30 mix-blend-luminosity" />
+            {displayData.mapImage.startsWith('http') ? (
+              <Image src={displayData.mapImage} alt="Map" className="h-full w-full object-cover opacity-30 mix-blend-luminosity" fill priority={true} />
+            ) : (
+              <Image src={displayData.mapImage} alt="Map" className="h-full w-full object-cover opacity-30 mix-blend-luminosity" fill priority={true} />
+            )}
             <div className="absolute inset-0 bg-black/20" />
           </motion.div>
         )}
@@ -175,19 +180,19 @@ export default function Home() {
 
             <motion.div
               initial={{ 
-                width: isMobile ? '90vw' : '45vw', height: isMobile ? '30vh' : '50vh',
-                right: isMobile ? '5vw' : '8vw', top: isMobile ? '12vh' : '18vh',
+                left: isMobile ? '6vw' : '47vw', right: isMobile ? '6vw' : '8vw',
+                height: isMobile ? '38vh' : '50vh', top: isMobile ? '13vh' : '18vh',
                 borderRadius: '1rem', opacity: 0, y: 40
               }}
               animate={
                 isTransitioning 
                 ? { 
-                    width: '100vw', height: '100vh', right: '0vw', top: '0vh', borderRadius: '0rem', opacity: 1, y: 0,
+                    left: '0vw', right: '0vw', height: '100vh', top: '0vh', borderRadius: '0rem', opacity: 1, y: 0,
                     zIndex: 50
                   } 
                 : { 
-                    width: isMobile ? '90vw' : '45vw', height: isMobile ? '30vh' : '50vh',
-                    right: isMobile ? '5vw' : '8vw', top: isMobile ? '12vh' : '18vh',
+                    left: isMobile ? '6vw' : '47vw', right: isMobile ? '6vw' : '8vw',
+                    height: isMobile ? '38vh' : '50vh', top: isMobile ? '13vh' : '18vh',
                     borderRadius: '1rem', opacity: 1, y: 0, zIndex: 20
                   }
               }
@@ -201,14 +206,19 @@ export default function Home() {
                   muted
                   loop
                   playsInline
-                  disablePictureInPicture
-                  disableRemotePlayback
-                  className="w-full h-full object-cover"
+                  preload="metadata"
+                  poster={displayData.cardImage || '/poster.jpg'}
+                  className="w-full h-full object-cover object-center"
                 >
                   <source src={displayData.cardVideo} type="video/mp4" />
+                  <track kind="captions" src={`${displayData.cardVideo.replace(/\.mp4$/, '')}.vtt`} srcLang="fr" label="Français" />
                 </video>
               ) : (
-                <img src={displayData.cardImage} alt={displayData.name} className="w-full h-full object-cover" />
+                displayData.cardImage ? (
+                  <Image src={displayData.cardImage} alt={displayData.name} width={1200} height={800} className="w-full h-full object-cover object-center" priority={true} />
+                ) : (
+                  <div className="w-full h-full bg-gray-900" />
+                )
               )}
             </motion.div>
 

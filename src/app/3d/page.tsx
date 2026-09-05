@@ -169,7 +169,7 @@ export default function Projets3DPage() {
                    </p>
               </div>
 
-              <div className="w-full md:w-2/3 relative h-[60vh]">
+              <div className="w-full md:w-2/3 relative h-[45vh] md:h-[60vh] overflow-hidden">
                    <div className="absolute right-0 top-0 w-3/4 h-[90%] rounded-3xl overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 z-10 group">
                        <video autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none">
                           <source src="/playstation_2.mp4" type="video/mp4" />
