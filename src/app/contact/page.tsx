@@ -84,7 +84,7 @@ export default function ContactPage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
           {/* COLONNE GAUCHE */}
           <motion.div variants={itemVars} className="flex flex-col gap-8">
             {/* CARTE CONTACT */}
