@@ -68,27 +68,26 @@ export default function ContactPage() {
           variants={containerVars}
           initial="hidden"
           animate="show"
-          className="w-full max-w-6xl flex flex-col gap-8"
+          className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch"
         >
-          {/* HERO */}
-          <motion.div variants={itemVars} className="max-w-xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-widest text-white/70 mb-6">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Recherche alternance — Sept. 2026
-            </span>
-            <h1 className="text-[2.75rem] md:text-[4rem] font-bold leading-[0.95] tracking-tighter mb-6">
-              Let&apos;s build<br />something.
-            </h1>
-            <p className="text-base md:text-lg text-white/60 max-w-md leading-relaxed">
-              Actuellement à la recherche d&apos;une alternance — Front-End, Back-End, Fullstack, DevOps ou UX/UI.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
           {/* COLONNE GAUCHE */}
-          <motion.div variants={itemVars} className="flex flex-col gap-8">
+          <motion.div variants={itemVars} className="flex flex-col gap-8 h-full">
+            {/* HERO */}
+            <div className="max-w-xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-widest text-white/70 mb-6">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Recherche alternance — Sept. 2026
+              </span>
+              <h1 className="text-[2.75rem] md:text-[4rem] font-bold leading-[0.95] tracking-tighter mb-6">
+                Let&apos;s build<br />something.
+              </h1>
+              <p className="text-base md:text-lg text-white/60 max-w-md leading-relaxed">
+                Actuellement à la recherche d&apos;une alternance — Front-End, Back-End, Fullstack, DevOps ou UX/UI.
+              </p>
+            </div>
+
             {/* CARTE CONTACT */}
-            <div className="rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
+            <div className="flex-1 flex flex-col rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
                 <span className="text-xs uppercase tracking-[0.2em] text-white/50">Contact</span>
                 <span className="text-xs uppercase tracking-[0.2em] text-white/30">Restons en contact</span>
@@ -158,7 +157,7 @@ export default function ContactPage() {
           </motion.div>
 
           {/* COLONNE DROITE — FORMULAIRE */}
-          <motion.div variants={itemVars} className="rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
+          <motion.div variants={itemVars} className="h-full flex flex-col rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
               <span className="text-xs uppercase tracking-[0.2em] text-white/50">Envoyer un message</span>
               <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-emerald-400/80">
@@ -244,7 +243,6 @@ export default function ContactPage() {
               )}
             </form>
           </motion.div>
-          </div>
         </motion.div>
       </div>
     </main>
