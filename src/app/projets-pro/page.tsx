@@ -132,12 +132,9 @@ export default function ProjetsProPage() {
 
       <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
         <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 gap-3">
-          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">&copy; {new Date().getFullYear()} Rafael Teixeira — Développeur Full Stack &amp; UI/UX</p>
+          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">&copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés</p>
           <div className="flex items-center gap-4">
-            <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">SEO</p>
-            <div className="flex items-center gap-3">
-              <Footer />
-            </div>
+            <Footer />
           </div>
         </div>
       </footer>

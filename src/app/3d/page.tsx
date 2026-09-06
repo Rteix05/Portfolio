@@ -206,11 +206,7 @@ export default function Projets3DPage() {
             &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
           </p>
           <div className="flex items-center gap-4">
-            <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">Développeur Full Stack &amp; UI/UX</p>
-            <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">SEO</p>
-            <div className="flex items-center gap-3">
-              <Footer />
-            </div>
+            <Footer />
           </div>
         </div>
       </footer>
