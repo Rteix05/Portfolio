@@ -1,16 +1,29 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import { Space_Grotesk } from 'next/font/google';
+import { LuMail, LuPhone, LuLinkedin, LuArrowUpRight, LuCode, LuServer, LuPenTool, LuPaperclip, LuSend } from 'react-icons/lu';
+import { SiGithub } from 'react-icons/si';
 
-// Importation de la police Space Grotesk
-const spaceGrotesk = Space_Grotesk({ 
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
 });
 
+const subjects = [
+  "Proposition d'alternance",
+  'Proposition de stage',
+  'Collaboration freelance',
+  'Question technique',
+  'Autre',
+];
+
 export default function ContactPage() {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [sent, setSent] = useState(false);
+
   const containerVars = {
     hidden: { opacity: 0 },
     show: {
@@ -19,129 +32,217 @@ export default function ContactPage() {
     },
   };
 
-  const itemVars: import("framer-motion").Variants = {
+  const itemVars: import('framer-motion').Variants = {
     hidden: { opacity: 0, y: 30 },
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] as [number, number, number, number] } },
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = `${formData.message}\n\n— ${formData.name} (${formData.email})`;
+    const mailto = `mailto:contact@rafaelteixeira.fr?subject=${encodeURIComponent(formData.subject || 'Contact via portfolio')}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+    setSent(true);
+  };
+
   return (
-    // On applique la police Space Grotesk sur toute la page en injectant sa classe
     <main className={`${spaceGrotesk.className} bg-black text-white min-h-screen overflow-hidden flex flex-col relative`}>
-      
-      {/* 1. BACKGROUND VIDEO */}
+
+      {/* BACKGROUND VIDEO */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <video autoPlay muted loop playsInline disablePictureInPicture className="w-full h-full object-cover opacity-40 mix-blend-lighten">
           <source src="/background.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]" />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
       <Navbar />
 
       <div className="grow flex flex-col items-center justify-center px-6 md:px-10 pt-32 pb-20 relative z-10">
-        
-        {/* 2. BACKGROUND TEXT */}
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15vw] font-bold pointer-events-none whitespace-nowrap select-none text-transparent opacity-30 tracking-tighter"
-          style={{ WebkitTextStroke: '1px rgba(255, 255, 255, 0.15)' }}
-        >
-          GET IN TOUCH
-        </div>
-
-        <motion.div 
-          variants={containerVars} 
-          initial="hidden" 
+        <motion.div
+          variants={containerVars}
+          initial="hidden"
           animate="show"
-          className="w-full max-w-4xl flex flex-col items-center relative z-10"
+          className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
         >
-          {/* Titre Minimaliste */}
-          <motion.div variants={itemVars} className="text-center mb-16">
-            <h1 className="text-[3rem] md:text-[5rem] lg:text-[6rem] font-bold leading-none tracking-tighter mb-6 drop-shadow-2xl">
-              Let&apos;s connect.
-            </h1>
-            <p className="text-lg md:text-xl text-white/70 max-w-xl mx-auto leading-relaxed">
-              Actuellement à la recherche d&apos;une alternance — Front-End, Back-End, Fullstack, DevOps ou UX/UI.
-            </p>
+          {/* COLONNE GAUCHE */}
+          <motion.div variants={itemVars} className="flex flex-col gap-8">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-widest text-white/70 mb-6">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Recherche alternance — Sept. 2026
+              </span>
+              <h1 className="text-[2.75rem] md:text-[4rem] font-bold leading-[0.95] tracking-tighter mb-6">
+                Let&apos;s build<br />something.
+              </h1>
+              <p className="text-base md:text-lg text-white/60 max-w-md leading-relaxed">
+                Actuellement à la recherche d&apos;une alternance — Front-End, Back-End, Fullstack, DevOps ou UX/UI.
+              </p>
+            </div>
+
+            {/* CARTE CONTACT */}
+            <div className="rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-xs uppercase tracking-[0.2em] text-white/50">Contact</span>
+                <span className="text-xs uppercase tracking-[0.2em] text-white/30">Restons en contact</span>
+              </div>
+
+              <div className="flex flex-col divide-y divide-white/10">
+                <a href="mailto:contact@rafaelteixeira.fr" className="group flex items-center gap-4 py-4 first:pt-0">
+                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
+                    <LuMail size={16} />
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Email</span>
+                    <span className="block text-sm md:text-base font-medium truncate">contact@rafaelteixeira.fr</span>
+                  </span>
+                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
+                </a>
+
+                <a href="tel:+33664687121" className="group flex items-center gap-4 py-4">
+                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
+                    <LuPhone size={16} />
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Téléphone</span>
+                    <span className="block text-sm md:text-base font-medium truncate">06 64 68 71 21</span>
+                  </span>
+                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
+                </a>
+
+                <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 py-4">
+                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
+                    <LuLinkedin size={16} />
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">LinkedIn</span>
+                    <span className="block text-sm md:text-base font-medium truncate">/in/rafael-teixeira</span>
+                  </span>
+                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
+                </a>
+
+                <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 py-4 last:pb-0">
+                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
+                    <SiGithub size={16} />
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">GitHub</span>
+                    <span className="block text-sm md:text-base font-medium truncate">github.com/Rteix05</span>
+                  </span>
+                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
+                </a>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/10">
+                <div className="flex flex-col items-center text-center gap-2">
+                  <LuCode size={18} className="text-white/60" />
+                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">Développement<br />Front / Back / Fullstack</span>
+                </div>
+                <div className="flex flex-col items-center text-center gap-2">
+                  <LuServer size={18} className="text-white/60" />
+                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">DevOps<br />Docker / CI-CD</span>
+                </div>
+                <div className="flex flex-col items-center text-center gap-2">
+                  <LuPenTool size={18} className="text-white/60" />
+                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">UX/UI<br />Design / Prototypage</span>
+                </div>
+              </div>
+            </div>
           </motion.div>
 
-          {/* 3. CARTES DE CONTACT */}
-          <motion.div variants={itemVars} className="w-full max-w-2xl flex flex-col gap-4">
-            
-            {/* Carte Téléphone */}
-            <a 
-              href="tel:+33664687121"
-              className="group relative flex items-center justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden"
-            >
-              <div className="relative z-10">
-                <span className="text-xs uppercase tracking-[0.2em] text-white/50 block mb-2">Téléphone</span>
-                <span className="text-xl md:text-3xl font-medium tracking-tight">06 64 68 71 21</span>
-              </div>
-              <div className="relative z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-500 shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform duration-500">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                </svg>
-              </div>
-            </a>
+          {/* COLONNE DROITE — FORMULAIRE */}
+          <motion.div variants={itemVars} className="rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
+            <div className="flex items-center justify-between mb-6">
+              <span className="text-xs uppercase tracking-[0.2em] text-white/50">Envoyer un message</span>
+              <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-emerald-400/80">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Je réponds rapidement
+              </span>
+            </div>
 
-            {/* Carte Email */}
-            <a 
-              href="mailto:contact@rafaelteixeira.fr" 
-              className="group relative flex items-center justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden"
-            >
-              <div className="relative z-10">
-                <span className="text-xs uppercase tracking-[0.2em] text-white/50 block mb-2">Email</span>
-                <span className="text-xl md:text-3xl font-medium tracking-tight">contact@rafaelteixeira.fr</span>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <div>
+                <label htmlFor="name" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Nom *</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Votre nom"
+                  className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors"
+                />
               </div>
-              <div className="relative z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-500 shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-45 transition-transform duration-500">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </div>
-            </a>
 
-            {/* Carte LinkedIn */}
-            <a 
-              href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/"
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="group relative flex items-center justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden"
-            >
-              <div className="relative z-10">
-                <span className="text-xs uppercase tracking-[0.2em] text-white/50 block mb-2">Réseau Professionnel</span>
-                <span className="text-xl md:text-3xl font-medium tracking-tight">LinkedIn</span>
+              <div>
+                <label htmlFor="email" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Email *</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="votre@exemple.com"
+                  className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors"
+                />
               </div>
-              <div className="relative z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-500 shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500">
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </div>
-            </a>
 
-            {/* Carte GitHub */}
-            <a 
-              href="https://github.com/Rteix05"
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="group relative flex items-center justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden"
-            >
-              <div className="relative z-10">
-                <span className="text-xs uppercase tracking-[0.2em] text-white/50 block mb-2">Code & Projets</span>
-                <span className="text-xl md:text-3xl font-medium tracking-tight">GitHub</span>
+              <div>
+                <label htmlFor="subject" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Sujet</label>
+                <select
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white/80 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors appearance-none"
+                >
+                  <option value="" className="bg-black">Sélectionner un sujet</option>
+                  {subjects.map((s) => (
+                    <option key={s} value={s} className="bg-black">{s}</option>
+                  ))}
+                </select>
               </div>
-              <div className="relative z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-500 shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500">
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </div>
-            </a>
 
+              <div>
+                <label htmlFor="message" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Message *</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={5}
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Écrivez votre message ici..."
+                  className="w-full resize-none rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors"
+                />
+              </div>
+
+              <span className="inline-flex items-center gap-2 text-xs text-white/40 -mt-1">
+                <LuPaperclip size={14} />
+                Ajouter une pièce jointe (optionnel)
+              </span>
+
+              <button
+                type="submit"
+                className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                <LuSend size={16} />
+                Envoyer le message
+              </button>
+
+              {sent && (
+                <p className="text-center text-xs text-emerald-400/80 uppercase tracking-widest">Merci pour votre message —</p>
+              )}
+            </form>
           </motion.div>
         </motion.div>
-
       </div>
     </main>
   );
