@@ -5,6 +5,8 @@ import { LuLinkedin, LuMail } from 'react-icons/lu'
 export default function Footer() {
   return (
     <div className="flex items-center gap-4">
+      <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">Développeur Full Stack &amp; UI/UX — SEO</p>
+      <div className="w-px h-4 bg-black/5 dark:bg-white/5" />
       <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white active:text-white transition-colors duration-300">
         <SiGithub size={18} />
       </a>
