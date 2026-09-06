@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
+import { SiGithub } from 'react-icons/si';
+import { LuLinkedin, LuMail } from 'react-icons/lu';
 import Navbar from '@/components/Navbar';
 import { getTechIcon } from '@/lib/techIcons';
 
@@ -305,7 +307,21 @@ export default function DesignPage() {
           <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
             &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
           </p>
-          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">Développeur Full Stack &amp; UI/UX</p>
+          <div className="flex items-center gap-4">
+            <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">Développeur Full Stack &amp; UI/UX</p>
+            <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">SEO</p>
+            <div className="flex items-center gap-3">
+              <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="text-black/20 dark:text-white/20 hover:text-black">
+                <SiGithub size={18} />
+              </a>
+              <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="text-black/20 dark:text-white/20 hover:text-black">
+                <LuLinkedin size={18} />
+              </a>
+              <a href="/contact" className="text-black/20 dark:text-white/20 hover:text-black">
+                <LuMail size={18} />
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </main>
