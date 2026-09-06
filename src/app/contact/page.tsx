@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import { Space_Grotesk } from 'next/font/google';
-import { LuMail, LuPhone, LuLinkedin, LuArrowUpRight, LuCode, LuServer, LuPenTool, LuPaperclip, LuSend } from 'react-icons/lu';
+import { LuMail, LuPhone, LuLinkedin, LuArrowUpRight, LuCode, LuSearch, LuPenTool, LuPaperclip, LuSend } from 'react-icons/lu';
 import { SiGithub } from 'react-icons/si';
 
 const spaceGrotesk = Space_Grotesk({
@@ -142,11 +142,11 @@ export default function ContactPage() {
               <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/10">
                 <div className="flex flex-col items-center text-center gap-2">
                   <LuCode size={18} className="text-white/60" />
-                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">Développement<br />Front / Back / Fullstack</span>
+                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">Développement<br />Fullstack / DevOps</span>
                 </div>
                 <div className="flex flex-col items-center text-center gap-2">
-                  <LuServer size={18} className="text-white/60" />
-                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">DevOps<br />Docker / CI-CD</span>
+                  <LuSearch size={18} className="text-white/60" />
+                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">Référencement<br />SEO</span>
                 </div>
                 <div className="flex flex-col items-center text-center gap-2">
                   <LuPenTool size={18} className="text-white/60" />
