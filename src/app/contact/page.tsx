@@ -68,23 +68,25 @@ export default function ContactPage() {
           variants={containerVars}
           initial="hidden"
           animate="show"
-          className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
+          className="w-full max-w-6xl flex flex-col gap-8"
         >
+          {/* HERO */}
+          <motion.div variants={itemVars} className="max-w-xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-widest text-white/70 mb-6">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Recherche alternance — Sept. 2026
+            </span>
+            <h1 className="text-[2.75rem] md:text-[4rem] font-bold leading-[0.95] tracking-tighter mb-6">
+              Let&apos;s build<br />something.
+            </h1>
+            <p className="text-base md:text-lg text-white/60 max-w-md leading-relaxed">
+              Actuellement à la recherche d&apos;une alternance — Front-End, Back-End, Fullstack, DevOps ou UX/UI.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* COLONNE GAUCHE */}
           <motion.div variants={itemVars} className="flex flex-col gap-8">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-widest text-white/70 mb-6">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Recherche alternance — Sept. 2026
-              </span>
-              <h1 className="text-[2.75rem] md:text-[4rem] font-bold leading-[0.95] tracking-tighter mb-6">
-                Let&apos;s build<br />something.
-              </h1>
-              <p className="text-base md:text-lg text-white/60 max-w-md leading-relaxed">
-                Actuellement à la recherche d&apos;une alternance — Front-End, Back-End, Fullstack, DevOps ou UX/UI.
-              </p>
-            </div>
-
             {/* CARTE CONTACT */}
             <div className="rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
@@ -242,6 +244,7 @@ export default function ContactPage() {
               )}
             </form>
           </motion.div>
+          </div>
         </motion.div>
       </div>
     </main>
