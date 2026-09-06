@@ -21,8 +21,9 @@ const subjects = [
 ];
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [sent, setSent] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '', company: '' });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const containerVars = {
     hidden: { opacity: 0 },
@@ -41,12 +42,26 @@ export default function ContactPage() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const body = `${formData.message}\n\n— ${formData.name} (${formData.email})`;
-    const mailto = `mailto:contact@rafaelteixeira.fr?subject=${encodeURIComponent(formData.subject || 'Contact via portfolio')}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setSent(true);
+    setStatus('sending');
+    setErrorMessage('');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Échec de l'envoi du message.");
+      }
+      setStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '', company: '' });
+    } catch (err) {
+      setStatus('error');
+      setErrorMessage(err instanceof Error ? err.message : "Échec de l'envoi du message.");
+    }
   };
 
   return (
@@ -230,16 +245,32 @@ export default function ContactPage() {
                 Ajouter une pièce jointe (optionnel)
               </span>
 
+              {/* Honeypot anti-spam, invisible aux humains */}
+              <input
+                type="text"
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+
               <button
                 type="submit"
-                className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-opacity"
+                disabled={status === 'sending'}
+                className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <LuSend size={16} />
-                Envoyer le message
+                {status === 'sending' ? 'Envoi en cours...' : 'Envoyer le message'}
               </button>
 
-              {sent && (
-                <p className="text-center text-xs text-emerald-400/80 uppercase tracking-widest">Merci pour votre message —</p>
+              {status === 'success' && (
+                <p className="text-center text-xs text-emerald-400/80 uppercase tracking-widest">Message envoyé — merci, je reviens vers vous rapidement !</p>
+              )}
+              {status === 'error' && (
+                <p className="text-center text-xs text-red-400/80 uppercase tracking-widest">{errorMessage}</p>
               )}
             </form>
           </motion.div>
