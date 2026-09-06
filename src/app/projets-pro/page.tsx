@@ -5,6 +5,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
 import Navbar from '@/components/Navbar';
+import { SiGithub } from 'react-icons/si';
+import { LuLinkedin, LuMail } from 'react-icons/lu';
 import { getTechIcon } from '@/lib/techIcons';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -128,6 +130,26 @@ export default function ProjetsProPage() {
           </h1>
         </div>
       </section>
+
+      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
+        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 gap-3">
+          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">&copy; {new Date().getFullYear()} Rafael Teixeira — Développeur Full Stack &amp; UI/UX</p>
+          <div className="flex items-center gap-4">
+            <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">SEO</p>
+            <div className="flex items-center gap-3">
+              <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="text-black/20 dark:text-white/20 hover:text-black">
+                <SiGithub size={18} />
+              </a>
+              <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="text-black/20 dark:text-white/20 hover:text-black">
+                <LuLinkedin size={18} />
+              </a>
+              <a href="/contact" className="text-black/20 dark:text-white/20 hover:text-black">
+                <LuMail size={18} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       {/* INTRO */}
       <section className="relative z-10 bg-white dark:bg-[#050505] pt-10 px-6 md:px-10 pb-16 transition-colors duration-500">
