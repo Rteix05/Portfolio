@@ -1,20 +1,41 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
 import Footer from '../../components/Footer';
 import Navbar from '@/components/Navbar';
+import LazyVideo from '@/components/LazyVideo';
 import { getTechIcon } from '@/lib/techIcons';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
-const projets = [
+type Projet = {
+  id: number;
+  name: string;
+  type: string;
+  description: string;
+  link?: string;
+  image?: string;
+  video?: string;
+  status?: 'en-cours';
+};
+
+const projets: Projet[] = [
   {
     id: 1,
+    name: 'WR506D — Penderie',
+    type: 'React Native · Expo · TypeScript · Symfony 7.4',
+    description: 'Application mobile de gestion de garde-robe : numérisation des vêtements, composition de tenues et organisation du dressing. Développée en React Native avec Expo.',
+    image: '/penderie-garde.webp',
+    status: 'en-cours',
+  },
+  {
+    id: 2,
     name: 'Pokémon — SAE 203',
     type: 'PHP · SQL · Base de données · HTML/CSS',
     description: 'Site en PHP permettant d\'apprendre à créer et manipuler des bases de données en PHP et SQL. Interface pokédex avec recherche, filtres et affichage dynamique.',
@@ -23,7 +44,7 @@ const projets = [
     video: '/sae203.mp4',
   },
   {
-    id: 2,
+    id: 3,
     name: "Carb'On — SAE 401",
     type: 'Vue.js · Symfony · TailwindCSS · Mobile First',
     description: "Application mobile-first de gestion de l'empreinte carbone sous forme de gamification. Backoffice administrable via EasyAdmin, frontend Vue 3 avec Tailwind CSS.",
@@ -32,7 +53,7 @@ const projets = [
     video: '/carbon.mp4', 
   },
   {
-    id: 3,
+    id: 4,
     name: 'Alpha Murder Party',
     type: 'PHP · MVC · MySQL · Authentification · Gestion des rôles',
     description: 'Site en architecture MVC avec base de données, intégrant l\'inscription, la connexion, la déconnexion, une messagerie interne et un système administrateur complet.',
@@ -41,7 +62,7 @@ const projets = [
     video: '/sae202.mp4', 
   },
   {
-    id: 4,
+    id: 5,
     name: 'Mairie de Sommeval',
     type: 'Symfony · React · API Platform · Docker · MySQL · RGAA',
     description: 'Refonte du site d\'une mairie avec une architecture headless Symfony en back + React en front. Gestion de contenu découplée et interface moderne.',
@@ -50,7 +71,7 @@ const projets = [
     video: '/sommeval.mp4', 
   },
   {
-    id: 5,
+    id: 6,
     name: 'Montagne de la Prière',
     type: 'Symfony · Next.js · Stripe · PayPal · Dashboard Admin · CRUD',
     description: 'Refonte complète d\'un site CMS vers une application SaaS fullstack développée lors de mon stage. Système de prise de rendez-vous, intégration de paiements en ligne et mailing automatisé.',
@@ -95,10 +116,13 @@ export default function ProjetsScolairesPage() {
 
       {/* HERO AVEC IMAGE DE FOND */}
       <section className="h-screen w-full relative flex items-center justify-center overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop" 
-          alt="Hero Background" 
-          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity pointer-events-none" 
+        <Image
+          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-20 mix-blend-luminosity pointer-events-none"
         />
         <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-[#050505]" />
         
@@ -106,9 +130,7 @@ export default function ProjetsScolairesPage() {
           <p className="text-sm uppercase tracking-[0.3em] mb-6 opacity-60">BUT MMI</p>
           <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none drop-shadow-2xl">
             Projets
-          </h1>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none -mt-1 md:-mt-6 drop-shadow-2xl">
-            Scolaires
+            <span className="block -mt-1 md:-mt-6">Scolaires</span>
           </h1>
         </div>
       </section>
@@ -123,11 +145,16 @@ export default function ProjetsScolairesPage() {
             </div>
             <div>
               <p className="opacity-50 mb-2 uppercase tracking-widest text-xs">Projets</p>
-              <p className="font-medium text-lg">{projets.length} Projets & SAE réalisés</p>
+              <p className="font-medium text-lg">
+                {projets.filter((p) => p.status !== 'en-cours').length} Projets & SAE réalisés
+                {projets.some((p) => p.status === 'en-cours')
+                  ? ` · ${projets.filter((p) => p.status === 'en-cours').length} en cours`
+                  : ''}
+              </p>
             </div>
             <div>
               <p className="opacity-50 mb-2 uppercase tracking-widest text-xs">Technologies</p>
-              <p className="font-medium text-lg leading-relaxed">PHP · SQL · Symfony · Next.js · Vue · React · TailwindCSS · Docker · Stripe · Figma</p>
+              <p className="font-medium text-lg leading-relaxed">PHP · SQL · Symfony · Next.js · Vue · React · React Native · TailwindCSS · Docker · Stripe · Figma</p>
             </div>
           </div>
         </div>
@@ -147,6 +174,12 @@ export default function ProjetsScolairesPage() {
                 <div ref={addRef} className="w-full md:w-1/3">
                   <div className="flex items-center gap-4 mb-4">
                     <span className="text-sm opacity-50 uppercase tracking-widest font-mono">0{projet.id}</span>
+                    {projet.status === 'en-cours' && (
+                      <span className="inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-amber-600 dark:text-amber-400">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        Projet en cours
+                      </span>
+                    )}
                   </div>
                   
                   {/* BADGES COMPÉTENCES */}
@@ -169,14 +202,20 @@ export default function ProjetsScolairesPage() {
                   <p className="text-lg opacity-70 leading-relaxed mb-10">
                     {projet.description}
                   </p>
-                  <a
-                    href={projet.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-black/20 dark:border-white/20 px-6 py-3 text-sm font-medium hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
-                  >
-                    Voir le site web <span>↗</span>
-                  </a>
+                  {projet.link ? (
+                    <a
+                      href={projet.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-black/20 dark:border-white/20 px-6 py-3 text-sm font-medium hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
+                    >
+                      Voir le site web <span>↗</span>
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 rounded-full border border-black/10 dark:border-white/10 px-6 py-3 text-sm font-medium opacity-40 cursor-default">
+                      Bientôt disponible
+                    </span>
+                  )}
                 </div>
 
                 {/* PARTIE MÉDIAS (Superposition Image + Vidéo) */}
@@ -184,22 +223,31 @@ export default function ProjetsScolairesPage() {
                   
                   {/* Grande Image (En arrière-plan) */}
                   <div className={`absolute ${isEven ? 'right-0' : 'left-0'} top-0 w-4/5 h-[85%] rounded-3xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 z-10 bg-gray-100 dark:bg-zinc-900`}>
-                    <img 
-                      src={projet.image} 
-                      alt={projet.name} 
-                      className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
-                    />
+                    {projet.image ? (
+                      <Image
+                        src={projet.image}
+                        alt={`Aperçu du projet ${projet.name}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 55vw"
+                        className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-black/5 to-transparent dark:from-white/5">
+                        <span className="text-xs uppercase tracking-widest opacity-40">Visuels à venir</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Petite Vidéo (Superposée) */}
-                  <div className={`absolute ${isEven ? 'left-0' : 'right-0'} bottom-0 w-[55%] aspect-4/3 rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-black/5 dark:border-white/10 z-20 bg-black`}>
-                    <video 
-                      autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback 
-                      className="w-full h-full object-cover pointer-events-none"
-                    >
-                      <source src={projet.video} type="video/mp4" />
-                    </video>
-                  </div>
+                  {projet.video && (
+                    <div className={`absolute ${isEven ? 'left-0' : 'right-0'} bottom-0 w-[55%] aspect-4/3 rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-black/5 dark:border-white/10 z-20 bg-black`}>
+                      <LazyVideo
+                        src={projet.video}
+                        poster={projet.image}
+                        className="w-full h-full object-cover pointer-events-none"
+                      />
+                    </div>
+                  )}
 
                 </div>
               </div>

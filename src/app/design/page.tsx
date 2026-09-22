@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
@@ -12,9 +13,39 @@ gsap.registerPlugin(ScrollTrigger);
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
+// Affiche une capture, ou un aperçu neutre tant que l'export Figma n'est pas dispo
+function Screen({ src, alt, accent, className }: { src?: string; alt: string; accent: string; className: string }) {
+  if (!src) {
+    return (
+      <div className="w-full h-full flex items-center justify-center" style={{ background: `${accent}12` }}>
+        <span className="text-[10px] md:text-xs uppercase tracking-widest opacity-40">Aperçu à venir</span>
+      </div>
+    );
+  }
+  return (
+    <div className="relative w-full h-full">
+      <Image src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 40vw" className={className} />
+    </div>
+  );
+}
+
 const projets = [
   {
     id: 1,
+    name: 'WR506D — Penderie',
+    subtitle: 'Projet en cours · Mobile',
+    type: 'Figma · UI Design · Mobile · Prototypage · UX Research',
+    description: "Recherche UX en amont : benchmark, personas et parcours utilisateurs pour cadrer les besoins d’une penderie numérique. Maquettage des écrans autour de ces expériences — numérisation des vêtements, composition de tenues, organisation du dressing — puis design UI complet (design system mobile, typographie, iconographie) et prototypage interactif des parcours clés.",
+    figmaLink: 'https://www.figma.com/design/vUbnJMQ2c02Q8gvG4DB4Ug/WR506D---Penderie?node-id=135-1772&t=08UGP1SQbgHjce84-1',
+    accent: '#D31D66',
+    screens: [
+      '/penderie-garde.webp',
+      '/penderie-couleurs.webp',
+      '/penderie-logotypes.webp',
+    ],
+  },
+  {
+    id: 2,
     name: 'Sommeval',
     subtitle: 'SAE 301 · Desktop',
     type: 'Figma · UI Design · Desktop · Prototypage',
@@ -28,7 +59,7 @@ const projets = [
     ],
   },
   {
-    id: 2,
+    id: 3,
     name: 'Carb\'On',
     subtitle: 'Mobile First · Environnement',
     type: 'Figma · UI Design · Mobile · UX Research',
@@ -42,7 +73,7 @@ const projets = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     name: 'WR403D — Jeux de Niche',
     subtitle: 'Projet de cours · Steam-like',
     type: 'Figma · UI Design · Web · Prototypage · UX',
@@ -219,26 +250,26 @@ export default function DesignPage() {
                   <div className="hidden md:grid grid-cols-5 grid-rows-2 gap-3 h-[65vh]">
                     {/* Screen principal */}
                     <div className="col-span-3 row-span-2 rounded-2xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 bg-gray-100 dark:bg-zinc-900 group">
-                      <img src={projet.screens[0]} alt={`${projet.name} - screen principal`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <Screen src={projet.screens[0]} alt={`${projet.name} - screen principal`} accent={projet.accent} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                     </div>
                     <div className="col-span-2 row-span-1 rounded-2xl overflow-hidden shadow-xl border border-black/5 dark:border-white/10 bg-gray-100 dark:bg-zinc-900 group">
-                      <img src={projet.screens[1]} alt={`${projet.name} - screen 2`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <Screen src={projet.screens[1]} alt={`${projet.name} - screen 2`} accent={projet.accent} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                     </div>
                     <div className="col-span-2 row-span-1 rounded-2xl overflow-hidden shadow-xl border border-white/10 group" style={{ background: `${projet.accent}18` }}>
-                      <img src={projet.screens[2]} alt={`${projet.name} - screen 3`} className="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105 mix-blend-luminosity" />
+                      <Screen src={projet.screens[2]} alt={`${projet.name} - screen 3`} accent={projet.accent} className="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105 mix-blend-luminosity" />
                     </div>
                   </div>
                   {/* Mobile: stack images */}
                   <div className="md:hidden flex flex-col gap-3">
                     <div className="rounded-2xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 bg-gray-100 dark:bg-zinc-900 aspect-video">
-                      <img src={projet.screens[0]} alt={`${projet.name} - screen principal`} className="w-full h-full object-cover" />
+                      <Screen src={projet.screens[0]} alt={`${projet.name} - screen principal`} accent={projet.accent} className="w-full h-full object-cover" />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="rounded-2xl overflow-hidden shadow-xl border border-black/5 dark:border-white/10 bg-gray-100 dark:bg-zinc-900 aspect-video">
-                        <img src={projet.screens[1]} alt={`${projet.name} - screen 2`} className="w-full h-full object-cover" />
+                        <Screen src={projet.screens[1]} alt={`${projet.name} - screen 2`} accent={projet.accent} className="w-full h-full object-cover" />
                       </div>
                       <div className="rounded-2xl overflow-hidden shadow-xl border border-white/10 aspect-video" style={{ background: `${projet.accent}18` }}>
-                        <img src={projet.screens[2]} alt={`${projet.name} - screen 3`} className="w-full h-full object-cover opacity-80 mix-blend-luminosity" />
+                        <Screen src={projet.screens[2]} alt={`${projet.name} - screen 3`} accent={projet.accent} className="w-full h-full object-cover opacity-80 mix-blend-luminosity" />
                       </div>
                     </div>
                   </div>

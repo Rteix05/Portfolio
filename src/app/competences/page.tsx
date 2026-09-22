@@ -8,7 +8,8 @@ import Footer from '../../components/Footer';
 import Navbar from '@/components/Navbar';
 import { getTechIcon } from '@/lib/techIcons';
 // Import d'icônes génériques pour celles qui n'ont pas de logo tech officiel
-import { LuLayoutTemplate, LuPenTool, LuFileText, LuCode, LuServer, LuDatabase, LuTerminal, LuGlobe } from 'react-icons/lu';
+import { LuLayoutTemplate, LuPenTool, LuFileText, LuCode, LuServer, LuDatabase, LuTerminal, LuGlobe,
+  LuSearchCheck, LuBraces, LuGauge, LuShare2, LuLink } from 'react-icons/lu';
 import { SiGithub } from 'react-icons/si';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -29,6 +30,11 @@ const getFallbackIcon = (name: string) => {
     case 'PostgreSQL': return <LuDatabase {...props} />;
     case 'OVH / VPS': return <LuServer {...props} />;
     case 'Linux CLI': return <LuTerminal {...props} />;
+    case 'SEO technique': return <LuSearchCheck {...props} />;
+    case 'Données structurées': return <LuBraces {...props} />;
+    case 'Core Web Vitals': return <LuGauge {...props} />;
+    case 'Metadata & Open Graph': return <LuShare2 {...props} />;
+    case 'Maillage interne': return <LuLink {...props} />;
     default: return <LuCode {...props} />;
   }
 };
@@ -47,6 +53,7 @@ const getProjectLink = (projectName: string) => {
     'WR403D': '/design',
     'Tous les projets': '/projets',
     'SAE 501': '/projets',
+    'WR506D — Penderie': '/projets-scolaires',
   };
   return links[projectName] || '#';
 };
@@ -64,6 +71,8 @@ type Section = {
   description: string;
   accent: string;
   box3Title: string;
+  ctaHref?: string;
+  ctaLabel?: string;
   box3Tags: string[];
   skills: Skill[];
 };
@@ -81,6 +90,7 @@ const sections: Section[] = [
       { name: 'React', detail: 'React 18, Hooks, Context, React Router', projects: ['Portfolio v4', 'Projets perso', 'PS5 UI'] },
       { name: 'Next.js', detail: 'App Router, SSR, ISR, API Routes', projects: ['Portfolio v4', 'Projets pro'] },
       { name: 'Vue.js', detail: 'Composition API, Vue Router, Pinia', projects: ['Projets scolaires'] }, // Vue mis en dernier du Core Tech
+      { name: 'React Native / Expo', detail: 'Expo Router, EAS Build, apps iOS & Android', projects: ['WR506D — Penderie'] },
       { name: 'Three.js / R3F', detail: 'React Three Fiber, Drei, GLSL Shaders', projects: ['Portfolio 3D', 'Expériences 3D'] },
       { name: 'TypeScript', detail: 'Typage strict, interfaces, generics', projects: ['Portfolio v4', 'Projets pro'] },
       { name: 'Tailwind CSS', detail: 'Utility-first, responsive, dark mode', projects: ['Portfolio v4', 'Sommeval', 'Carb\'On'] },
@@ -133,11 +143,31 @@ const sections: Section[] = [
     box3Tags: ['Intégration Continue (CI)', 'Gestion Noms de Domaine', 'Certificats SSL'],
     skills: [
       { name: 'Git / GitHub', detail: 'Création de repos, branches, PRs, code review, gestion d\'équipe', projects: ['Tous les projets'] },
+      { name: 'Gitflow', detail: 'Branches feature / develop / main, releases, hotfix', projects: ['Tous les projets'] },
       { name: 'Docker', detail: 'Images custom, docker-compose, environnements reproductibles et simples à lancer', projects: ['Sommeval', 'Projets pro'] },
       { name: 'Documentation', detail: 'READMEs clairs et structurés pour une prise en main rapide', projects: ['Tous les projets'] },
       { name: 'Vercel', detail: 'Déploiement continu, variables d\'env, domaines custom', projects: ['Portfolio v4', 'Projets Next.js'] },
       { name: 'OVH / VPS', detail: 'Configuration serveur, SSL, reverse proxy Nginx', projects: ['Projets pro', 'Hébergement client'] },
       { name: 'Linux CLI', detail: 'Navigation, scripts bash, gestion de services systemd', projects: ['VPS', 'Environnements Docker'] },
+    ],
+  },
+  {
+    id: 5,
+    category: 'SEO & Performance',
+    title: 'Visibilité & Référencement',
+    description: 'Rendre un site lisible par les moteurs et rapide pour les visiteurs : structure technique, sémantique du HTML, Core Web Vitals et suivi des résultats dans le temps.',
+    accent: '#f59e0b',
+    box3Title: 'Mesure & Outils',
+    box3Tags: ['Google Search Console', 'Lighthouse / PageSpeed', 'Suivi des positions'],
+    ctaHref: '/referencement',
+    ctaLabel: 'Voir la méthode SEO',
+    skills: [
+      { name: 'SEO technique', detail: 'Indexation, URLs canoniques, sitemap, robots, redirections', projects: ['Portfolio v4'] },
+      { name: 'Core Web Vitals', detail: 'LCP, INP, CLS, optimisation des images et des médias', projects: ['Portfolio v4'] },
+      { name: 'Données structurées', detail: 'JSON-LD Schema.org, résultats enrichis', projects: ['Portfolio v4'] },
+      { name: 'Metadata & Open Graph', detail: 'Titles, méta-descriptions, aperçus de partage', projects: ['Tous les projets'] },
+      { name: 'Sémantique HTML', detail: 'Structure Hn, accessibilité, textes alternatifs', projects: ['Tous les projets'] },
+      { name: 'Maillage interne', detail: 'Architecture des liens, pages orphelines', projects: ['Portfolio v4'] },
     ],
   },
 ];
@@ -264,7 +294,7 @@ export default function CompetencesPage() {
                   </p>
 
                   <a
-                    href="/contact"
+                    href={section.ctaHref ?? '/contact'}
                     className="inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium border transition-all"
                     style={{
                       borderColor: `${section.accent}60`,
@@ -281,7 +311,7 @@ export default function CompetencesPage() {
                       (e.currentTarget as HTMLAnchorElement).style.borderColor = `${section.accent}60`;
                     }}
                   >
-                    Discuter de cette stack <span>&rarr;</span>
+                    {section.ctaLabel ?? 'Discuter de cette stack'} <span>&rarr;</span>
                   </a>
                 </div>
 
@@ -350,19 +380,11 @@ export default function CompetencesPage() {
                           {section.box3Title}
                         </p>
                         <div className="flex flex-col gap-2 mt-1">
-                          {otherSkills.length > 0 ? (
-                            otherSkills.slice(0, 3).map(s => (
-                              <span key={s.name} className="text-xs font-medium opacity-80 flex items-center gap-1.5">
-                                • {s.name}
-                              </span>
-                            ))
-                          ) : (
-                            section.box3Tags.map(tag => (
-                              <span key={tag} className="text-xs font-medium opacity-80 flex items-center gap-1.5">
-                                • {tag}
-                              </span>
-                            ))
-                          )}
+                          {[...otherSkills.map(s => s.name), ...section.box3Tags].slice(0, 4).map(label => (
+                            <span key={label} className="text-xs font-medium opacity-80 flex items-center gap-1.5">
+                              • {label}
+                            </span>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -403,10 +425,10 @@ export default function CompetencesPage() {
             &larr; Design
           </a>
           <a
-            href="/a-propos"
+            href="/referencement"
             className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
           >
-            À Propos &rarr;
+            Référencement &rarr;
           </a>
         </div>
         <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">

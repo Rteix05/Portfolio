@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
 import Footer from '../../components/Footer';
 import Navbar from '@/components/Navbar';
+import LazyVideo from '@/components/LazyVideo';
 import dynamic from 'next/dynamic';
 
 const CharmanderViewer = dynamic(() => import('@/components/CharmanderViewer'), { ssr: false });
@@ -128,9 +129,7 @@ export default function Projets3DPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative rounded-3xl overflow-hidden aspect-video shadow-2xl border border-black/10 dark:border-white/10 group">
-              <video autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105 pointer-events-none">
-                <source src="/blender.mp4" type="video/mp4" />
-              </video>
+              <LazyVideo src="/blender.mp4" className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105 pointer-events-none" />
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
               <div className="absolute bottom-0 left-0 p-8 pointer-events-none">
                 <p className="text-xs uppercase tracking-widest text-white/60 mb-2 font-mono">Étape 1</p>
@@ -140,9 +139,7 @@ export default function Projets3DPage() {
             </div>
 
             <div className="relative rounded-3xl overflow-hidden aspect-video shadow-2xl border border-black/10 dark:border-white/10 group">
-              <video autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105 pointer-events-none">
-                <source src="/playstation_2.mp4" type="video/mp4" />
-              </video>
+              <LazyVideo src="/playstation_2.mp4" className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105 pointer-events-none" />
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
               <div className="absolute bottom-0 left-0 p-8 pointer-events-none">
                 <p className="text-xs uppercase tracking-widest text-white/60 mb-2 font-mono">Étape 2</p>
@@ -172,14 +169,10 @@ export default function Projets3DPage() {
 
               <div className="w-full md:w-2/3 relative h-[45vh] md:h-[60vh] overflow-hidden">
                    <div className="absolute right-0 top-0 w-3/4 h-[90%] rounded-3xl overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 z-10 group">
-                       <video autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none">
-                          <source src="/playstation_2.mp4" type="video/mp4" />
-                       </video>
+                       <LazyVideo src="/playstation_2.mp4" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none" />
                    </div>
                    <div className="absolute left-0 bottom-0 w-1/2 aspect-4/3 rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-black/10 dark:border-white/10 z-20 group">
-                       <video autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none">
-                          <source src="/blender.mp4" type="video/mp4" />
-                       </video>
+                       <LazyVideo src="/blender.mp4" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none" />
                    </div>
               </div>
           </div>
