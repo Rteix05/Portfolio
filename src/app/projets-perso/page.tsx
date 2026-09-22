@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
 import Footer from '../../components/Footer';
 import Navbar from '@/components/Navbar';
+import LazyVideo from '@/components/LazyVideo';
 import { getTechIcon } from '@/lib/techIcons';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -78,10 +80,13 @@ export default function ProjetsPersoPage() {
 
       {/* HERO AVEC IMAGE DE FOND */}
       <section className="h-screen w-full relative flex items-center justify-center overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop" 
-          alt="Hero Background" 
-          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity pointer-events-none" 
+        <Image
+          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-20 mix-blend-luminosity pointer-events-none"
         />
         <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-[#050505]" />
         
@@ -89,9 +94,7 @@ export default function ProjetsPersoPage() {
           <p className="text-sm uppercase tracking-[0.3em] mb-6 opacity-60">Side Projects</p>
           <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none drop-shadow-2xl">
             Projets
-          </h1>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none -mt-1 md:-mt-6 drop-shadow-2xl">
-            Personnels
+            <span className="block -mt-1 md:-mt-6">Personnels</span>
           </h1>
         </div>
       </section>
@@ -164,21 +167,22 @@ export default function ProjetsPersoPage() {
                   
                   {/* Grande Image (En arrière-plan) */}
                   <div className={`absolute ${isEven ? 'right-0' : 'left-0'} top-0 w-4/5 h-[85%] rounded-3xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 z-10 bg-gray-100 dark:bg-zinc-900`}>
-                    <img 
-                      src={projet.image} 
-                      alt={projet.name} 
-                      className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                    <Image
+                      src={projet.image}
+                      alt={`Aperçu du projet ${projet.name}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 55vw"
+                      className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
                     />
                   </div>
 
                   {/* Petite Vidéo (Superposée) */}
                   <div className={`absolute ${isEven ? 'left-0' : 'right-0'} bottom-0 w-[55%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-black/5 dark:border-white/10 z-20 bg-black`}>
-                    <video 
-                      autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback 
-                      className="w-full h-full object-cover pointer-events-none"
-                    >
-                      <source src={projet.video} type="video/mp4" />
-                    </video>
+                    <LazyVideo
+                        src={projet.video}
+                        poster={projet.image}
+                        className="w-full h-full object-cover pointer-events-none"
+                      />
                   </div>
 
                 </div>

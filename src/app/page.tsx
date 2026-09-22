@@ -66,6 +66,15 @@ const projects = [
     mapImage: '/competences.webp',
     cardVideo: '/figma2.mp4',
   },
+  {
+    id: 'referencement',
+    name: 'Référencement',
+    subtitle: 'SEO technique, Core Web Vitals, Search Console',
+    description: 'Audit et optimisation du référencement naturel : indexation, sémantique, performance et mesure.',
+    mapImage: '/competences.webp',
+    cardImage: '/competences.webp',
+    hidden: true,
+  },
   { 
     id: 'a-propos', 
     name: 'À Propos',
@@ -108,6 +117,29 @@ export default function Home() {
 
   return (
     <main className="relative h-screen w-full overflow-hidden bg-[#050505] text-white">
+      {/* Contenu de référencement : l’accueil est une expérience au survol, donc son
+          texte et ses liens internes sont exposés ici pour les moteurs et les lecteurs d’écran. */}
+      <div className="sr-only">
+        <h1>Rafael Teixeira — Développeur Full Stack à Troyes &amp; Paris</h1>
+        <p>
+          Portfolio de Rafael Teixeira, développeur full stack et étudiant en BUT MMI à Troyes.
+          Développement web avec React, Next.js, TypeScript, PHP et Symfony, design d’interfaces
+          sur Figma et expériences 3D avec Three.js.
+        </p>
+        <nav aria-label="Sections du portfolio">
+          <ul>
+            {projects.map((p) => (
+              <li key={`seo-${p.id}`}>
+                <a href={`/${p.id}`}>{p.name}</a> — {p.description}
+              </li>
+            ))}
+            <li>
+              <a href="/contact">Contact</a> — Me contacter pour une alternance, une mission ou un projet.
+            </li>
+          </ul>
+        </nav>
+      </div>
+
       
       {/* 0. BACKGROUND VIDEO 3D (Ton propre rendu) */}
       <motion.div 

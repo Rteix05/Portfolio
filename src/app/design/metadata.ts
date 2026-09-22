@@ -1,12 +1,20 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Design — UI/UX & Prototypage',
-  description: 'Maquettes, prototypes et parcours utilisateur réalisés avec Figma et outils de design.',
+  title: 'Design UI/UX — Maquettes & prototypes Figma',
+  description:
+    'Recherche UX, maquettes haute-fidélité, design systems et prototypes interactifs réalisés sur Figma, du wireframe à l’interface finale.',
+  alternates: { canonical: '/design' },
   openGraph: {
-    title: 'Design — Rafael Teixeira',
-    description: 'Maquettes, prototypes et parcours utilisateur réalisés avec Figma et outils de design.',
-    url: 'https://rafaelteixeira.fr/design',
-    images: ['https://rafaelteixeira.fr/design/og-image.png'],
+    title: 'Design UI/UX — Maquettes & prototypes Figma | Rafael Teixeira',
+    description:
+      'Recherche UX, maquettes haute-fidélité, design systems et prototypes interactifs réalisés sur Figma, du wireframe à l’interface finale.',
+    url: '/design',
+    siteName: 'Rafael Teixeira',
+    images: [
+      { url: '/og-image.webp', width: 1200, height: 630, alt: 'Rafael Teixeira — Développeur Full Stack' },
+    ],
+    locale: 'fr_FR',
+    type: 'website',
   },
 };

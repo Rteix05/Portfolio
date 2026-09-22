@@ -1,12 +1,20 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '3D — Projets 3D interactifs',
-  description: 'Modèles 3D interactifs et shaders — Three.js, React Three Fiber.',
+  title: 'Expériences 3D — Three.js & React Three Fiber',
+  description:
+    'Expériences 3D interactives sur le web : modèles glTF, shaders GLSL et animations temps réel, construits avec Three.js et React Three Fiber.',
+  alternates: { canonical: '/3d' },
   openGraph: {
-    title: '3D — Rafael Teixeira',
-    description: 'Modèles 3D interactifs et shaders — Three.js, React Three Fiber.',
-    url: 'https://rafaelteixeira.fr/3d',
-    images: ['https://rafaelteixeira.fr/3d/og-image.png'],
+    title: 'Expériences 3D — Three.js & React Three Fiber | Rafael Teixeira',
+    description:
+      'Expériences 3D interactives sur le web : modèles glTF, shaders GLSL et animations temps réel, construits avec Three.js et React Three Fiber.',
+    url: '/3d',
+    siteName: 'Rafael Teixeira',
+    images: [
+      { url: '/og-image.webp', width: 1200, height: 630, alt: 'Rafael Teixeira — Développeur Full Stack' },
+    ],
+    locale: 'fr_FR',
+    type: 'website',
   },
 };

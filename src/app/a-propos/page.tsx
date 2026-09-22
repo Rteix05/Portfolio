@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Space_Grotesk } from 'next/font/google';
@@ -116,10 +117,17 @@ export default function AProposPage() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col md:flex-row gap-8 mb-16 items-end">
             <div
-              className="w-48 h-60 md:w-64 md:h-80 rounded-2xl overflow-hidden shrink-0 border border-black/10 dark:border-white/10"
+              className="relative w-48 h-60 md:w-64 md:h-80 rounded-2xl overflow-hidden shrink-0 border border-black/10 dark:border-white/10"
               data-hero
             >
-              <img src="/Raf.webp" alt="Rafael Teixeira" className="w-full h-full object-cover object-top" />
+              <Image
+                src="/Raf.webp"
+                alt="Portrait de Rafael Teixeira, développeur full stack"
+                fill
+                priority
+                sizes="(max-width: 768px) 12rem, 16rem"
+                className="object-cover object-top"
+              />
             </div>
 
             <div className="flex-1 flex flex-col gap-4" data-hero>
@@ -149,7 +157,7 @@ export default function AProposPage() {
 
           <div data-hero className="border-t border-black/10 dark:border-white/10 pt-8 flex items-end justify-between">
             <div>
-              <p className="text-black/60 dark:text-white/60 font-semibold text-2xl md:text-3xl italic">Rafael Teixeira</p>
+              <h1 className="text-black/60 dark:text-white/60 font-semibold text-2xl md:text-3xl italic">Rafael Teixeira</h1>
             </div>
             <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest text-right max-w-50">
               Développeur<br />Full Stack & UI/UX
@@ -267,10 +275,10 @@ export default function AProposPage() {
       <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
         <div className="flex items-center justify-between px-6 md:px-16 py-16">
           <a
-            href="/competences"
+            href="/referencement"
             className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
           >
-            &larr; Compétences
+            &larr; Référencement
           </a>
           <a
             href="/3d"

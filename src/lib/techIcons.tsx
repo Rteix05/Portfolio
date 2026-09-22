@@ -21,6 +21,9 @@ const iconMap: Record<string, ReactNode> = {
   'tailwindcss': <SiTailwindcss />,
   'mobile first': <LuSmartphone />,
   'three.js': <SiThreedotjs />,
+  'react native': <SiReact />,
+  'react native / expo': <SiReact />,
+  'expo': <SiReact />,
   'react three fiber': <SiReact />,
   'r3f': <SiReact />,
   'gsap': <SiGreensock />,
@@ -54,6 +57,7 @@ const iconMap: Record<string, ReactNode> = {
   'premiere pro': <LuScissors />,
   'reverse proxy': <LuServer />,
   'git': <SiGit />,
+  'gitflow': <SiGit />,
   'mongodb': <SiMongodb />,
   'express': <SiExpress />,
   'spline': <LuBox />,
@@ -68,5 +72,7 @@ const iconMap: Record<string, ReactNode> = {
 };
 
 export function getTechIcon(name: string): ReactNode | null {
-  return iconMap[name.toLowerCase().trim()] ?? null;
+  const key = name.toLowerCase().trim();
+  // Ignore un numéro de version suffixé (ex : "Symfony 7.4")
+  return iconMap[key] ?? iconMap[key.replace(/ [0-9.]+$/, '')] ?? null;
 }
