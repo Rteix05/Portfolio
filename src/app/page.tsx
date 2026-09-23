@@ -117,15 +117,9 @@ export default function Home() {
 
   return (
     <main className="relative h-screen w-full overflow-hidden bg-[#050505] text-white">
-      {/* Contenu de référencement : l’accueil est une expérience au survol, donc son
-          texte et ses liens internes sont exposés ici pour les moteurs et les lecteurs d’écran. */}
+      {/* Les liens internes de l’accueil vivent dans le menu au survol : on les expose
+          aussi ici pour les moteurs et les lecteurs d’écran. Le titre, lui, est visible. */}
       <div className="sr-only">
-        <h1>Rafael Teixeira — Développeur Full Stack à Troyes &amp; Paris</h1>
-        <p>
-          Portfolio de Rafael Teixeira, développeur full stack et étudiant en BUT MMI à Troyes.
-          Développement web avec React, Next.js, TypeScript, PHP et Symfony, design d’interfaces
-          sur Figma et expériences 3D avec Three.js.
-        </p>
         <nav aria-label="Sections du portfolio">
           <ul>
             {projects.map((p) => (
@@ -270,6 +264,60 @@ export default function Home() {
       <div className="absolute inset-0 z-40 flex flex-col pointer-events-none">
         
         <Navbar isHidden={isTransitioning} onMenuClick={() => setMenuOpen(prev => !prev)} />
+
+        {/* ACCROCHE — nom à gauche, discours à droite.
+            Les deux s’effacent dès qu’un projet prend le dessus ou que le menu s’ouvre. */}
+        <AnimatePresence>
+          {!hoveredProject && !isTransitioning && !menuOpen && (
+            <motion.div
+              key="hero-nom"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.7, ease }}
+              className={`absolute left-6 bottom-52 md:left-[10vw] md:bottom-[12vh] ${spaceGrotesk.className}`}
+            >
+              <h1 className="font-semibold uppercase leading-[0.92] tracking-[-0.06em] text-[2.6rem] sm:text-[3.6rem] md:text-[6.5rem] drop-shadow-2xl">
+                Rafael
+                <span className="block">Teixeira</span>
+              </h1>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {!hoveredProject && !isTransitioning && !menuOpen && (
+            <motion.div
+              key="hero-texte"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.7, ease, delay: 0.1 }}
+              className={`absolute left-6 right-6 bottom-28 md:left-auto md:right-[8vw] md:bottom-[48vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
+            >
+              <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-white/50 mb-4">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                </span>
+                Disponible en alternance
+              </span>
+
+              <p className="text-sm md:text-base text-white/70 font-medium tracking-tight md:whitespace-nowrap">
+                Développeur full-stack · Étudiant en BUT MMI à Troyes
+              </p>
+
+              <p className="mt-3 text-sm md:text-[0.95rem] leading-relaxed text-white/50">
+                Je conçois et développe des sites et des applications web, du design de l’interface
+                jusqu’à la mise en ligne et son référencement.
+              </p>
+
+              <p className="mt-6 text-[10px] font-mono uppercase tracking-[0.15em] text-white/30 leading-relaxed md:whitespace-nowrap">
+                React · Next.js · TypeScript · Symfony · Docker · Three.js · SEO
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* SOCIAL ICONS */}
         <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex items-center gap-4 pointer-events-auto z-50">
