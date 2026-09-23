@@ -1,14 +1,25 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Référencement naturel — SEO technique & Core Web Vitals',
+  title: 'Référencement naturel — La chaîne SEO de A à Z',
   description:
-    'Audit et optimisation SEO : indexation, metadata, données structurées, structure sémantique, Core Web Vitals et suivi Search Console. Une méthode en quatre étapes.',
+    'Les huit maillons du référencement naturel : mots-clés, arborescence, SEO technique, balises title, données structurées, Core Web Vitals, maillage interne et suivi Search Console.',
+  keywords: [
+    'référencement naturel',
+    'SEO technique',
+    'audit SEO',
+    'Core Web Vitals',
+    'Google Search Console',
+    'données structurées',
+    'maillage interne',
+    'indexation',
+    'trafic organique',
+  ],
   alternates: { canonical: '/referencement' },
   openGraph: {
-    title: 'Référencement naturel — SEO technique & Core Web Vitals | Rafael Teixeira',
+    title: 'Référencement naturel — La chaîne SEO de A à Z | Rafael Teixeira',
     description:
-      'Audit et optimisation SEO : indexation, metadata, données structurées, structure sémantique, Core Web Vitals et suivi Search Console.',
+      'Des mots-clés au code, du code à l’indexation, de l’indexation aux résultats mesurés : les huit maillons du référencement naturel, expliqués un par un.',
     url: '/referencement',
     siteName: 'Rafael Teixeira',
     images: [
