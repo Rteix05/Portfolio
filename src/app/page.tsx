@@ -293,7 +293,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.7, ease, delay: 0.1 }}
-              className={`absolute left-6 right-6 bottom-28 md:left-auto md:right-[8vw] md:bottom-[20vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
+              className={`absolute left-6 right-6 bottom-28 md:left-auto md:right-[8vw] md:bottom-[48vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
             >
               <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-white/50 mb-4">
                 <span className="relative flex h-1.5 w-1.5">
