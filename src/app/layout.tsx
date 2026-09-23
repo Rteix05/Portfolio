@@ -48,6 +48,9 @@ export const metadata: Metadata = {
   },
   authors: [{ name: 'Rafael Teixeira', url: SITE_URL }],
   creator: 'Rafael Teixeira',
+  verification: {
+    google: 'RHaEUb71xv0DD795uCO9Mq7XN_xYVx3ClvuBJYI_QKQ',
+  },
 };
 
 // Données structurées : identité de l auteur + site, pour les résultats enrichis
