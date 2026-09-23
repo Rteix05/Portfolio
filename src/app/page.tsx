@@ -265,17 +265,37 @@ export default function Home() {
         
         <Navbar isHidden={isTransitioning} onMenuClick={() => setMenuOpen(prev => !prev)} />
 
-        {/* ACCROCHE : nom, rôle et pitch. S’efface dès qu’un projet est survolé ou que le menu s’ouvre. */}
+        {/* ACCROCHE — nom à gauche, discours à droite.
+            Les deux s’effacent dès qu’un projet prend le dessus ou que le menu s’ouvre. */}
         <AnimatePresence>
           {!hoveredProject && !isTransitioning && !menuOpen && (
             <motion.div
+              key="hero-nom"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.7, ease }}
-              className={`absolute left-6 right-6 bottom-28 md:left-[10vw] md:right-auto md:bottom-[12vh] md:max-w-2xl ${spaceGrotesk.className}`}
+              className={`absolute left-6 bottom-52 md:left-[10vw] md:bottom-[12vh] ${spaceGrotesk.className}`}
             >
-              <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-white/50 mb-5">
+              <h1 className="font-semibold uppercase leading-[0.92] tracking-[-0.06em] text-[2.6rem] sm:text-[3.6rem] md:text-[6.5rem] drop-shadow-2xl">
+                Rafael
+                <span className="block">Teixeira</span>
+              </h1>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {!hoveredProject && !isTransitioning && !menuOpen && (
+            <motion.div
+              key="hero-texte"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.7, ease, delay: 0.1 }}
+              className={`absolute left-6 right-6 bottom-24 md:left-auto md:right-[8vw] md:bottom-[15vh] md:w-80 md:text-right ${spaceGrotesk.className}`}
+            >
+              <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-white/50 mb-4">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -283,21 +303,16 @@ export default function Home() {
                 Disponible en alternance
               </span>
 
-              <h1 className="font-semibold uppercase leading-[0.92] tracking-[-0.06em] text-[3rem] sm:text-[4rem] md:text-[6.5rem] drop-shadow-2xl">
-                Rafael
-                <span className="block">Teixeira.</span>
-              </h1>
-
-              <p className="mt-5 text-sm md:text-base text-white/70 font-medium tracking-tight">
+              <p className="text-sm md:text-base text-white/70 font-medium tracking-tight">
                 Développeur full-stack · Étudiant en BUT MMI à Troyes
               </p>
 
-              <p className="mt-3 max-w-md text-sm md:text-base leading-relaxed text-white/50">
+              <p className="mt-3 text-sm md:text-[0.95rem] leading-relaxed text-white/50">
                 Je conçois et développe des sites et des applications web, du design de l’interface
                 jusqu’à la mise en ligne et son référencement.
               </p>
 
-              <p className="mt-7 text-[10px] md:text-[11px] font-mono uppercase tracking-[0.2em] text-white/30">
+              <p className="mt-6 text-[10px] md:text-[11px] font-mono uppercase tracking-[0.2em] text-white/30 leading-relaxed">
                 React · Next.js · TypeScript · Symfony · PHP · Docker · Three.js · SEO
               </p>
             </motion.div>
