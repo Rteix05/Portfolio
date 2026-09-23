@@ -293,7 +293,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.7, ease, delay: 0.1 }}
-              className={`absolute left-6 right-6 bottom-24 md:left-auto md:right-[8vw] md:bottom-[15vh] md:w-80 md:text-right ${spaceGrotesk.className}`}
+              className={`absolute left-6 right-6 bottom-28 md:left-auto md:right-[8vw] md:bottom-[20vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
             >
               <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-white/50 mb-4">
                 <span className="relative flex h-1.5 w-1.5">
@@ -303,7 +303,7 @@ export default function Home() {
                 Disponible en alternance
               </span>
 
-              <p className="text-sm md:text-base text-white/70 font-medium tracking-tight">
+              <p className="text-sm md:text-base text-white/70 font-medium tracking-tight md:whitespace-nowrap">
                 Développeur full-stack · Étudiant en BUT MMI à Troyes
               </p>
 
@@ -312,8 +312,8 @@ export default function Home() {
                 jusqu’à la mise en ligne et son référencement.
               </p>
 
-              <p className="mt-6 text-[10px] md:text-[11px] font-mono uppercase tracking-[0.2em] text-white/30 leading-relaxed">
-                React · Next.js · TypeScript · Symfony · PHP · Docker · Three.js · SEO
+              <p className="mt-6 text-[10px] font-mono uppercase tracking-[0.15em] text-white/30 leading-relaxed md:whitespace-nowrap">
+                React · Next.js · TypeScript · Symfony · Docker · Three.js · SEO
               </p>
             </motion.div>
           )}
