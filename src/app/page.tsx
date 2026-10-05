@@ -116,7 +116,7 @@ export default function Home() {
   const displayData = currentId ? projects.find(p => p.id === currentId) : null;
 
   return (
-    <main className="relative h-screen w-full overflow-hidden bg-[#050505] text-white">
+    <main className="relative h-dvh w-full overflow-hidden bg-[#050505] text-white">
       {/* Les liens internes de l’accueil vivent dans le menu au survol : on les expose
           aussi ici pour les moteurs et les lecteurs d’écran. Le titre, lui, est visible. */}
       <div className="sr-only">
@@ -266,7 +266,10 @@ export default function Home() {
         <Navbar isHidden={isTransitioning} onMenuClick={() => setMenuOpen(prev => !prev)} />
 
         {/* ACCROCHE — nom à gauche, discours à droite.
-            Les deux s’effacent dès qu’un projet prend le dessus ou que le menu s’ouvre. */}
+            Les deux s’effacent dès qu’un projet prend le dessus ou que le menu s’ouvre.
+            Sur mobile, les deux blocs s’empilent dans une colonne pour ne jamais se chevaucher ;
+            à partir de md, le conteneur disparaît (display: contents) et chacun reprend sa place. */}
+        <div className="absolute left-6 right-6 bottom-20 flex flex-col gap-8 md:contents">
         <AnimatePresence>
           {!hoveredProject && !isTransitioning && !menuOpen && (
             <motion.div
@@ -275,7 +278,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.7, ease }}
-              className={`absolute left-6 bottom-52 md:left-[10vw] md:bottom-[12vh] ${spaceGrotesk.className}`}
+              className={`md:absolute md:left-[10vw] md:bottom-[12vh] ${spaceGrotesk.className}`}
             >
               <h1 className="font-semibold uppercase leading-[0.92] tracking-[-0.06em] text-[2.6rem] sm:text-[3.6rem] md:text-[6.5rem] drop-shadow-2xl">
                 Rafael
@@ -293,7 +296,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.7, ease, delay: 0.1 }}
-              className={`absolute left-6 right-6 bottom-28 md:left-auto md:right-[8vw] md:bottom-[48vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
+              className={`md:absolute md:right-[8vw] md:bottom-[48vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
             >
               <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-white/50 mb-4">
                 <span className="relative flex h-1.5 w-1.5">
@@ -318,6 +321,7 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
+        </div>
 
         {/* SOCIAL ICONS */}
         <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex items-center gap-4 pointer-events-auto z-50">
