@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Pas de classes dans les médias : le scanner plante sur les gros binaires (.glb) */
+@source not "../../public";
+
 @variant dark (&:where(.dark, .dark *));
 
 * {
@@ -10,9 +13,17 @@ input, textarea, [contenteditable] {
   user-select: text;
 }
 
+/* Le thème suit la classe posée sur <html> (sombre par défaut), pas le système */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+:root.dark {
+  --background: #050505;
+  --foreground: #f5f5f5;
 }
 
 @theme inline {
@@ -20,17 +31,157 @@ input, textarea, [contenteditable] {
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --ease-out-soft: var(--ease-out);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--background);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--foreground) 85%, transparent);
+  color: var(--background);
+}
+
+/* Conteneur unique : mêmes marges et même largeur sur toutes les pages */
+@utility container-site {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  @variant md {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Carte de base : bordure fine, fond à peine teinté, survol en douceur */
+@utility carte {
+  border-radius: 1.25rem;
+  border: 1px solid rgb(0 0 0 / 0.08);
+  background: rgb(0 0 0 / 0.025);
+  transition:
+    transform 0.6s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    background-color 0.4s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
+  @variant dark {
+    border-color: rgb(255 255 255 / 0.09);
+    background: rgb(255 255 255 / 0.03);
+  }
+}
+
+@utility carte-survol {
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgb(0 0 0 / 0.16);
+    box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.18);
+  }
+  @variant dark {
+    &:hover {
+      border-color: rgb(255 255 255 / 0.18);
+      box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.7);
+    }
+  }
+}
+
+/* Halo qui suit le curseur (--mx / --my posés en JS, voir suivreCurseur) */
+@utility projecteur {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-out);
+    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgb(0 0 0 / 0.06), transparent 70%);
+  }
+  &:hover::before {
+    opacity: 1;
+  }
+  @variant dark {
+    &::before {
+      background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.08), transparent 70%);
+    }
+  }
+}
+
+/* Étiquette de section (« Side Projects », « Technologies utilisées »…) */
+@utility surtitre {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+/* Liens précédent / suivant du pied de page */
+@utility lien-voisin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@utility lien-voisin-sens {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.35);
+  @variant dark {
+    color: rgb(255 255 255 / 0.35);
+  }
+}
+
+@utility lien-voisin-titre {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: clamp(1.25rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.25);
+  transition: color 0.5s var(--ease-out);
+  .group:hover & {
+    color: rgb(0 0 0);
+  }
+  @variant dark {
+    color: rgb(255 255 255 / 0.25);
+    .group:hover & {
+      color: rgb(255 255 255);
+    }
+  }
+}
+
+@utility lien-voisin-fleche {
+  display: inline-block;
+  transition: translate 0.5s var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
