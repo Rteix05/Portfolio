@@ -4,17 +4,19 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { reveler } from '@/lib/reveal';
 import { Space_Grotesk } from 'next/font/google';
-import Footer from '../../components/Footer';
+import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
-import LazyVideo from '@/components/LazyVideo';
+import LazyVideo, { affiche } from '@/components/LazyVideo';
+import HeroFond from '@/components/HeroFond';
 import { getTechIcon } from '@/lib/techIcons';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
-// Données enrichies avec les images et vidéos (temporairement les mêmes vidéos PS5 partout)
+// Données enrichies avec les images et vidéos
 const projets = [
   {
     id: 1,
@@ -23,7 +25,7 @@ const projets = [
     description: "Portfolio personnel développé avec Next.js, Tailwind CSS, GSAP et React Three Fiber. Animations au scroll, viewer 3D interactif, design immersif et navigation fluide entre les pages.",
     link: 'https://rafaelteixeira.fr',
     image: '/portfolio.webp',
-    video: '/background.mp4', 
+    video: '/projets/portfolio.mp4',
   },
   {
     id: 2,
@@ -31,8 +33,8 @@ const projets = [
     type: 'Vue.js · UI Design',
     description: 'Site Vue + Tailwind imitant l\'interface utilisateur de la PlayStation 3, avec des animations atmosphériques et des transitions soignées. Navigation au clavier et interactions fidèles à l\'original.',
     link: 'https://ps3userinterface.vercel.app/',
-    image: '/ps3-bg.webp',
-    video: '/play3.mp4',
+    image: '/projets/ps3-image.webp',
+    video: '/projets/ps3.mp4',
   },
   {
     id: 3,
@@ -40,8 +42,8 @@ const projets = [
     type: 'Three.js · R3F · GLSL · React',
     description: 'Portfolio personnel reproduisant l\'UI de la PS5 entièrement en 3D dans le navigateur. Navigation spatiale, modèles GLB animés, shaders custom (God Rays, Bokeh, Réflexions), particules et effets post-processing.',
     link: 'https://portfolio-playstation-bp93gdmje.vercel.app/',
-    image: '/play5.webp',
-    video: '/playstation.mp4',
+    image: '/projets/ps5-image.webp',
+    video: '/projets/ps5.mp4',
   },
 ];
 
@@ -50,22 +52,7 @@ export default function ProjetsPersoPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      textRefs.current.forEach((el) => {
-        if (el) {
-          gsap.fromTo(el,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                end: 'bottom 20%',
-                toggleActions: 'play reverse play reverse',
-              },
-            }
-          );
-        }
-      });
+      reveler(textRefs.current);
     });
     return () => ctx.revert();
   }, []);
@@ -78,16 +65,9 @@ export default function ProjetsPersoPage() {
     <main className={`${spaceGrotesk.className} bg-white text-black dark:bg-[#050505] dark:text-white min-h-screen transition-colors duration-500`}>
       <Navbar />
 
-      {/* HERO AVEC IMAGE DE FOND */}
+      {/* HERO : MONTAGE FLOU DES PROJETS EN FOND */}
       <section className="h-screen w-full relative flex items-center justify-center overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-20 mix-blend-luminosity pointer-events-none"
-        />
+        <HeroFond nom="perso" />
         <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-[#050505]" />
         
         <div className="relative z-10 text-center">
@@ -101,7 +81,7 @@ export default function ProjetsPersoPage() {
 
       {/* INTRO */}
       <section className="relative z-10 bg-white dark:bg-[#050505] pt-10 px-6 md:px-10 pb-16 transition-colors duration-500">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-black/10 dark:border-white/20 pt-10 text-sm">
             <div className="md:col-span-1">
               <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight text-black/90 dark:text-white/90">
@@ -171,8 +151,9 @@ export default function ProjetsPersoPage() {
                       src={projet.image}
                       alt={`Aperçu du projet ${projet.name}`}
                       fill
+                      loading={index === 0 ? 'eager' : 'lazy'}
                       sizes="(max-width: 768px) 100vw, 55vw"
-                      className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                      className="object-cover opacity-90 transition-transform duration-1000 ease-out-soft hover:scale-[1.04]"
                     />
                   </div>
 
@@ -180,7 +161,7 @@ export default function ProjetsPersoPage() {
                   <div className={`absolute ${isEven ? 'left-0' : 'right-0'} bottom-0 w-[55%] aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-black/5 dark:border-white/10 z-20 bg-black`}>
                     <LazyVideo
                         src={projet.video}
-                        poster={projet.image}
+                        poster={affiche(projet.video, projet.image)}
                         className="w-full h-full object-cover pointer-events-none"
                       />
                   </div>
@@ -194,7 +175,7 @@ export default function ProjetsPersoPage() {
 
       {/* SECTION GRILLE TECHNOS */}
       <section className="relative z-10 bg-gray-50 dark:bg-black py-24 px-6 md:px-10 border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div ref={addRef} className="mb-16 text-center md:text-left">
             <p className="text-sm font-medium opacity-50 tracking-widest uppercase mb-4">Technologies utilisées</p>
             <h2 className="text-4xl md:text-6xl font-semibold leading-tight">
@@ -206,7 +187,7 @@ export default function ProjetsPersoPage() {
             {['Next.js', 'Vue.js', 'React', 'Three.js', 'React Three Fiber', 'GSAP', 'TailwindCSS', 'GLSL Shaders', 'Vite', 'Vercel'].map((tech) => {
               const icon = getTechIcon(tech);
               return (
-                <div key={tech} className="rounded-xl border border-black/10 dark:border-white/10 px-5 py-5 flex flex-col items-center gap-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                <div key={tech} className="carte carte-survol px-5 py-6 flex flex-col items-center gap-3 text-sm font-medium">
                   {icon && <span className="text-xl opacity-70">{icon}</span>}
                   {tech}
                 </div>
@@ -217,30 +198,7 @@ export default function ProjetsPersoPage() {
       </section>
 
       {/* FOOTER NAV + COPYRIGHT */}
-      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
-        <div className="flex items-center justify-between px-6 md:px-16 py-16">
-          <a
-            href="/projets-scolaires"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            &larr; Projets Scolaires
-          </a>
-          <a
-            href="/design"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            Design &rarr;
-          </a>
-        </div>
-        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">
-          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
-          </p>
-          <div className="flex items-center gap-4">
-            <Footer />
-          </div>
-        </div>
-      </footer>
+      <PageFooter precedent={{ href: '/projets-scolaires', label: 'Projets Scolaires' }} suivant={{ href: '/projets-pro', label: 'Projets Pro' }} />
     </main>
   );
 }

@@ -4,8 +4,9 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { reveler } from '@/lib/reveal';
 import { Space_Grotesk } from 'next/font/google';
-import Footer from '../../components/Footer';
+import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
 import { getTechIcon } from '@/lib/techIcons';
 
@@ -93,22 +94,7 @@ export default function DesignPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      textRefs.current.forEach((el) => {
-        if (el) {
-          gsap.fromTo(el,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                end: 'bottom 20%',
-                toggleActions: 'play reverse play reverse',
-              },
-            }
-          );
-        }
-      });
+      reveler(textRefs.current);
     });
     return () => ctx.revert();
   }, []);
@@ -145,7 +131,7 @@ export default function DesignPage() {
 
       {/* INTRO */}
       <section className="relative z-10 bg-white dark:bg-[#050505] pt-10 px-6 md:px-10 pb-32 transition-colors duration-500">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-black/10 dark:border-white/20 pt-10">
             <div>
               <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight text-black/90 dark:text-white/90">
@@ -250,13 +236,13 @@ export default function DesignPage() {
                   <div className="hidden md:grid grid-cols-5 grid-rows-2 gap-3 h-[65vh]">
                     {/* Screen principal */}
                     <div className="col-span-3 row-span-2 rounded-2xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 bg-gray-100 dark:bg-zinc-900 group">
-                      <Screen src={projet.screens[0]} alt={`${projet.name} - screen principal`} accent={projet.accent} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <Screen src={projet.screens[0]} alt={`${projet.name} - screen principal`} accent={projet.accent} className="w-full h-full object-cover transition-transform duration-1000 ease-out-soft group-hover:scale-[1.04]" />
                     </div>
                     <div className="col-span-2 row-span-1 rounded-2xl overflow-hidden shadow-xl border border-black/5 dark:border-white/10 bg-gray-100 dark:bg-zinc-900 group">
-                      <Screen src={projet.screens[1]} alt={`${projet.name} - screen 2`} accent={projet.accent} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <Screen src={projet.screens[1]} alt={`${projet.name} - screen 2`} accent={projet.accent} className="w-full h-full object-cover transition-transform duration-1000 ease-out-soft group-hover:scale-[1.04]" />
                     </div>
                     <div className="col-span-2 row-span-1 rounded-2xl overflow-hidden shadow-xl border border-white/10 group" style={{ background: `${projet.accent}18` }}>
-                      <Screen src={projet.screens[2]} alt={`${projet.name} - screen 3`} accent={projet.accent} className="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105 mix-blend-luminosity" />
+                      <Screen src={projet.screens[2]} alt={`${projet.name} - screen 3`} accent={projet.accent} className="w-full h-full object-cover opacity-80 transition-transform duration-1000 ease-out-soft group-hover:scale-[1.04] mix-blend-luminosity" />
                     </div>
                   </div>
                   {/* Mobile: stack images */}
@@ -295,7 +281,7 @@ export default function DesignPage() {
 
       {/* STACK DESIGN */}
       <section className="relative z-10 bg-gray-50 dark:bg-black py-32 px-6 md:px-10 border-t border-black/5 dark:border-white/10 transition-colors duration-500 mt-16">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div ref={addRef} className="mb-16 text-center md:text-left">
             <p className="text-sm font-medium opacity-50 tracking-widest uppercase mb-4">Outils & méthodes</p>
             <h2 className="text-4xl md:text-6xl font-semibold leading-tight">
@@ -307,7 +293,7 @@ export default function DesignPage() {
             {['Figma', 'Adobe XD', 'Photoshop', 'Illustrator', 'After Effects', 'Premiere Pro', 'Spline', 'Framer'].map((tech) => {
               const icon = getTechIcon(tech);
               return (
-                <div key={tech} className="rounded-xl border border-black/10 dark:border-white/10 px-5 py-5 flex flex-col items-center gap-2 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                <div key={tech} className="carte carte-survol px-5 py-6 flex flex-col items-center gap-3 text-sm font-medium">
                   {icon && <span className="text-xl opacity-70">{icon}</span>}
                   {tech}
                 </div>
@@ -318,30 +304,7 @@ export default function DesignPage() {
       </section>
 
       {/* FOOTER NAV + COPYRIGHT */}
-      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
-        <div className="flex items-center justify-between px-6 md:px-16 py-16">
-          <a
-            href="/projets-perso"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            &larr; Projets Perso
-          </a>
-          <a
-            href="/competences"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            Compétences &rarr;
-          </a>
-        </div>
-        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">
-          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
-          </p>
-          <div className="flex items-center gap-4">
-            <Footer />
-          </div>
-        </div>
-      </footer>
+      <PageFooter precedent={{ href: '/projets-pro', label: 'Projets Pro' }} suivant={{ href: '/competences', label: 'Compétences' }} />
     </main>
   );
 }
