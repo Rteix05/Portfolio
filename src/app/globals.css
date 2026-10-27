@@ -146,9 +146,9 @@ p {
   font-size: 0.7rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.35);
+  color: rgb(0 0 0 / 0.55);
   @variant dark {
-    color: rgb(255 255 255 / 0.35);
+    color: rgb(255 255 255 / 0.55);
   }
 }
 
@@ -160,13 +160,13 @@ p {
   font-weight: 600;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  color: rgb(0 0 0 / 0.25);
+  color: rgb(0 0 0 / 0.55);
   transition: color 0.5s var(--ease-out);
   .group:hover & {
     color: rgb(0 0 0);
   }
   @variant dark {
-    color: rgb(255 255 255 / 0.25);
+    color: rgb(255 255 255 / 0.55);
     .group:hover & {
       color: rgb(255 255 255);
     }
