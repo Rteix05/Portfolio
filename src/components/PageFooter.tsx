@@ -33,7 +33,7 @@ export default function PageFooter({ precedent, suivant }: { precedent?: Lien; s
       )}
       <div className="border-t border-black/8 dark:border-white/8">
         <div className="container-site flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
-          <p className="text-xs uppercase tracking-widest text-black/30 dark:text-white/30">
+          <p className="text-xs uppercase tracking-widest text-black/55 dark:text-white/55">
             &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
           </p>
           <Footer />

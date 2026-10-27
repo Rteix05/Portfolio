@@ -5,15 +5,15 @@ import { LuLinkedin, LuMail } from 'react-icons/lu'
 export default function Footer() {
   return (
     <div className="flex items-center gap-4">
-      <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">Développeur Full Stack &amp; UI/UX — SEO</p>
+      <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest hidden sm:block">Développeur Full Stack &amp; UI/UX — SEO</p>
       <div className="w-px h-4 bg-black/5 dark:bg-white/5" />
-      <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white active:text-white transition-colors duration-300">
+      <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" aria-label="GitHub (nouvel onglet)" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white active:text-white transition-colors duration-300">
         <SiGithub size={18} />
       </a>
-      <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white active:text-white transition-colors duration-300">
+      <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (nouvel onglet)" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white active:text-white transition-colors duration-300">
         <LuLinkedin size={18} />
       </a>
-      <a href="/contact" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white active:text-white transition-colors duration-300">
+      <a href="/contact" aria-label="Contact" className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white active:text-white transition-colors duration-300">
         <LuMail size={18} />
       </a>
     </div>
