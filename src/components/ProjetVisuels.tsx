@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import LazyVideo from '@/components/LazyVideo';
+import LazyVideo, { affiche } from '@/components/LazyVideo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +14,8 @@ type Props = {
   video: string;
   videoIsImage?: boolean;
   aDroite: boolean;
+  /** Premier projet de la page : son image est l’élément LCP */
+  prioritaire?: boolean;
 };
 
 /**
@@ -21,7 +23,7 @@ type Props = {
  * Inclinaison 3D qui suit la souris, parallaxe au scroll,
  * et clic sur la petite vignette pour la passer au premier plan.
  */
-export default function ProjetVisuels({ nom, image, video, videoIsImage, aDroite }: Props) {
+export default function ProjetVisuels({ nom, image, video, videoIsImage, aDroite, prioritaire }: Props) {
   const zone = useRef<HTMLDivElement>(null);
   const scene = useRef<HTMLDivElement>(null);
   const grande = useRef<HTMLDivElement>(null);
@@ -59,9 +61,9 @@ export default function ProjetVisuels({ nom, image, video, videoIsImage, aDroite
 
   const media = (src: string, estImage: boolean, sizes: string) =>
     estImage ? (
-      <Image src={src} alt={`Aperçu du projet ${nom}`} fill sizes={sizes} className="object-cover object-top" />
+      <Image src={src} alt={`Aperçu du projet ${nom}`} fill sizes={sizes} loading={prioritaire ? 'eager' : 'lazy'} className="object-cover object-top" />
     ) : (
-      <LazyVideo src={src} poster={image} className="w-full h-full object-cover pointer-events-none" />
+      <LazyVideo src={src} poster={affiche(src, image)} className="w-full h-full object-cover pointer-events-none" />
     );
 
   const cadre =

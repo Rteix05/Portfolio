@@ -42,8 +42,7 @@ const projets: Projet[] = [
     description: 'Plateforme web sur-mesure (architecture Headless) pour une association religieuse. Gestion des inscriptions, dons, ressources PDF et espace membre sécurisé.',
     link: 'https://www.samuelpanzutv.com',
     image: '/mdlp.webp',
-    video: '/mdlpfav.webp',
-    videoIsImage: true,
+    video: '/projets/mdlp.mp4',
     role: 'Développeur Fullstack (Conception, Développement, Déploiement)',
     projectType: 'Application Web sur-mesure (Architecture Headless)',
     details: {
@@ -95,8 +94,7 @@ const projets: Projet[] = [
     description: "Plateforme de formation en ligne pour l'École du Savoir et de l'Intelligence Chrétienne : catalogue de formations, vente de masterclass premium et espace personnel pour chaque élève.",
     link: 'https://esich.fr',
     image: '/esic.webp',
-    video: '/esic-detail.webp',
-    videoIsImage: true,
+    video: '/projets/esic.mp4',
     role: 'Développeur Fullstack (Conception, Développement, Déploiement)',
     projectType: 'Plateforme e-learning avec paiement en ligne',
     details: {
@@ -189,8 +187,6 @@ export default function ProjetsProPage() {
         </div>
       </section>
 
-      <PageFooter />
-
       {/* INTRO */}
       <section className="relative z-10 bg-white dark:bg-[#050505] pt-10 px-6 md:px-10 pb-16 transition-colors duration-500">
         <div className="max-w-7xl mx-auto">
@@ -271,6 +267,7 @@ export default function ProjetsProPage() {
                       video={projet.video}
                       videoIsImage={projet.videoIsImage}
                       aDroite={isEven}
+                      prioritaire={index === 0}
                     />
                   </div>
                 </div>
@@ -352,15 +349,7 @@ export default function ProjetsProPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <section className="flex flex-col sm:flex-row items-center justify-between gap-6 px-6 md:px-20 py-16 bg-white dark:bg-[#050505] border-t border-black/5 dark:border-white/10 transition-colors duration-500">
-        <a href="/projets-perso" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
-          ← Projets Perso
-        </a>
-        <a href="/design" className="text-2xl md:text-4xl lg:text-6xl font-semibold italic text-black/20 dark:text-white/30 hover:text-black dark:hover:text-white transition-colors cursor-pointer">
-          Design UI/UX →
-        </a>
-      </section>
+      <PageFooter precedent={{ href: '/projets-perso', label: 'Projets Perso' }} suivant={{ href: '/design', label: 'Design' }} />
     </main>
   );
 }
