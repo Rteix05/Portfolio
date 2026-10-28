@@ -31,7 +31,7 @@ Pour lancer le projet en local :
 Cloner le dépôt :
 
 Bash
-git clone https://github.com/Rteix05/ton-repo.git
+git clone https://github.com/Rteix05/Portfolio
 Installer les dépendances :
 
 Bash
