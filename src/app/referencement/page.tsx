@@ -3,8 +3,9 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { reveler } from '@/lib/reveal';
 import { Space_Grotesk } from 'next/font/google';
-import Footer from '../../components/Footer';
+import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -147,26 +148,7 @@ export default function ReferencementPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      revealRefs.current.forEach((el) => {
-        if (el) {
-          gsap.fromTo(
-            el,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                end: 'bottom 20%',
-                toggleActions: 'play reverse play reverse',
-              },
-            },
-          );
-        }
-      });
+      reveler(revealRefs.current);
     });
     return () => ctx.revert();
   }, []);
@@ -210,7 +192,7 @@ export default function ReferencementPage() {
 
       {/* INTRO */}
       <section className="relative z-10 bg-white dark:bg-[#050505] pt-10 px-6 md:px-10 pb-24 transition-colors duration-500">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-black/10 dark:border-white/20 pt-10">
             <div>
               <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight text-black/90 dark:text-white/90">
@@ -232,7 +214,7 @@ export default function ReferencementPage() {
 
       {/* LA CHAINE DE A A Z */}
       <section className="relative z-10 bg-white dark:bg-[#050505] px-6 md:px-10 pb-28 transition-colors duration-500">
-        <div className="max-w-5xl mx-auto border-t border-black/10 dark:border-white/20 pt-10">
+        <div className="max-w-7xl mx-auto border-t border-black/10 dark:border-white/20 pt-10">
           <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight text-black/90 dark:text-white/90">
             La chaîne du référencement, de A à Z
           </h2>
@@ -279,7 +261,7 @@ export default function ReferencementPage() {
 
       {/* METHODE */}
       <section className="relative z-10 bg-white dark:bg-[#050505] px-6 md:px-10 pb-32 transition-colors duration-500">
-        <div className="max-w-6xl mx-auto border-t border-black/10 dark:border-white/20 pt-10">
+        <div className="max-w-7xl mx-auto border-t border-black/10 dark:border-white/20 pt-10">
           <h2 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight mb-4 text-black/90 dark:text-white/90">
             Comment j’interviens
           </h2>
@@ -315,30 +297,7 @@ export default function ReferencementPage() {
       </section>
 
       {/* FOOTER NAV + COPYRIGHT */}
-      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
-        <div className="flex items-center justify-between px-6 md:px-16 py-16">
-          <a
-            href="/competences"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            &larr; Compétences
-          </a>
-          <a
-            href="/a-propos"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            À Propos &rarr;
-          </a>
-        </div>
-        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">
-          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
-          </p>
-          <div className="flex items-center gap-4">
-            <Footer />
-          </div>
-        </div>
-      </footer>
+      <PageFooter precedent={{ href: '/competences', label: 'Compétences' }} suivant={{ href: '/a-propos', label: 'À Propos' }} />
     </main>
   );
 }

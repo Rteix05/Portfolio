@@ -1,0 +1,346 @@
+/*
+ * Pile éclatée 3D : 7 calques empilés qui s'écartent au scroll, puis la caméra
+ * les traverse un par un. Tout est piloté par des variables CSS que
+ * EclatStack.tsx met à jour depuis un ScrollTrigger épinglé :
+ *   --eclat-progress  0 → 1  ouverture de la pile
+ *   --eclat-zoom      0 → 1  passage en vue rapprochée
+ *   --eclat-camera    0 → 6  calque actuellement cadré (valeur continue)
+ *   --cam-x / --cam-y        recentrage sur le calque cadré
+ *   --orbite-x / --orbite-y  légère rotation au survol de la souris
+ */
+
+[data-eclat] {
+  --eclat-progress: 0;
+  --eclat-camera: 0;
+  --eclat-zoom: 0;
+  --calque: 44;
+  --profondeur: 66px;
+  --epaisseur: 10px;
+  --approche: 1.45;
+  --cam-x: 0;
+  --cam-y: 0;
+  --orbite-x: 0;
+  --orbite-y: 0;
+
+  --rayon: 8px;
+
+  /* Mêmes teintes que la page 3D : noir/blanc et opacités */
+  --eclat-paper: #ffffff;
+  --eclat-surface: #e6e6e6;
+  --eclat-accent: #000000;
+  --eclat-rule: rgb(0 0 0 / 0.1);
+  --eclat-ink: #000000;
+  --eclat-ink-2: rgb(0 0 0 / 0.6);
+}
+
+.dark [data-eclat] {
+  --eclat-paper: #050505;
+  --eclat-surface: #1a1a1a;
+  --eclat-accent: #ffffff;
+  --eclat-rule: rgb(255 255 255 / 0.1);
+  --eclat-ink: #ffffff;
+  --eclat-ink-2: rgb(255 255 255 / 0.6);
+}
+
+[data-eclat] .eclat-label {
+  font-size: 0.75rem;
+  line-height: 1.1;
+  letter-spacing: 0.1em;
+}
+
+[data-eclat-vignette],
+[data-eclat-legende] {
+  min-width: 0;
+}
+
+[data-eclat-scene],
+[data-eclat-axe],
+[data-eclat-tranche],
+[data-eclat-sol] {
+  display: none;
+}
+
+/* Mobile : carrousel horizontal, la carte suivante dépasse pour inviter à glisser */
+[data-eclat-legendes] {
+  display: flex;
+  gap: 1rem;
+  margin-inline: -1.5rem;
+  padding-inline: 1.5rem;
+  scroll-padding-inline: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+[data-eclat-legendes]::-webkit-scrollbar {
+  display: none;
+}
+
+[data-eclat-legende] {
+  flex: 0 0 min(84%, 24rem);
+  scroll-snap-align: start;
+}
+
+[data-eclat-progres] {
+  position: relative;
+  display: block;
+  height: 2px;
+  margin-block-start: 2rem;
+  overflow: hidden;
+  border-radius: 1px;
+  background-color: var(--eclat-rule);
+}
+
+[data-eclat-progres] > span {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 15%;
+  background-color: var(--eclat-ink);
+  will-change: transform;
+}
+
+@media (min-width: 48rem) {
+  [data-eclat-piste] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.75rem;
+    min-height: 100svh;
+  }
+
+  [data-eclat-vignette],
+  [data-eclat-progres] {
+    display: none;
+  }
+
+  [data-eclat-scene] {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    width: min(100%, 177.8svh - 32.893rem, 73.6rem);
+    margin-inline: auto;
+    perspective: 1400px;
+    container-type: inline-size;
+  }
+
+  [data-eclat-pile] {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform-style: preserve-3d;
+    transform:
+      rotateX(calc((var(--eclat-progress) * 7 + var(--orbite-x)) * (1 - 0.5 * var(--eclat-zoom)) * 1deg))
+      rotateY(calc((var(--eclat-progress) * -13 + var(--orbite-y)) * (1 - 0.5 * var(--eclat-zoom)) * 1deg))
+      scale(calc((1 + (var(--approche) - 1) * var(--eclat-zoom)) * (1 + (var(--approche) - 1) * (1 - var(--eclat-progress)))))
+      translate3d(
+        calc(var(--cam-x) * var(--eclat-zoom) * -1cqw),
+        calc(var(--cam-y) * var(--eclat-zoom) * -1cqw),
+        calc(var(--eclat-camera) * var(--profondeur) * var(--eclat-zoom))
+      );
+  }
+
+  [data-eclat-etiquette] {
+    position: absolute;
+    inset-block-end: 100%;
+    inset-inline: 0;
+    margin-block-end: 0.4rem;
+    opacity: clamp(0, calc(var(--eclat-progress) * 2.4 - 1.4), 1);
+  }
+
+  /* Grille au sol, tracée progressivement à l'ouverture */
+  [data-eclat-sol] {
+    position: absolute;
+    inset: -14% -22%;
+    display: block;
+    width: auto;
+    height: auto;
+    transform: translateZ(calc(var(--profondeur) * -9));
+    fill: none;
+    stroke: var(--eclat-rule);
+    stroke-width: 0.3px;
+    vector-effect: non-scaling-stroke;
+    opacity: calc(0.45 * (1 - var(--eclat-zoom)));
+  }
+
+  [data-eclat-sol] line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: clamp(0, calc(1 - (var(--eclat-progress) * 2.6 - var(--n) * 0.1)), 1);
+  }
+
+  [data-eclat-calque],
+  [data-eclat-cadre] {
+    transform-style: preserve-3d;
+  }
+
+  /* Épaisseur des plaques : tranche droite et tranche basse */
+  [data-eclat-tranche] {
+    position: absolute;
+    display: block;
+    background-color: var(--eclat-surface);
+  }
+
+  [data-eclat-tranche='droite'] {
+    inset-block: var(--rayon);
+    inset-inline-end: 0;
+    width: var(--epaisseur);
+    border-block: 1px solid var(--eclat-rule);
+    transform-origin: 100%;
+    transform: rotateY(-90deg);
+  }
+
+  [data-eclat-tranche='bas'] {
+    inset-block-end: 0;
+    inset-inline: var(--rayon);
+    height: var(--epaisseur);
+    border-inline: 1px solid var(--eclat-rule);
+    transform-origin: 50% 100%;
+    transform: rotateX(90deg);
+  }
+
+  [data-eclat-calque] {
+    --d: calc(var(--i) - var(--eclat-camera));
+    --f: max(0, calc(1 - var(--d) * var(--d) * 2.2));
+    --derriere: clamp(0, var(--d), 1);
+    position: absolute;
+    width: calc(var(--calque) * 1cqw);
+    left: calc((100 - var(--calque)) / 2 * 1cqw + var(--dx) * var(--eclat-progress) * 1cqw);
+    top: calc((62.5 - var(--calque) * 0.625) / 2 * 1cqw + var(--dy) * var(--eclat-progress) * 1cqw);
+    transform: translateZ(calc(var(--i) * -1 * (var(--profondeur) * var(--eclat-progress) + 1px)));
+    opacity: calc(1 - var(--eclat-zoom) * (1 - (var(--f) + (1 - var(--f)) * 0.18 * var(--derriere))));
+    scale: calc(1 + 0.04 * var(--f) * var(--eclat-zoom));
+  }
+
+  [data-eclat-cadre] {
+    position: relative;
+    display: block;
+  }
+
+  /* Poignées de sélection autour du calque cadré */
+  [data-eclat-poignee] {
+    --marge: calc(-3px - 6px * (1 - var(--f)));
+    position: absolute;
+    z-index: 1;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background-color: var(--eclat-accent);
+    opacity: calc(var(--f) * var(--eclat-zoom));
+    transform: translateZ(2px);
+  }
+
+  [data-eclat-poignee]:nth-child(1) {
+    inset-block-start: var(--marge);
+    inset-inline-start: var(--marge);
+  }
+
+  [data-eclat-poignee]:nth-child(2) {
+    inset-block-start: var(--marge);
+    inset-inline-end: var(--marge);
+  }
+
+  [data-eclat-poignee]:nth-child(3) {
+    inset-block-end: var(--marge);
+    inset-inline-end: var(--marge);
+  }
+
+  [data-eclat-poignee]:nth-child(4) {
+    inset-block-end: var(--marge);
+    inset-inline-start: var(--marge);
+  }
+
+  [data-eclat-calque] [data-eclat-carte] {
+    border-color: color-mix(in oklab, var(--eclat-accent) calc(var(--f) * var(--eclat-zoom) * 100%), var(--eclat-rule));
+  }
+
+  [data-eclat-axe] {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 42rem;
+    margin-inline: auto;
+    opacity: calc(var(--eclat-progress) * (1 - var(--eclat-zoom)));
+  }
+
+  [data-eclat-axe-trait] {
+    flex: 1;
+    height: 1px;
+    background-color: var(--eclat-rule);
+  }
+
+  /* Les légendes se superposent ; seule celle du calque cadré est visible */
+  [data-eclat-legendes] {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 42rem;
+    min-height: 10.5rem;
+    margin-block-start: 0;
+    margin-inline: auto;
+    padding-inline: 0;
+    overflow: visible;
+  }
+
+  [data-eclat-legende] {
+    --d: calc(var(--i) - var(--eclat-camera));
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    opacity: calc(var(--eclat-zoom) * max(0, calc(1 - var(--d) * var(--d) * 4)));
+  }
+}
+
+/* Écrans larges mais bas : scène et légende côte à côte */
+@media (min-width: 56rem) and (max-height: 46rem) {
+  [data-eclat-piste] {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  [data-eclat-scene] {
+    flex: none;
+    width: min(64%, 160svh - 9.6rem);
+  }
+
+  [data-eclat-legendes] {
+    flex: 1;
+    align-self: center;
+    min-width: 0;
+    max-width: none;
+    min-height: 16rem;
+  }
+
+  [data-eclat-axe] {
+    display: none;
+  }
+}
+
+/* Mouvement réduit : pile ouverte figée, toutes les légendes listées */
+@media (prefers-reduced-motion: reduce) {
+  [data-eclat] {
+    --eclat-progress: 1;
+    --eclat-zoom: 0;
+  }
+
+  @media (min-width: 48rem) {
+    [data-eclat-piste] {
+      min-height: 0;
+    }
+
+    [data-eclat-legendes] {
+      position: static;
+      display: grid;
+      gap: 2.5rem;
+      min-height: 0;
+    }
+
+    [data-eclat-legende] {
+      position: static;
+      opacity: 1;
+    }
+  }
+}

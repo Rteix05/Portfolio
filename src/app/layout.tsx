@@ -88,9 +88,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className="dark" suppressHydrationWarning>
       <head>
-        <link rel="preload" href="/background.mp4" as="video" type="video/mp4" />
+        {/* Thème retenu appliqué avant le premier rendu : pas de flash sombre → clair */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(localStorage.getItem('theme')==='light'){document.documentElement.classList.replace('dark','light')}}catch(e){}",
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
