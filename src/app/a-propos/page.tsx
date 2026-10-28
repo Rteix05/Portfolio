@@ -4,11 +4,12 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { reveler } from '@/lib/reveal';
 import { Space_Grotesk } from 'next/font/google';
 import { LuCamera, LuDumbbell, LuPersonStanding, LuSwords } from 'react-icons/lu';
 import { SiGithub } from 'react-icons/si';
 import { LuLinkedin, LuMail } from 'react-icons/lu';
-import Footer from '../../components/Footer';
+import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
 import { TbMotorbike } from 'react-icons/tb';
 
@@ -77,23 +78,7 @@ export default function AProposPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 88%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      });
+      reveler(gsap.utils.toArray<HTMLElement>('[data-reveal]'));
 
       if (heroRef.current) {
         gsap.from(heroRef.current.querySelectorAll('[data-hero]'), {
@@ -113,7 +98,7 @@ export default function AProposPage() {
       <Navbar />
 
       {/* HERO */}
-      <section ref={heroRef} className="min-h-screen pt-32 pb-20 px-6 md:px-16 flex flex-col justify-end">
+      <section ref={heroRef} className="min-h-screen pt-32 pb-20 px-6 md:px-10 flex flex-col justify-end">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col md:flex-row gap-8 mb-16 items-end">
             <div
@@ -167,7 +152,7 @@ export default function AProposPage() {
       </section>
 
       {/* BIO */}
-      <section className="py-24 px-6 md:px-16 border-t border-black/8 dark:border-white/8">
+      <section className="py-24 px-6 md:px-10 border-t border-black/8 dark:border-white/8">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div data-reveal>
             <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-6">À propos</p>
@@ -189,7 +174,7 @@ export default function AProposPage() {
       </section>
 
       {/* PARCOURS */}
-      <section className="py-24 px-6 md:px-16 border-t border-black/8 dark:border-white/8">
+      <section className="py-24 px-6 md:px-10 border-t border-black/8 dark:border-white/8">
         <div className="max-w-7xl mx-auto">
           <p data-reveal className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-12">
             Parcours
@@ -221,7 +206,7 @@ export default function AProposPage() {
       </section>
 
       {/* HOBBIES */}
-      <section className="py-24 px-6 md:px-16 border-t border-black/8 dark:border-white/8">
+      <section className="py-24 px-6 md:px-10 border-t border-black/8 dark:border-white/8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row gap-12 items-start">
             <div data-reveal className="md:w-1/3">
@@ -232,7 +217,7 @@ export default function AProposPage() {
               {hobbies.map((h) => (
                 <div
                   key={h.label}
-                  className="flex items-center gap-4 rounded-xl border border-black/8 dark:border-white/8 p-5 hover:border-black/20 dark:hover:border-white/20 transition-colors"
+                  className="carte carte-survol flex items-center gap-4 p-5"
                 >
                   <span className="text-black/50 dark:text-white/50">{h.icon}</span>
                   <span className="font-medium text-black/80 dark:text-white/80">{h.label}</span>
@@ -244,7 +229,7 @@ export default function AProposPage() {
       </section>
 
       {/* CONTACT */}
-      <section className="py-24 px-6 md:px-16 border-t border-black/8 dark:border-white/8">
+      <section className="py-24 px-6 md:px-10 border-t border-black/8 dark:border-white/8">
         <div className="max-w-7xl mx-auto">
           <p data-reveal className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-12">
             Me contacter
@@ -256,7 +241,7 @@ export default function AProposPage() {
                 href={l.href}
                 target={l.href.startsWith('http') || l.href.endsWith('.pdf') ? '_blank' : undefined}
                 rel="noopener noreferrer"
-                className="group flex flex-col justify-between rounded-2xl border border-black/10 dark:border-white/10 p-6 hover:border-black/30 dark:hover:border-white/30 hover:bg-black/4 dark:hover:bg-white/4 transition-all min-h-32"
+                className="carte carte-survol group flex flex-col justify-between p-6 min-h-32"
               >
                 <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest">{l.label}</p>
                 <div className="flex items-end justify-between mt-4">
@@ -272,30 +257,7 @@ export default function AProposPage() {
       </section>
 
       {/* FOOTER NAV + COPYRIGHT */}
-      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
-        <div className="flex items-center justify-between px-6 md:px-16 py-16">
-          <a
-            href="/referencement"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            &larr; Référencement
-          </a>
-          <a
-            href="/3d"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            Projets 3D &rarr;
-          </a>
-        </div>
-        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">
-          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
-          </p>
-          <div className="flex items-center gap-4">
-              <Footer />
-          </div>
-        </div>
-      </footer>
+      <PageFooter precedent={{ href: '/referencement', label: 'Référencement' }} suivant={{ href: '/3d', label: 'Projets 3D' }} />
     </main>
   );
 }

@@ -4,10 +4,12 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { reveler } from '@/lib/reveal';
 import { Space_Grotesk } from 'next/font/google';
-import Footer from '../../components/Footer';
+import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
-import LazyVideo from '@/components/LazyVideo';
+import LazyVideo, { affiche } from '@/components/LazyVideo';
+import HeroFond from '@/components/HeroFond';
 import { getTechIcon } from '@/lib/techIcons';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -32,6 +34,7 @@ const projets: Projet[] = [
     type: 'React Native · Expo · TypeScript · Symfony 7.4',
     description: 'Application mobile de gestion de garde-robe : numérisation des vêtements, composition de tenues et organisation du dressing. Développée en React Native avec Expo.',
     image: '/penderie-garde.webp',
+    video: '/projets/penderie.mp4',
     status: 'en-cours',
   },
   {
@@ -40,8 +43,8 @@ const projets: Projet[] = [
     type: 'PHP · SQL · Base de données · HTML/CSS',
     description: 'Site en PHP permettant d\'apprendre à créer et manipuler des bases de données en PHP et SQL. Interface pokédex avec recherche, filtres et affichage dynamique.',
     link: 'https://sae203.mmi24h04.mmi-troyes.fr',
-    image: 'https://images.unsplash.com/photo-1613909207039-6b173b755cc1?q=80&w=2000&auto=format&fit=crop',
-    video: '/sae203.mp4',
+    image: '/projets/pokemon-image.webp',
+    video: '/projets/pokemon.mp4',
   },
   {
     id: 3,
@@ -50,7 +53,7 @@ const projets: Projet[] = [
     description: "Application mobile-first de gestion de l'empreinte carbone sous forme de gamification. Backoffice administrable via EasyAdmin, frontend Vue 3 avec Tailwind CSS.",
     link: 'https://sae401.mmi24b07.mmi-troyes.fr',
     image: '/carbon.webp',
-    video: '/carbon.mp4', 
+    video: '/projets/carbon.mp4',
   },
   {
     id: 4,
@@ -59,7 +62,7 @@ const projets: Projet[] = [
     description: 'Site en architecture MVC avec base de données, intégrant l\'inscription, la connexion, la déconnexion, une messagerie interne et un système administrateur complet.',
     link: 'https://sae202.mmi24h04.mmi-troyes.fr',
     image: '/murderbg.webp',
-    video: '/sae202.mp4', 
+    video: '/projets/murder.mp4',
   },
   {
     id: 5,
@@ -67,8 +70,8 @@ const projets: Projet[] = [
     type: 'Symfony · React · API Platform · Docker · MySQL · RGAA',
     description: 'Refonte du site d\'une mairie avec une architecture headless Symfony en back + React en front. Gestion de contenu découplée et interface moderne.',
     link: 'http://sae301.mmi24b11.mmi-troyes.fr/',
-    image: '/logo-mairie.webp',
-    video: '/sommeval.mp4', 
+    image: '/projets/sommeval-image.webp',
+    video: '/projets/sommeval.mp4',
   },
   {
     id: 6,
@@ -76,8 +79,8 @@ const projets: Projet[] = [
     type: 'Symfony · Next.js · Stripe · PayPal · Dashboard Admin · CRUD',
     description: 'Refonte complète d\'un site CMS vers une application SaaS fullstack développée lors de mon stage. Système de prise de rendez-vous, intégration de paiements en ligne et mailing automatisé.',
     link: 'https://samuelpanzutv.com', 
-    image: '/mdlp.webp', // À remplacer par ton image
-    video: '/mdlp.mp4', // À remplacer par ta vidéo
+    image: '/mdlp.webp',
+    video: '/projets/mdlp.mp4',
   },
 ];
 
@@ -86,22 +89,7 @@ export default function ProjetsScolairesPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      textRefs.current.forEach((el) => {
-        if (el) {
-          gsap.fromTo(el,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                end: 'bottom 20%',
-                toggleActions: 'play reverse play reverse',
-              },
-            }
-          );
-        }
-      });
+      reveler(textRefs.current);
     });
     return () => ctx.revert();
   }, []);
@@ -114,16 +102,9 @@ export default function ProjetsScolairesPage() {
     <main className={`${spaceGrotesk.className} bg-white text-black dark:bg-[#050505] dark:text-white min-h-screen transition-colors duration-500`}>
       <Navbar />
 
-      {/* HERO AVEC IMAGE DE FOND */}
+      {/* HERO : MONTAGE FLOU DES PROJETS EN FOND */}
       <section className="h-screen w-full relative flex items-center justify-center overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-20 mix-blend-luminosity pointer-events-none"
-        />
+        <HeroFond nom="scolaires" />
         <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-[#050505]" />
         
         <div className="relative z-10 text-center">
@@ -137,7 +118,7 @@ export default function ProjetsScolairesPage() {
 
       {/* INTRO */}
       <section className="relative z-10 bg-white dark:bg-[#050505] pt-10 px-6 md:px-10 pb-16 transition-colors duration-500">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 border-t border-black/10 dark:border-white/20 pt-10 text-sm">
             <div>
               <p className="opacity-50 mb-2 uppercase tracking-widest text-xs">Formation</p>
@@ -228,8 +209,9 @@ export default function ProjetsScolairesPage() {
                         src={projet.image}
                         alt={`Aperçu du projet ${projet.name}`}
                         fill
+                        loading={index === 0 ? 'eager' : 'lazy'}
                         sizes="(max-width: 768px) 100vw, 55vw"
-                        className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                        className="object-cover opacity-90 transition-transform duration-1000 ease-out-soft hover:scale-[1.04]"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-black/5 to-transparent dark:from-white/5">
@@ -243,7 +225,7 @@ export default function ProjetsScolairesPage() {
                     <div className={`absolute ${isEven ? 'left-0' : 'right-0'} bottom-0 w-[55%] aspect-4/3 rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border border-black/5 dark:border-white/10 z-20 bg-black`}>
                       <LazyVideo
                         src={projet.video}
-                        poster={projet.image}
+                        poster={affiche(projet.video, projet.image)}
                         className="w-full h-full object-cover pointer-events-none"
                       />
                     </div>
@@ -257,30 +239,7 @@ export default function ProjetsScolairesPage() {
       </div>
 
       {/* FOOTER NAV + COPYRIGHT */}
-      <footer className={`border-t border-black/8 dark:border-white/8 ${spaceGrotesk.className}`}>
-        <div className="flex items-center justify-between px-6 md:px-16 py-16">
-          <a
-            href="/3d"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            &larr; Projets 3D
-          </a>
-          <a
-            href="/projets-perso"
-            className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-black/20 dark:text-white/20 hover:text-black dark:hover:text-white transition-colors"
-          >
-            Projets Perso &rarr;
-          </a>
-        </div>
-        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-6 border-t border-black/8 dark:border-white/8 gap-3">
-          <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} Rafael Teixeira — Tous droits réservés
-          </p>
-          <div className="flex items-center gap-4">
-            <Footer />
-          </div>
-        </div>
-      </footer>
+      <PageFooter precedent={{ href: '/3d', label: 'Projets 3D' }} suivant={{ href: '/projets-perso', label: 'Projets Perso' }} />
     </main>
   );
 }

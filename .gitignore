@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sources lourdes (modèles 3D, rushs) : hors dépôt
+/sources

@@ -18,8 +18,8 @@ const projects = [
     subtitle: 'Three.js, React Three Fiber, GLSL',
     description: 'Modèles 3D interactifs, shaders custom et expériences immersives dans le navigateur.',
     mapImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop',
-    cardImage: 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=1000&auto=format&fit=crop',
-    cardVideo: '/blender.mp4',
+    cardImage: '/3d-accueil.webp',
+    cardVideo: '/3d-accueil.mp4',
   },
   { 
     id: 'projets-scolaires', 
@@ -27,8 +27,8 @@ const projects = [
     subtitle: 'PHP, Symfony, React, MVC',
     description: 'SAE universitaires : sites dynamiques, architectures headless et bases de données.',
     mapImage: '/murderbg.webp',
-    cardImage: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop',
-    cardVideo: '/sommeval.mp4',
+    cardImage: '/scolaires-accueil.webp',
+    cardVideo: '/scolaires-accueil.mp4',
   },
   { 
     id: 'projets-perso', 
@@ -36,18 +36,17 @@ const projects = [
     subtitle: 'React, Vue, Parallax, UI Design',
     description: 'Side projects créatifs : GTA VI parallax, PS3 UI, PS5 Portfolio 3D.',
     mapImage: '/ps3-bg.webp',
-    cardImage: 'https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=1000&auto=format&fit=crop',
-    cardVideo: '/playstation_2.mp4',
+    cardImage: '/perso-accueil.webp',
+    cardVideo: '/perso-accueil.mp4',
   },
   { 
     id: 'projets-pro', 
     name: 'Projets Pro',
     subtitle: 'React, Next.js, Node.js',
     description: 'Missions en entreprise, stages et collaborations professionnelles.',
-    mapImage: '/logo-mairie.webp',
-    cardImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',
-    cardVideo: '/blender.mp4',
-    hidden: true,
+    mapImage: '/esic.webp',
+    cardImage: '/pro-accueil.webp',
+    cardVideo: '/pro-accueil.mp4',
   },
   { 
     id: 'design', 
@@ -55,8 +54,8 @@ const projects = [
     subtitle: 'Figma, UI/UX, Prototypage',
     description: 'Maquettes, prototypes et parcours utilisateur pensés avec soin.',
     mapImage: '/sommevalfig.webp',
-    cardImage: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=1000&auto=format&fit=crop',
-    cardVideo: '/figma1.mp4',
+    cardImage: '/design-accueil.webp',
+    cardVideo: '/design-accueil.mp4',
   },
   { 
     id: 'competences', 
@@ -64,7 +63,8 @@ const projects = [
     subtitle: 'Front-End, Back-End, Outils',
     description: 'Stack technique complète : React, Vue, Symfony, Three.js et plus encore.',
     mapImage: '/competences.webp',
-    cardVideo: '/figma2.mp4',
+    cardImage: '/competences-accueil.webp',
+    cardVideo: '/competences-accueil.mp4',
   },
   {
     id: 'referencement',
@@ -147,6 +147,7 @@ export default function Home() {
           loop 
           playsInline 
           disablePictureInPicture
+          poster="/background-affiche.webp"
           className="w-full h-full object-cover opacity-50 mix-blend-lighten"
         >
           <source src="/background.mp4" type="video/mp4" />
@@ -325,13 +326,13 @@ export default function Home() {
 
         {/* SOCIAL ICONS */}
         <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex items-center gap-4 pointer-events-auto z-50">
-          <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
+          <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" aria-label="GitHub (nouvel onglet)" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
             <SiGithub size={20} />
           </a>
-          <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
+          <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (nouvel onglet)" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
             <LuLinkedin size={20} />
           </a>
-          <a href="/contact" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
+          <a href="/contact" aria-label="Contact" className="text-white/40 hover:text-white active:text-white transition-colors duration-300">
             <LuMail size={20} />
           </a>
         </div>

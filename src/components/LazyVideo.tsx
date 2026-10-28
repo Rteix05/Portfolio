@@ -14,6 +14,11 @@ type LazyVideoProps = {
  * Ici la source n'est montée qu'à l'approche du viewport : le navigateur ne
  * télécharge que ce que le visiteur atteint vraiment.
  */
+/** Les vidéos de /projets/ ont leur propre affiche (.webp, même nom) : pas de saut au démarrage */
+export function affiche(video: string, repli?: string) {
+  return video.startsWith('/projets/') ? video.replace(/\.mp4$/, '.webp') : repli;
+}
+
 export default function LazyVideo({ src, className, poster, captions }: LazyVideoProps) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [inView, setInView] = useState(false);
