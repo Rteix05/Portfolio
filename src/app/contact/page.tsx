@@ -1,44 +1,48 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import Navbar from '@/components/Navbar';
+import WaveMesh from '@/components/WaveMesh';
 import { Space_Grotesk } from 'next/font/google';
-import { LuMail, LuPhone, LuLinkedin, LuArrowUpRight, LuCode, LuSearch, LuPenTool, LuPaperclip, LuSend } from 'react-icons/lu';
+import { LuMail, LuPhone, LuLinkedin } from 'react-icons/lu';
 import { SiGithub } from 'react-icons/si';
+import { SUJETS_CONTACT } from '@/lib/contact';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
 });
 
-const subjects = [
-  "Proposition d'alternance",
-  'Proposition de stage',
-  'Collaboration freelance',
-  'Question technique',
-  'Autre',
+const sujets = SUJETS_CONTACT;
+
+const coordonnees = [
+  { label: 'Email', valeur: 'contact@rafaelteixeira.fr', href: 'mailto:contact@rafaelteixeira.fr', icone: LuMail },
+  { label: 'Téléphone', valeur: '06 64 68 71 21', href: 'tel:+33664687121', icone: LuPhone },
+  { label: 'LinkedIn', valeur: '/in/rafael-teixeira', href: 'https://www.linkedin.com/in/rafael-teixeira-57b5b1269/', icone: LuLinkedin, externe: true },
+  { label: 'GitHub', valeur: 'github.com/Rteix05', href: 'https://github.com/Rteix05', icone: SiGithub, externe: true },
 ];
+
+const domaines = ['Développement fullstack', 'DevOps', 'UX/UI design', 'Référencement SEO'];
+
+// Apparition ligne après ligne en sortant du flou, comme le texte des carrousels
+const conteneur: Variants = { cache: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } } };
+const ligne: Variants = {
+  cache: { opacity: 0, y: 18, filter: 'blur(10px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.33, 1, 0.68, 1] } },
+};
+
+// Champ de saisie épuré : simple trait dessous, qui prend la couleur du texte au focus
+const champ =
+  'w-full border-0 border-b border-black/15 bg-transparent px-0 py-3 text-base text-black placeholder:text-black/30 transition-colors focus:border-black focus:outline-none focus:ring-0 dark:border-white/15 dark:text-white dark:placeholder:text-white/30 dark:focus:border-white';
+const etiquette = 'block font-mono text-[10px] uppercase tracking-[0.2em] text-black/45 dark:text-white/45';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '', company: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const containerVars = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-    },
-  };
-
-  const itemVars: import('framer-motion').Variants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] as [number, number, number, number] } },
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -65,217 +69,147 @@ export default function ContactPage() {
   };
 
   return (
-    <main className={`${spaceGrotesk.className} bg-black text-white min-h-screen overflow-hidden flex flex-col relative`}>
-
-      {/* BACKGROUND VIDEO */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <video autoPlay muted loop playsInline disablePictureInPicture className="w-full h-full object-cover opacity-40 mix-blend-lighten">
-          <source src="/background.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]" />
-        <div className="absolute inset-0 bg-black/50" />
+    <main className={`${spaceGrotesk.className} relative min-h-screen overflow-hidden bg-white text-black transition-colors duration-500 dark:bg-[#050505] dark:text-white`}>
+      {/* Fond de la home : champ de points animé, aux couleurs du thème */}
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <WaveMesh className="h-full w-full" />
+        {/* Voile pour garder le texte lisible au-dessus des points */}
+        <div className="absolute inset-0 bg-linear-to-b from-white/70 via-white/30 to-white/80 dark:from-[#050505]/70 dark:via-[#050505]/20 dark:to-[#050505]/80" />
       </div>
 
       <Navbar />
 
-      <div className="grow flex flex-col items-center justify-center px-6 md:px-10 pt-32 pb-20 relative z-10">
-        <motion.div
-          variants={containerVars}
-          initial="hidden"
-          animate="show"
-          className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch"
-        >
-          {/* COLONNE GAUCHE */}
-          <motion.div variants={itemVars} className="flex flex-col gap-8 h-full">
-            {/* HERO */}
-            <div className="max-w-xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-widest text-white/70 mb-6">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Recherche alternance — Sept. 2026
-              </span>
-              <h1 className="text-[2.75rem] md:text-[4rem] font-bold leading-[0.95] tracking-tighter mb-6">
-                Let&apos;s build<br />something.
-              </h1>
-              <p className="text-base md:text-lg text-white/60 max-w-md leading-relaxed">
-                Actuellement à la recherche d&apos;une alternance — Front-End, Back-End, Fullstack, DevOps ou UX/UI.
-              </p>
-            </div>
+      <motion.div
+        variants={conteneur}
+        initial="cache"
+        animate="visible"
+        className="relative z-10 mx-auto grid min-h-screen max-w-7xl grid-cols-1 items-center gap-16 px-6 pb-20 pt-32 md:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:pt-36"
+      >
+        {/* COLONNE GAUCHE : accroche et coordonnées */}
+        <div>
+          <motion.p variants={ligne} className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.25em] text-black/55 dark:text-white/55">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            </span>
+            Disponible en alternance · sept. 2026
+          </motion.p>
 
-            {/* CARTE CONTACT */}
-            <div className="flex-1 flex flex-col rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-xs uppercase tracking-[0.2em] text-white/50">Contact</span>
-                <span className="text-xs uppercase tracking-[0.2em] text-white/30">Restons en contact</span>
-              </div>
+          <motion.h1 variants={ligne} className="mt-6 text-[3rem] font-semibold leading-[0.95] tracking-tighter sm:text-[4.5rem] md:text-[5.5rem]">
+            Parlons de
+            <span className="block">votre projet.</span>
+          </motion.h1>
 
-              <div className="flex flex-col divide-y divide-white/10">
-                <a href="mailto:contact@rafaelteixeira.fr" className="group flex items-center gap-4 py-4 first:pt-0">
-                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
-                    <LuMail size={16} />
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Email</span>
-                    <span className="block text-sm md:text-base font-medium truncate">contact@rafaelteixeira.fr</span>
-                  </span>
-                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
-                </a>
+          <motion.p variants={ligne} className="mt-6 max-w-md text-base leading-relaxed text-black/60 dark:text-white/60 md:text-lg">
+            Je cherche une alternance en développement front-end, back-end ou fullstack, en DevOps ou en UX/UI. Une question, une mission, une idée : écrivez-moi.
+          </motion.p>
 
-                <a href="tel:+33664687121" className="group flex items-center gap-4 py-4">
-                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
-                    <LuPhone size={16} />
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">Téléphone</span>
-                    <span className="block text-sm md:text-base font-medium truncate">06 64 68 71 21</span>
-                  </span>
-                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
-                </a>
-
-                <a href="https://www.linkedin.com/in/rafael-teixeira-57b5b1269/" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 py-4">
-                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
-                    <LuLinkedin size={16} />
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">LinkedIn</span>
-                    <span className="block text-sm md:text-base font-medium truncate">/in/rafael-teixeira</span>
-                  </span>
-                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
-                </a>
-
-                <a href="https://github.com/Rteix05" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 py-4 last:pb-0">
-                  <span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
-                    <SiGithub size={16} />
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-[10px] uppercase tracking-widest text-white/40 mb-0.5">GitHub</span>
-                    <span className="block text-sm md:text-base font-medium truncate">github.com/Rteix05</span>
-                  </span>
-                  <LuArrowUpRight size={16} className="text-white/30 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
-                </a>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/10">
-                <div className="flex flex-col items-center text-center gap-2">
-                  <LuCode size={18} className="text-white/60" />
-                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">Développement<br />Fullstack / DevOps</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-2">
-                  <LuSearch size={18} className="text-white/60" />
-                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">Référencement<br />SEO</span>
-                </div>
-                <div className="flex flex-col items-center text-center gap-2">
-                  <LuPenTool size={18} className="text-white/60" />
-                  <span className="text-[10px] uppercase tracking-widest text-white/40 leading-tight">UX/UI<br />Design / Prototypage</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* COLONNE DROITE — FORMULAIRE */}
-          <motion.div variants={itemVars} className="h-full flex flex-col rounded-3xl backdrop-blur-md bg-white/5 border border-white/10 p-6 md:p-8">
-            <div className="flex items-center justify-between mb-6">
-              <span className="text-xs uppercase tracking-[0.2em] text-white/50">Envoyer un message</span>
-              <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-emerald-400/80">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Je réponds rapidement
-              </span>
-            </div>
-
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <div>
-                <label htmlFor="name" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Nom *</label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Votre nom"
-                  className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Email *</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="votre@exemple.com"
-                  className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Sujet</label>
-                <select
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white/80 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors appearance-none"
+          {/* Coordonnées en cartel : étiquette à gauche, valeur à droite, flèche qui glisse au survol */}
+          <motion.ul variants={ligne} className="mt-12 border-t border-black/10 dark:border-white/10">
+            {coordonnees.map(({ label, valeur, href, icone: Icone, externe }) => (
+              <li key={label} className="border-b border-black/10 dark:border-white/10">
+                <a
+                  href={href}
+                  {...(externe ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="group flex items-center gap-4 py-4 md:py-5"
                 >
-                  <option value="" className="bg-black">Sélectionner un sujet</option>
-                  {subjects.map((s) => (
-                    <option key={s} value={s} className="bg-black">{s}</option>
-                  ))}
-                </select>
-              </div>
+                  <span className="flex w-24 shrink-0 items-center gap-2 font-mono md:w-28 md:gap-2.5 text-[10px] uppercase tracking-[0.2em] text-black/45 dark:text-white/45">
+                    <Icone size={14} aria-hidden="true" />
+                    {label}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-base font-medium md:text-lg">{valeur}</span>
+                  <span
+                    aria-hidden="true"
+                    className="text-lg text-black/30 transition-[transform,color] duration-500 ease-out-soft group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-black dark:text-white/30 dark:group-hover:text-white"
+                  >
+                    ↗
+                  </span>
+                </a>
+              </li>
+            ))}
+          </motion.ul>
 
-              <div>
-                <label htmlFor="message" className="block text-[10px] uppercase tracking-widest text-white/40 mb-2">Message *</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={5}
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="Écrivez votre message ici..."
-                  className="w-full resize-none rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors"
-                />
-              </div>
-
-              <span className="inline-flex items-center gap-2 text-xs text-white/40 -mt-1">
-                <LuPaperclip size={14} />
-                Ajouter une pièce jointe (optionnel)
+          <motion.p variants={ligne} className="mt-8 flex flex-wrap gap-2">
+            {domaines.map((d) => (
+              <span key={d} className="rounded-full border border-black/10 px-3 py-1 text-xs text-black/60 dark:border-white/15 dark:text-white/60">
+                {d}
               </span>
+            ))}
+          </motion.p>
+        </div>
 
-              {/* Honeypot anti-spam, invisible aux humains */}
-              <input
-                type="text"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                tabIndex={-1}
-                autoComplete="off"
-                className="hidden"
-                aria-hidden="true"
-              />
+        {/* COLONNE DROITE : formulaire */}
+        <motion.div
+          variants={ligne}
+          className="rounded-3xl border border-black/10 bg-white/75 p-6 shadow-[0_40px_100px_-40px_rgba(0,0,0,0.25)] backdrop-blur-xl dark:border-white/10 dark:bg-[#0b0b0b]/70 md:p-10"
+        >
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Envoyer un message</h2>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">Je réponds rapidement</span>
+          </div>
 
+          <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-7">
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
+              <div>
+                <label htmlFor="name" className={etiquette}>Nom *</label>
+                <input id="name" name="name" type="text" required autoComplete="name" value={formData.name} onChange={handleChange} placeholder="Votre nom" className={champ} />
+              </div>
+              <div>
+                <label htmlFor="email" className={etiquette}>Email *</label>
+                <input id="email" name="email" type="email" required autoComplete="email" value={formData.email} onChange={handleChange} placeholder="votre@exemple.com" className={champ} />
+              </div>
+            </div>
+
+            {/* Sujet en pastilles : un clic pour choisir, un second pour retirer */}
+            <fieldset>
+              <legend className={etiquette}>Sujet</legend>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {sujets.map((s) => {
+                  const actif = formData.subject === s;
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      aria-pressed={actif}
+                      onClick={() => setFormData((prev) => ({ ...prev, subject: actif ? '' : s }))}
+                      className={`rounded-full border px-3.5 py-1.5 text-xs transition-colors ${
+                        actif
+                          ? 'border-black bg-black text-white dark:border-white dark:bg-white dark:text-black'
+                          : 'border-black/15 text-black/65 hover:border-black/40 dark:border-white/15 dark:text-white/65 dark:hover:border-white/40'
+                      }`}
+                    >
+                      {s}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+
+            <div>
+              <label htmlFor="message" className={etiquette}>Message *</label>
+              <textarea id="message" name="message" required rows={5} value={formData.message} onChange={handleChange} placeholder="Parlez-moi de votre projet, de la mission ou de votre question…" className={`${champ} resize-none`} />
+            </div>
+
+            {/* Honeypot anti-spam, invisible aux humains */}
+            <input type="text" name="company" value={formData.company} onChange={handleChange} tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+
+            <div className="flex flex-wrap items-center gap-4">
               <button
                 type="submit"
                 disabled={status === 'sending'}
-                className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-6 py-3.5 text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group inline-flex items-center gap-3 rounded-full bg-black px-7 py-3.5 text-sm font-medium text-white transition-[transform,opacity] duration-300 hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-black"
               >
-                <LuSend size={16} />
-                {status === 'sending' ? 'Envoi en cours...' : 'Envoyer le message'}
+                {status === 'sending' ? 'Envoi en cours…' : 'Envoyer le message'}
+                <span aria-hidden="true" className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1">→</span>
               </button>
-
-              {status === 'success' && (
-                <p className="text-center text-xs text-emerald-400/80 uppercase tracking-widest">Message envoyé — merci, je reviens vers vous rapidement !</p>
-              )}
-              {status === 'error' && (
-                <p className="text-center text-xs text-red-400/80 uppercase tracking-widest">{errorMessage}</p>
-              )}
-            </form>
-          </motion.div>
+              <p role="status" aria-live="polite" className="text-xs">
+                {status === 'success' && <span className="text-emerald-600 dark:text-emerald-400">Message envoyé, merci ! Je reviens vers vous rapidement.</span>}
+                {status === 'error' && <span className="text-red-600 dark:text-red-400">{errorMessage}</span>}
+              </p>
+            </div>
+          </form>
         </motion.div>
-      </div>
+      </motion.div>
     </main>
   );
 }

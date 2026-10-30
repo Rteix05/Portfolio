@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { estSujetConnu } from '@/lib/contact';
+import { mailConfirmation, mailNotification } from '@/lib/emails/contact';
 
 const CONTACT_EMAIL = 'contact@rafaelteixeira.fr';
 const MAX_LENGTH = { name: 100, email: 254, subject: 150, message: 5000 };
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 export async function POST(request: NextRequest) {
   let body: unknown;
@@ -62,27 +55,38 @@ export async function POST(request: NextRequest) {
   }
 
   const resend = new Resend(apiKey);
+  // Adresse d'envoi sur mon domaine vérifié chez Resend ; sans elle, Resend n'écrit qu'au titulaire du compte
+  const expediteur = process.env.CONTACT_FROM_EMAIL;
 
   try {
+    const notification = mailNotification({ nom: trimmedName, email: trimmedEmail, sujet: trimmedSubject, message: trimmedMessage });
     const { error } = await resend.emails.send({
-      from: process.env.CONTACT_FROM_EMAIL || 'Portfolio <onboarding@resend.dev>',
+      from: expediteur || 'Portfolio <onboarding@resend.dev>',
       to: CONTACT_EMAIL,
       replyTo: trimmedEmail,
-      subject: `[Portfolio] ${trimmedSubject || 'Nouveau message'} — ${trimmedName}`,
-      html: `
-        <div style="font-family: sans-serif; line-height: 1.6;">
-          <p><strong>Nom :</strong> ${escapeHtml(trimmedName)}</p>
-          <p><strong>Email :</strong> ${escapeHtml(trimmedEmail)}</p>
-          ${trimmedSubject ? `<p><strong>Sujet :</strong> ${escapeHtml(trimmedSubject)}</p>` : ''}
-          <p><strong>Message :</strong></p>
-          <p>${escapeHtml(trimmedMessage).replace(/\n/g, '<br />')}</p>
-        </div>
-      `,
+      subject: notification.sujet,
+      html: notification.html,
+      text: notification.texte,
     });
 
     if (error) {
       console.error('Resend error:', error);
       return NextResponse.json({ error: "Échec de l'envoi du message." }, { status: 502 });
+    }
+
+    // Accusé de réception : seulement avec un expéditeur sur mon domaine. Un échec ici
+    // ne fait pas échouer l'envoi, le message m'est déjà parvenu.
+    if (expediteur) {
+      const confirmation = mailConfirmation({ sujetConnu: estSujetConnu(trimmedSubject) ? trimmedSubject : undefined });
+      const { error: erreurConfirmation } = await resend.emails.send({
+        from: expediteur,
+        to: trimmedEmail,
+        replyTo: CONTACT_EMAIL,
+        subject: confirmation.sujet,
+        html: confirmation.html,
+        text: confirmation.texte,
+      });
+      if (erreurConfirmation) console.error('Resend error (accusé de réception):', erreurConfirmation);
     }
 
     return NextResponse.json({ ok: true });

@@ -4,6 +4,7 @@ import { useState, useSyncExternalStore } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import LogoRT from './LogoRT';
 
 const ease: [number, number, number, number] = [0.76, 0, 0.24, 1];
 
@@ -37,11 +38,25 @@ export default function Navbar({ isHidden = false, onMenuClick }: { isHidden?: b
 
   const toggleTheme = () => {
     const suivant = theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.classList.remove('dark', 'light');
-    document.documentElement.classList.add(suivant);
+    const racine = document.documentElement;
+    const appliquer = () => {
+      racine.classList.remove('dark', 'light');
+      racine.classList.add(suivant);
+    };
     try {
       localStorage.setItem('theme', suivant);
     } catch {}
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return appliquer();
+    // Fondu enchaîné de toute la page entre l'ancien et le nouveau thème (réglé dans globals.css)
+    if (document.startViewTransition) {
+      document.startViewTransition(appliquer);
+      return;
+    }
+    // Navigateurs sans View Transitions : les couleurs glissent d'un thème à l'autre
+    racine.classList.add('changement-theme');
+    appliquer();
+    window.setTimeout(() => racine.classList.remove('changement-theme'), 700);
   };
 
   const isHome = pathname === '/';
@@ -81,49 +96,49 @@ export default function Navbar({ isHidden = false, onMenuClick }: { isHidden?: b
             </motion.div>
 
             {/* CENTRE */}
-            <motion.div layout="position" className="text-lg md:text-xl font-medium tracking-tight px-2 md:px-6 whitespace-nowrap">
-              Rafael Teixeira
+            <motion.div layout="position" className="px-2 md:px-6">
+              <Link
+                href="/"
+                aria-label="Rafael Teixeira, accueil"
+                className="flex items-center gap-3 text-lg md:text-xl font-medium tracking-tight whitespace-nowrap"
+              >
+                {/* 20 px de haut : une case du logo = 2 px, rendu net */}
+                <LogoRT className="h-5 w-auto shrink-0" />
+                <span className="hidden md:inline">Rafael Teixeira</span>
+              </Link>
             </motion.div>
 
             {/* DROITE */}
             <motion.div layout="position" className="flex items-center gap-2 md:pr-2">
-              <div className="text-sm opacity-60 uppercase tracking-widest text-right min-w-30 hidden md:block mr-2 tabular-nums">
+              {/* BOUTON THÈME : toujours visible, à gauche de l'heure */}
+              <button
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+                className="h-10 w-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={theme}
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.3, ease }}
+                    className="flex"
+                  >
+                    {theme === 'dark' ? (
+                      // Icône Soleil
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    ) : (
+                      // Icône Lune
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    )}
+                  </motion.span>
+                </AnimatePresence>
+              </button>
+
+              <div className="text-sm opacity-60 uppercase tracking-widest text-right min-w-30 hidden md:block mx-2 tabular-nums">
                 {heure}
               </div>
-
-              <AnimatePresence initial={false}>
-                {isScrolled && (
-                  <motion.button
-                    key="theme"
-                    initial={{ opacity: 0, scale: 0.6 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.6 }}
-                    transition={{ duration: 0.4, ease }}
-                    onClick={toggleTheme}
-                    aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
-                    className="h-10 w-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-                  >
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.span
-                        key={theme}
-                        initial={{ opacity: 0, rotate: -90 }}
-                        animate={{ opacity: 1, rotate: 0 }}
-                        exit={{ opacity: 0, rotate: 90 }}
-                        transition={{ duration: 0.3, ease }}
-                        className="flex"
-                      >
-                        {theme === 'dark' ? (
-                          // Icône Soleil
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                        ) : (
-                          // Icône Lune
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-                        )}
-                      </motion.span>
-                    </AnimatePresence>
-                  </motion.button>
-                )}
-              </AnimatePresence>
 
               {/* BOUTON MAIL : le libellé se déplie au survol */}
               <AnimatePresence initial={false}>

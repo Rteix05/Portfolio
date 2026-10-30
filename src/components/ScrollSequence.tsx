@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { CalqueFondPoints } from '@/components/FondPoints';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { rafraichirDansLOrdre } from '@/lib/scrollOrder';
@@ -86,8 +87,6 @@ export default function ScrollSequence({
   const modeSombre = useSyncExternalStore(suivreTheme, lireTheme, () => true);
   const dossier = modeSombre && dossiers.sombre ? dossiers.sombre : dossiers.clair;
   const clair = dossier === dossiers.clair;
-  // Couleur de fond des images rendues, pour combler autour quand elles ne couvrent pas tout
-  const fond = clair ? '#ffffff' : '#050505';
   // Position courante dans la séquence, partagée entre le scroll et le canvas :
   // au changement de thème, la nouvelle séquence reprend à la même image
   const positionRef = useRef(0);
@@ -95,6 +94,7 @@ export default function ScrollSequence({
   const sceneRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const voileRef = useRef<HTMLDivElement>(null);
+  const fondRef = useRef<HTMLDivElement>(null);
   const chapitreRefs = useRef<(HTMLDivElement | null)[]>([]);
   const fantomeRefs = useRef<(HTMLParagraphElement | null)[]>([]);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -112,6 +112,12 @@ export default function ScrollSequence({
     // autour de la position, plus quelques repères.
     const fichiers: (Blob | undefined)[] = [];
     const cache = new Map<number, ImageBitmap>();
+    // Fond de chaque image (blanc ou noir selon la phase), lu sur un pixel au décodage
+    const sombres = new Map<number, boolean>();
+    const echantillon = document.createElement('canvas');
+    echantillon.width = 1;
+    echantillon.height = 1;
+    const ctxEchantillon = echantillon.getContext('2d', { willReadFrequently: true });
     const enCours = new Set<number>();
     let voulue = positionRef.current;
     let sens = 1; // sens du scroll, pour décoder en avance du bon côté
@@ -152,7 +158,12 @@ export default function ScrollSequence({
       const index = indexPret(base);
       if (index === -1) return;
       ctx.globalAlpha = 1;
-      ctx.fillStyle = fond;
+      // Le canvas se fond dans les points de la scène : « multiplier » efface le fond blanc
+      // des images, « éclaircir » efface leur fond noir. En thème clair, la phase
+      // d'évolution (fond noir) reste opaque : son halo blanc disparaîtrait sur une page blanche
+      const sombre = sombres.get(index) ?? !clair;
+      canvas.style.mixBlendMode = !sombre ? 'multiply' : clair ? 'normal' : 'lighten';
+      ctx.fillStyle = sombre ? '#040404' : '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       peindre(cache.get(index)!);
       // Fondu vers l'image suivante : le mouvement reste continu entre deux images
@@ -190,6 +201,10 @@ export default function ScrollSequence({
         createImageBitmap(fichiers[n]!)
           .then((bmp) => {
             if (annule || !aGarder(n)) return bmp.close();
+            if (!sombres.has(n) && ctxEchantillon) {
+              ctxEchantillon.drawImage(bmp, 0, 0, 1, 1, 0, 0, 1, 1);
+              sombres.set(n, ctxEchantillon.getImageData(0, 0, 1, 1).data[0] < 128);
+            }
             cache.set(n, bmp);
             if (Math.abs(n - voulue) < 2 || dessinee !== voulue) demander(true);
           })
@@ -233,13 +248,16 @@ export default function ScrollSequence({
         }
       }
     }
+    // Sur téléphone l'image n'est jamais dessinée à plus de 1280 px de large :
+    // on charge la version réduite (dossier « -mobile »), deux fois plus légère
+    const source = window.matchMedia('(max-width: 767px)').matches ? `${dossier}-mobile` : dossier;
     const controleur = new AbortController();
     let suivant = 0;
     const telecharger = async () => {
       while (!annule && suivant < ordre.length) {
         const n = ordre[suivant++];
         try {
-          const reponse = await fetch(cheminImage(dossier, n), { signal: controleur.signal });
+          const reponse = await fetch(cheminImage(source, n), { signal: controleur.signal });
           if (!reponse.ok) continue;
           fichiers[n] = await reponse.blob();
           decoder();
@@ -281,7 +299,7 @@ export default function ScrollSequence({
       cache.forEach((bmp) => bmp.close());
       cache.clear();
     };
-  }, [dossier, total, fond]);
+  }, [dossier, total, clair]);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -346,13 +364,36 @@ export default function ScrollSequence({
     return () => trigger.kill();
   }, [total, chapitres, fantomes, statistiques, duree]);
 
+  // Garde le fond de points de la scène calé sur l'écran, quelle que soit la position de la
+  // scène (épinglée ou non) : il se superpose alors pile au fond de la page
+  useEffect(() => {
+    let raf = 0;
+    const caler = () => {
+      const scene = sceneRef.current;
+      const fond = fondRef.current;
+      if (scene && fond) fond.style.transform = `translate3d(0, ${-scene.getBoundingClientRect().top}px, 0)`;
+      raf = requestAnimationFrame(caler);
+    };
+    raf = requestAnimationFrame(caler);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <div
       ref={sceneRef}
+      style={{ clipPath: 'inset(0)' }}
       className={`relative h-screen w-full overflow-hidden motion-reduce:h-auto motion-reduce:min-h-screen ${
         clair ? 'bg-white text-black' : 'bg-[#050505] text-white'
       }`}
     >
+      {/* Fond de points dans la scène elle-même : épinglée, elle est isolée du fond de la page,
+          et le canvas a besoin d'un fond avec lequel se mélanger. Calé sur l'écran comme
+          celui de la page (décalé à chaque image de la position de la scène), il dessine exactement
+          les mêmes points : la jonction ne se voit pas.
+          Le clip-path de la scène le découpe à ses limites */}
+      <div ref={fondRef} className="absolute left-0 top-0 h-screen w-full will-change-transform">
+        <CalqueFondPoints className="absolute inset-0" />
+      </div>
       {/* Mobile : l'image occupe le haut de l'écran, le texte passe en dessous */}
       <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-x-0 top-0 h-[66%] w-full md:inset-0 md:h-full" />
 

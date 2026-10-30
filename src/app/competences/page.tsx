@@ -7,11 +7,12 @@ import { reveler } from '@/lib/reveal';
 import { Space_Grotesk } from 'next/font/google';
 import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
+import HeroProjet from '@/components/HeroProjet';
 import { getTechIcon } from '@/lib/techIcons';
 // Import d'icônes génériques pour celles qui n'ont pas de logo tech officiel
 import { LuLayoutTemplate, LuPenTool, LuFileText, LuCode, LuServer, LuDatabase, LuTerminal, LuGlobe,
-  LuSearchCheck, LuBraces, LuGauge, LuShare2, LuLink } from 'react-icons/lu';
-import { SiGithub } from 'react-icons/si';
+  LuSearchCheck, LuBraces, LuGauge, LuShare2, LuLink, LuFlaskConical, LuMonitorCheck, LuListChecks, LuShieldCheck, LuBot, LuWorkflow, LuSparkles, LuScanEye, LuMessageSquareCode, LuRefreshCw } from 'react-icons/lu';
+import { SiGithub, SiSpringboot, SiPython } from 'react-icons/si';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,6 +37,20 @@ const getFallbackIcon = (name: string) => {
     case 'Core Web Vitals': return <LuGauge {...props} />;
     case 'Metadata & Open Graph': return <LuShare2 {...props} />;
     case 'Maillage interne': return <LuLink {...props} />;
+    case 'PHPUnit': return <LuFlaskConical {...props} />;
+    case 'Playwright': return <LuMonitorCheck {...props} />;
+    case 'Cypress': return <LuListChecks {...props} />;
+    case 'ESLint': return <LuShieldCheck {...props} />;
+    case 'Tests de l’IA': return <LuBot {...props} />;
+    case 'CI GitHub Actions': return <LuWorkflow {...props} />;
+    case 'Java (Spring Boot)': return <SiSpringboot size={18} />;
+    case 'Python': return <SiPython size={18} />;
+    case 'OpenRouter (LLM)': return <LuSparkles {...props} />;
+    case 'IA de vision': return <LuScanEye {...props} />;
+    case 'Prompt engineering': return <LuMessageSquareCode {...props} />;
+    case 'Fallback multi-modèles': return <LuRefreshCw {...props} />;
+    case 'Validation des réponses': return <LuShieldCheck {...props} />;
+    case 'Dev assisté par IA': return <LuBot {...props} />;
     default: return <LuCode {...props} />;
   }
 };
@@ -47,14 +62,14 @@ const getProjectLink = (projectName: string) => {
     'Projets scolaires': '/projets',
     'Sommeval': 'http://sae301.mmi24b11.mmi-troyes.fr/',
     'Carb\'On': 'https://sae401.mmi24b07.mmi-troyes.fr',
-    'Projets perso': '/projets-perso',
+    'Projets perso': '/projets',
     'Portfolio 3D': '/3d',
     'Expériences 3D': '/3d',
     'PS5 UI': '/3d',
     'WR403D': '/design',
     'Tous les projets': '/projets',
     'SAE 501': '/projets',
-    'WR506D — Penderie': '/projets-scolaires',
+    'WR506D — Penderie': '/projets',
   };
   return links[projectName] || '#';
 };
@@ -112,9 +127,28 @@ const sections: Section[] = [
       { name: 'PHP', detail: 'POO, MVC, sessions, authentification', projects: ['Sommeval', 'Projets scolaires'] },
       { name: 'Symfony', detail: 'Controllers, Twig, Doctrine ORM, API Platform', projects: ['Sommeval', 'SAE 501'] },
       { name: 'Node.js', detail: 'Express, API REST, middleware', projects: ['Projets pro', 'Side projects'] },
+      { name: 'Java (Spring Boot)', detail: 'API REST avec Spring Boot, architecture en couches', projects: ['Projets scolaires'] },
+      { name: 'Python', detail: 'Scripts et automatisation, dont l’animation de l’évolution 3D dans Blender', projects: ['Expériences 3D'] },
       { name: 'SQL / MySQL', detail: 'Requêtes complexes, jointures, CRUD', projects: ['Sommeval', 'Projets scolaires'] },
       { name: 'PostgreSQL', detail: 'Migrations, relations, indexation', projects: ['Projets pro'] },
       { name: 'REST API', detail: 'Architecture RESTful, CRUD, JSON', projects: ['Sommeval', 'Projets pro'] },
+    ],
+  },
+  {
+    id: 7,
+    category: 'Intelligence artificielle',
+    title: 'IA & LLM',
+    description: 'Intégrer de l’IA dans de vraies applications : reconnaissance d’images, modèles de langage avec bascule automatique entre plusieurs modèles, réponses contrôlées et testées pour qu’elles restent fiables.',
+    accent: '#8b5cf6',
+    box3Title: 'Usage',
+    box3Tags: ['Intégration dans des apps réelles', 'Tests avec un faux LLM', 'Modèles gratuits, coût maîtrisé'],
+    skills: [
+      { name: 'OpenRouter (LLM)', detail: 'Accès à plusieurs modèles (Gemma, Nemotron) depuis une seule API', projects: ['WR506D — Penderie'] },
+      { name: 'IA de vision', detail: 'Reconnaissance de vêtements par photo et lecture d’étiquettes textiles', projects: ['WR506D — Penderie'] },
+      { name: 'Prompt engineering', detail: 'Réponses JSON limitées au catalogue de l’app, sans hallucinations', projects: ['WR506D — Penderie'] },
+      { name: 'Fallback multi-modèles', detail: 'Bascule automatique sur 4 LLM gratuits quand l’un échoue', projects: ['WR506D — Penderie'] },
+      { name: 'Validation des réponses', detail: 'Contrôle des sorties et historique de chaque scan pour mesurer la fiabilité', projects: ['WR506D — Penderie'] },
+      { name: 'Dev assisté par IA', detail: 'Claude Code, Codex, Antigravity, avec une PR relue par sujet', projects: ['Tous les projets'] },
     ],
   },
   {
@@ -160,8 +194,6 @@ const sections: Section[] = [
     accent: '#f59e0b',
     box3Title: 'Mesure & Outils',
     box3Tags: ['Google Search Console', 'Lighthouse / PageSpeed', 'Suivi des positions'],
-    ctaHref: '/referencement',
-    ctaLabel: 'Voir la méthode SEO',
     skills: [
       { name: 'SEO technique', detail: 'Indexation, URLs canoniques, sitemap, robots, redirections', projects: ['Portfolio v4'] },
       { name: 'Core Web Vitals', detail: 'LCP, INP, CLS, optimisation des images et des médias', projects: ['Portfolio v4'] },
@@ -171,7 +203,37 @@ const sections: Section[] = [
       { name: 'Maillage interne', detail: 'Architecture des liens, pages orphelines', projects: ['Portfolio v4'] },
     ],
   },
+  {
+    id: 6,
+    category: 'Tests & Qualité',
+    title: 'Test & Vérification',
+    description: 'Prouver que le code fait ce qu’il doit avant chaque mise en ligne : tests unitaires et fonctionnels, scénarios de bout en bout dans un vrai navigateur, intégration continue, et vérification du résultat sur le site en production.',
+    accent: '#22d3ee',
+    box3Title: 'Méthode',
+    box3Tags: ['Tests avant chaque mise en ligne', 'Vérification en production', 'Une PR relue par sujet'],
+    skills: [
+      { name: 'PHPUnit', detail: 'Tests unitaires et fonctionnels Symfony : 240 tests sur Penderie, 81 sur l’Académie E.S.I.C.', projects: ['WR506D — Penderie', 'Académie E.S.I.C.'] },
+      { name: 'Playwright', detail: 'Parcours de bout en bout et vérifications visuelles dans un vrai navigateur', projects: ['Portfolio v4'] },
+      { name: 'Cypress', detail: 'Scénarios e2e : connexion, réservation, back-office', projects: ['Matos'] },
+      { name: 'ESLint', detail: 'Règles de qualité et typage strict TypeScript appliqués au code', projects: ['Portfolio v4'] },
+      { name: 'Tests de l’IA', detail: 'Faux service OpenRouter pour tester les réponses des LLM sans réseau ni coût', projects: ['WR506D — Penderie'] },
+      { name: 'CI GitHub Actions', detail: 'Tests lancés à chaque push, déploiement seulement si tout passe', projects: ['Académie E.S.I.C.'] },
+    ],
+  },
 ];
+
+// Résumé de la démarche de référencement : les 8 maillons de la chaîne SEO et la méthode de travail
+const maillonsSeo = [
+  { titre: 'Mots-clés et intentions', texte: 'Partir des requêtes réellement tapées, de leur volume et de l’intention derrière.' },
+  { titre: 'Architecture', texte: 'Une page par intention, des URLs claires et une profondeur de clic maîtrisée.' },
+  { titre: 'SEO technique', texte: 'robots.txt, sitemap, canoniques et contenu bien présent dans le HTML servi.' },
+  { titre: 'Optimisation on-page', texte: 'Titles et méta-descriptions pensés pour le clic, structure Hn cohérente.' },
+  { titre: 'Données structurées', texte: 'JSON-LD Schema.org pour accéder aux résultats enrichis.' },
+  { titre: 'Core Web Vitals', texte: 'LCP, INP et CLS mesurés sur le terrain, en mobile-first.' },
+  { titre: 'Maillage interne', texte: 'Diriger l’autorité vers les pages stratégiques, aucune page orpheline.' },
+  { titre: 'Mesure et itération', texte: 'Search Console pour voir ce que Google indexe vraiment, puis itérer.' },
+];
+const methodeSeo = ['Audit', 'Priorisation', 'Implémentation', 'Mesure'];
 
 export default function CompetencesPage() {
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -188,30 +250,13 @@ export default function CompetencesPage() {
   };
 
   return (
-    <main className={`${spaceGrotesk.className} bg-white text-black dark:bg-[#050505] dark:text-white min-h-screen transition-colors duration-500`}>
+    <main className={`${spaceGrotesk.className} text-black dark:text-white min-h-screen transition-colors duration-500`}>
       <Navbar />
 
-      <section className="h-screen w-full relative flex items-center justify-center overflow-hidden">
-        <video
-          autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback
-          className="absolute inset-0 w-full h-full object-cover opacity-20 dark:opacity-15 pointer-events-none"
-        >
-          <source src="/figma1.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-linear-to-b from-white/50 via-white/10 to-white dark:from-[#050505]/50 dark:via-[#050505]/10 dark:to-[#050505]" />
+      {/* OUVERTURE : bandeau titre + média de la carte d’accueil */}
+      <HeroProjet id="competences" />
 
-        <div className="relative z-10 text-center px-6">
-          <p className="text-sm uppercase tracking-[0.4em] mb-8 opacity-50">Expertise · Stack Technique</p>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[10rem] font-semibold tracking-tighter leading-none uppercase drop-shadow-2xl">
-            Compétences
-          </h1>
-          <p className="mt-8 text-base md:text-lg opacity-50 max-w-md mx-auto leading-relaxed">
-            Technologies maîtrisées, frameworks back-end, design systems & architecture devops.
-          </p>
-        </div>
-      </section>
-
-      <section className="relative z-10 bg-white dark:bg-[#050505] pt-10 px-6 md:px-10 pb-32 transition-colors duration-500">
+      <section className="relative z-10 pt-10 px-6 md:px-10 pb-32 transition-colors duration-500">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-black/10 dark:border-white/20 pt-10">
             <div>
@@ -229,7 +274,7 @@ export default function CompetencesPage() {
         </div>
       </section>
 
-      <div className="bg-white dark:bg-[#050505] transition-colors duration-500">
+      <div>
         {sections.map((section, index) => {
           const isEven = index % 2 === 0;
           
@@ -249,7 +294,7 @@ export default function CompetencesPage() {
 
                 <div ref={addRef} className="w-full md:w-2/5 shrink-0">
                   <div className="flex items-center gap-3 mb-5">
-                    <span className="text-xs font-mono opacity-40 uppercase tracking-widest">0{section.id}</span>
+                    <span className="text-xs font-mono opacity-40 uppercase tracking-widest">{String(index + 1).padStart(2, '0')}</span>
                     <span className="h-px flex-1 bg-black/10 dark:bg-white/10" />
                     <span
                       className="text-xs px-3 py-1 rounded-full font-medium"
@@ -401,8 +446,49 @@ export default function CompetencesPage() {
         })}
       </div>
 
+      {/* RÉFÉRENCEMENT EN RÉSUMÉ : la chaîne en 8 maillons et la méthode de travail */}
+      <section aria-labelledby="titre-seo-resume" className="relative px-6 md:px-10 py-24 md:py-32 border-t border-black/5 dark:border-white/5">
+        <div ref={addRef} className="max-w-7xl mx-auto">
+          <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.3em]" style={{ color: '#f59e0b' }}>SEO & Performance</p>
+              <h2 id="titre-seo-resume" className="mt-4 text-4xl md:text-6xl font-semibold tracking-tight leading-[1.02]">
+                Le référencement, en résumé
+              </h2>
+            </div>
+            <p className="text-base md:text-lg leading-relaxed text-black/60 dark:text-white/60">
+              Le référencement est une chaîne de huit maillons, du choix des mots-clés à la mesure des résultats :
+              un seul maillon faible suffit à faire perdre leur effet à tous les autres. Je les traite dans l’ordre
+              où ils se déroulent sur un vrai projet, en vérifiant chaque point sur le site en production.
+            </p>
+          </div>
+
+          <ol className="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-black/10 bg-black/10 sm:grid-cols-2 lg:grid-cols-4 dark:border-white/10 dark:bg-white/10">
+            {maillonsSeo.map((m, i) => (
+              <li key={m.titre} className="bg-white/90 p-6 backdrop-blur dark:bg-[#050505]/90">
+                <p className="font-mono text-xs text-black/40 dark:text-white/40">{String(i + 1).padStart(2, '0')}</p>
+                <p className="mt-3 text-base font-semibold">{m.titre}</p>
+                <p className="mt-2 text-sm leading-relaxed text-black/60 dark:text-white/60">{m.texte}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-10">
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-black/70 dark:text-white/70">
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">Méthode</span>
+              {methodeSeo.map((etape, i) => (
+                <span key={etape} className="flex items-center gap-3">
+                  {i > 0 && <span aria-hidden="true" className="text-black/25 dark:text-white/25">→</span>}
+                  {etape}
+                </span>
+              ))}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* FOOTER NAV + COPYRIGHT */}
-      <PageFooter precedent={{ href: '/design', label: 'Design' }} suivant={{ href: '/referencement', label: 'Référencement' }} />
+      <PageFooter precedent={{ href: '/design', label: 'Design' }} suivant={{ href: '/a-propos', label: 'À Propos' }} />
     </main>
   );
 }
