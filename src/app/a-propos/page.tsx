@@ -11,6 +11,7 @@ import { SiGithub } from 'react-icons/si';
 import { LuLinkedin, LuMail } from 'react-icons/lu';
 import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
+import HeroProjet from '@/components/HeroProjet';
 import { TbMotorbike } from 'react-icons/tb';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
@@ -94,11 +95,14 @@ export default function AProposPage() {
   }, []);
 
   return (
-    <main className="bg-white dark:bg-[#0c0c0c] text-black dark:text-white min-h-screen">
+    <main className="text-black dark:text-white min-h-screen">
       <Navbar />
 
-      {/* HERO */}
-      <section ref={heroRef} className="min-h-screen pt-32 pb-20 px-6 md:px-10 flex flex-col justify-end">
+      {/* OUVERTURE : bandeau titre + média de la carte d’accueil */}
+      <HeroProjet id="a-propos" />
+
+      {/* PRÉSENTATION */}
+      <section ref={heroRef} className="pt-24 pb-20 px-6 md:px-10 flex flex-col justify-end">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col md:flex-row gap-8 mb-16 items-end">
             <div
@@ -142,7 +146,7 @@ export default function AProposPage() {
 
           <div data-hero className="border-t border-black/10 dark:border-white/10 pt-8 flex items-end justify-between">
             <div>
-              <h1 className="text-black/60 dark:text-white/60 font-semibold text-2xl md:text-3xl italic">Rafael Teixeira</h1>
+              <p className="text-black/60 dark:text-white/60 font-semibold text-2xl md:text-3xl italic">Rafael Teixeira</p>
             </div>
             <p className="text-xs text-black/20 dark:text-white/20 uppercase tracking-widest text-right max-w-50">
               Développeur<br />Full Stack & UI/UX
@@ -257,7 +261,7 @@ export default function AProposPage() {
       </section>
 
       {/* FOOTER NAV + COPYRIGHT */}
-      <PageFooter precedent={{ href: '/referencement', label: 'Référencement' }} suivant={{ href: '/3d', label: 'Projets 3D' }} />
+      <PageFooter precedent={{ href: '/competences', label: 'Compétences' }} suivant={{ href: '/3d', label: 'Projets 3D' }} />
     </main>
   );
 }

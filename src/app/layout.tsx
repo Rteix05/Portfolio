@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import SmoothScroll from '../components/SmoothScroll';
+import FondPoints from '@/components/FondPoints';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 
@@ -103,6 +104,8 @@ export default function RootLayout({
       </head>
       <body className={`${spaceGrotesk.className}`}>
         {/* On enveloppe notre app avec notre propre composant Client */}
+        {/* Fond de points de la home, derrière toutes les pages */}
+        <FondPoints />
         <SmoothScroll>
           {children}
         </SmoothScroll>

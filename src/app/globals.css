@@ -39,7 +39,8 @@ html {
 }
 
 body {
-  background: var(--background);
+  /* Transparent : la couleur vient de <html>, et le fond de points (FondPoints) reste visible */
+  background: transparent;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -184,4 +185,19 @@ p {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Changement de thème : fondu enchaîné doux de toute la page (View Transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Repli sans View Transitions : les couleurs glissent pendant le changement */
+html.changement-theme,
+html.changement-theme *,
+html.changement-theme *::before,
+html.changement-theme *::after {
+  transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, fill 0.6s ease !important;
 }

@@ -7,9 +7,10 @@ import { reveler } from '@/lib/reveal';
 import { Space_Grotesk } from 'next/font/google';
 import PageFooter from '@/components/PageFooter';
 import Navbar from '@/components/Navbar';
+import HeroProjet from '@/components/HeroProjet';
 import LazyVideo from '@/components/LazyVideo';
 import EclatStack from '@/components/EclatStack';
-import ScrollSequence, { type Chapitre, type Fantome } from '@/components/ScrollSequence';
+import ScrollSequence, { type Chapitre } from '@/components/ScrollSequence';
 import dynamic from 'next/dynamic';
 
 const CharmanderViewer = dynamic(() => import('@/components/CharmanderViewer'), { ssr: false });
@@ -46,12 +47,6 @@ const chapitresSequence: Chapitre[] = [
   },
 ];
 
-const fantomesSequence: Fantome[] = [
-  { debut: -0.05, fin: 0.12, texte: 'Salamèche' },
-  { debut: 0.36, fin: 0.57, texte: 'Reptincel' },
-  { debut: 0.83, fin: 1.1, texte: 'Dracaufeu' },
-];
-
 export default function Projets3DPage() {
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -67,28 +62,11 @@ export default function Projets3DPage() {
   };
 
   return (
-    <main className={`${spaceGrotesk.className} bg-white dark:bg-[#050505] text-black dark:text-white min-h-screen transition-colors duration-500`}>
+    <main className={`${spaceGrotesk.className} text-black dark:text-white min-h-screen transition-colors duration-500`}>
       <Navbar />
 
-      {/* 1. HERO SECTION avec vidéo Blender */}
-      <section className="h-screen w-full relative overflow-hidden flex items-end pb-16 pl-6 md:pl-10">
-        <video 
-          autoPlay muted loop playsInline disablePictureInPicture
-          poster="/blender-affiche.webp"
-          className="absolute inset-0 w-full h-full object-cover opacity-20 dark:opacity-30"
-        >
-          <source src="/blender.mp4" type="video/mp4" />
-        </video>
-        {/* Overlay pour assurer le contraste du texte */}
-        <div className="absolute inset-0 bg-white/40 dark:bg-black/50" />
-        
-        <div className="relative z-10 max-w-4xl">
-          <p className="text-sm uppercase tracking-[0.3em] opacity-60 mb-3">3D & Interactive</p>
-          <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[9rem] font-semibold tracking-tighter leading-none">
-            Expériences 3D
-          </h1>
-        </div>
-      </section>
+      {/* OUVERTURE : bandeau titre + média de la carte d’accueil */}
+      <HeroProjet id="3d" />
 
       {/* 2. INTRODUCTION */}
       <section className="py-20 px-6 md:px-10 border-t border-black/10 dark:border-white/10">
@@ -115,12 +93,11 @@ export default function Projets3DPage() {
           total={360}
           duree={350}
           chapitres={chapitresSequence}
-          fantomes={fantomesSequence}
         />
       </section>
 
       {/* 2bis. PILE ÉCLATÉE 3D */}
-      <section aria-labelledby="eclat-titre" className="py-24 px-6 md:px-10 border-t border-black/10 dark:border-white/10">
+      <section aria-labelledby="eclat-titre" className="py-24 px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
           <p className="text-sm uppercase tracking-[0.3em] opacity-60 mb-3">01</p>
           <h2 id="eclat-titre" className="text-4xl md:text-6xl font-semibold leading-tight max-w-2xl opacity-90">
@@ -217,7 +194,7 @@ export default function Projets3DPage() {
       </section>
 
       {/* FOOTER NAV + COPYRIGHT */}
-      <PageFooter precedent={{ href: '/a-propos', label: 'À Propos' }} suivant={{ href: '/projets-scolaires', label: 'Projets Scolaires' }} />
+      <PageFooter precedent={{ href: '/a-propos', label: 'À Propos' }} suivant={{ href: '/projets', label: 'Projets' }} />
     </main>
   );
 }
