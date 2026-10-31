@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { reveler } from '@/lib/reveal';
@@ -104,43 +103,28 @@ export default function AProposPage() {
       {/* PRÉSENTATION */}
       <section ref={heroRef} className="pt-24 pb-20 px-6 md:px-10 flex flex-col justify-end">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col md:flex-row gap-8 mb-16 items-end">
-            <div
-              className="relative w-48 h-60 md:w-64 md:h-80 rounded-2xl overflow-hidden shrink-0 border border-black/10 dark:border-white/10"
-              data-hero
-            >
-              <Image
-                src="/Raf.webp"
-                alt="Portrait de Rafael Teixeira, développeur full stack"
-                fill
-                priority
-                sizes="(max-width: 768px) 12rem, 16rem"
-                className="object-cover object-top"
-              />
+          {/* Sans portrait : les étiquettes puis la fiche sur toute la largeur */}
+          <div className="flex flex-col gap-4 mb-16" data-hero>
+            <div className="flex flex-wrap gap-2">
+              <span className="text-xs px-3 py-1 rounded-full border border-black/20 dark:border-white/20 text-black/50 dark:text-white/50 uppercase tracking-widest">
+                Troyes / Paris
+              </span>
+              <span className="text-xs px-3 py-1 rounded-full border border-black/20 dark:border-white/20 text-black/50 dark:text-white/50 uppercase tracking-widest">
+                Alternance disponible
+              </span>
             </div>
-
-            <div className="flex-1 flex flex-col gap-4" data-hero>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-3 py-1 rounded-full border border-black/20 dark:border-white/20 text-black/50 dark:text-white/50 uppercase tracking-widest">
-                  Troyes / Paris
-                </span>
-                <span className="text-xs px-3 py-1 rounded-full border border-black/20 dark:border-white/20 text-black/50 dark:text-white/50 uppercase tracking-widest">
-                  Alternance disponible
-                </span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-auto pt-8 border-t border-black/10 dark:border-white/10">
-                {[
-                  ['Rôle', 'Développeur Full Stack'],
-                  ['Stack', 'React · Next · Symfony · TypeScript · Docker'],
-                  ['Formation', 'BUT MMI · IUT Troyes'],
-                  ['Poste', 'Pas d\'entreprise pour le moment'],
-                ].map(([k, v]) => (
-                  <div key={k}>
-                    <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-1">{k}</p>
-                    <p className="text-sm font-medium text-black/80 dark:text-white/80">{v}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 pt-8 border-t border-black/10 dark:border-white/10">
+              {[
+                ['Rôle', 'Développeur Full Stack'],
+                ['Stack', 'React · Next · Symfony · TypeScript · Docker'],
+                ['Formation', 'BUT MMI · IUT Troyes'],
+                ['Poste', 'Pas d\'entreprise pour le moment'],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <p className="text-xs text-black/30 dark:text-white/30 uppercase tracking-widest mb-1">{k}</p>
+                  <p className="text-sm md:text-base font-medium text-black/80 dark:text-white/80">{v}</p>
+                </div>
+              ))}
             </div>
           </div>
 
