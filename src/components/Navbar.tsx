@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
+import { useRef, useState, useSyncExternalStore } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -36,6 +36,7 @@ export default function Navbar({ isHidden = false, onMenuClick }: { isHidden?: b
     setIsScrolled(latest > 50);
   });
 
+  const minuterieTheme = useRef(0);
   const toggleTheme = () => {
     const suivant = theme === 'dark' ? 'light' : 'dark';
     const racine = document.documentElement;
@@ -48,15 +49,12 @@ export default function Navbar({ isHidden = false, onMenuClick }: { isHidden?: b
     } catch {}
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return appliquer();
-    // Fondu enchaîné de toute la page entre l'ancien et le nouveau thème (réglé dans globals.css)
-    if (document.startViewTransition) {
-      document.startViewTransition(appliquer);
-      return;
-    }
-    // Navigateurs sans View Transitions : les couleurs glissent d'un thème à l'autre
+    // Les couleurs de la page glissent d'un thème à l'autre (globals.css) pendant que le fond
+    // animé et le logo 3D font de même : rien ne se fige, contrairement à un fondu de captures
     racine.classList.add('changement-theme');
     appliquer();
-    window.setTimeout(() => racine.classList.remove('changement-theme'), 700);
+    window.clearTimeout(minuterieTheme.current);
+    minuterieTheme.current = window.setTimeout(() => racine.classList.remove('changement-theme'), 750);
   };
 
   const isHome = pathname === '/';

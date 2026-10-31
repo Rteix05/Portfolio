@@ -34,11 +34,19 @@ const enRgb = (hex: string) => {
   const n = parseInt(hex.slice(1), 16);
   return `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`;
 };
+const enTableau = (hex: string) => enRgb(hex).split(',').map(Number);
+// Couleurs du thème courant, en [r, g, b]
+const couleursTheme = () => {
+  const [fond, points] = PALETTES[lireTheme()];
+  return { fond: enTableau(fond), points: enTableau(points) };
+};
+// Durée du glissement des couleurs au changement de thème (comme le reste de la page)
+const DUREE_THEME = 0.7;
 
 export default function WaveMesh({ className = '' }: { className?: string }) {
   const conteneurRef = useRef<HTMLDivElement | null>(null);
   const theme = useSyncExternalStore(suivreTheme, lireTheme, () => 'sombre' as const);
-  const [fond, points] = PALETTES[theme];
+  const [fond] = PALETTES[theme];
 
   useEffect(() => {
     const conteneur = conteneurRef.current;
@@ -55,7 +63,20 @@ export default function WaveMesh({ className = '' }: { className?: string }) {
     // Écran tactile : pas de survol, et 30 images/s suffisent pour économiser la batterie
     const tactile = !matchMedia('(hover: hover) and (pointer: fine)').matches;
     const dpr = Math.min(devicePixelRatio, 2);
-    const couleurPoints = enRgb(points);
+    // Couleurs affichées : elles glissent vers celles du thème au lieu de changer d'un coup,
+    // et le canvas n'est jamais recréé (l'animation continue pendant la transition)
+    const couleurs = couleursTheme();
+    let cible = couleurs;
+    let transition: { depuis: typeof couleurs; debut: number } | null = null;
+    const melanger = (a: number[], b: number[], k: number) => a.map((v, i) => Math.round(v + (b[i] - v) * k));
+    const mettreAJourCouleurs = () => {
+      if (!transition) return;
+      const p = Math.min(1, (performance.now() - transition.debut) / 1000 / DUREE_THEME);
+      const k = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      couleurs.fond = melanger(transition.depuis.fond, cible.fond, k);
+      couleurs.points = melanger(transition.depuis.points, cible.points, k);
+      if (p >= 1) transition = null;
+    };
 
     let largeur = 0;
     let hauteur = 0;
@@ -106,7 +127,21 @@ export default function WaveMesh({ className = '' }: { className?: string }) {
     };
 
     const dessiner = (t: number) => {
-      ctx.clearRect(0, 0, largeur, hauteur);
+      mettreAJourCouleurs();
+      const couleurPoints = couleurs.points.join(',');
+      // Fond et halo peints ici, pour qu'ils suivent eux aussi le glissement des couleurs
+      ctx.fillStyle = `rgb(${couleurs.fond.join(',')})`;
+      ctx.fillRect(0, 0, largeur, hauteur);
+      ctx.save();
+      ctx.translate(largeur / 2, hauteur * 0.3);
+      ctx.scale(1, (hauteur * 0.6) / (largeur * 1.2));
+      const rayonHalo = largeur * 1.2 * 0.6;
+      const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, rayonHalo);
+      halo.addColorStop(0, `rgba(${couleurPoints},0.07)`);
+      halo.addColorStop(1, `rgba(${couleurPoints},0)`);
+      ctx.fillStyle = halo;
+      ctx.fillRect(-rayonHalo, -rayonHalo, rayonHalo * 2, rayonHalo * 2);
+      ctx.restore();
       bosse.x += (bosse.cibleX - bosse.x) * 0.1;
       bosse.z += (bosse.cibleZ - bosse.z) * 0.1;
       bosse.force += (bosse.cibleForce - bosse.force) * 0.06;
@@ -175,6 +210,21 @@ export default function WaveMesh({ className = '' }: { className?: string }) {
     redimensionner();
     dessiner(mouvementReduit ? 3 : 0);
 
+    // Changement de thème : on lance le glissement (immédiat si les animations sont réduites)
+    const observateurTheme = new MutationObserver(() => {
+      const nouvelles = couleursTheme();
+      if (nouvelles.fond.join() === cible.fond.join()) return;
+      cible = nouvelles;
+      if (mouvementReduit) {
+        couleurs.fond = cible.fond;
+        couleurs.points = cible.points;
+        dessiner(3);
+        return;
+      }
+      transition = { depuis: { fond: [...couleurs.fond], points: [...couleurs.points] }, debut: performance.now() };
+    });
+    observateurTheme.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
     // Hors de l'écran ou onglet caché : l'animation s'arrête
     const observateurVisibilite = new IntersectionObserver(([entree]) => {
       visible = entree.isIntersecting;
@@ -200,20 +250,21 @@ export default function WaveMesh({ className = '' }: { className?: string }) {
       raf = 0;
       observateurVisibilite.disconnect();
       observateurTaille.disconnect();
+      observateurTheme.disconnect();
       document.removeEventListener('visibilitychange', reveiller);
       window.removeEventListener('pointermove', auMouvement);
       window.removeEventListener('pointerdown', auClic);
       canvas.remove();
     };
-  }, [points]);
+  }, []);
 
-  const [r, g, b] = enRgb(points).split(',');
+  // Le fond du conteneur ne sert qu'avant le premier dessin du canvas
   return (
     <div
       ref={conteneurRef}
       aria-hidden="true"
       className={`relative isolate overflow-hidden ${className}`}
-      style={{ background: `radial-gradient(120% 60% at 50% 30%, rgb(${r} ${g} ${b} / 0.07), transparent 60%), ${fond}` }}
+      style={{ background: fond }}
     />
   );
 }

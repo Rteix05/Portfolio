@@ -252,7 +252,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: heroVisible ? 1 : 0 }}
           transition={fondu}
-          className={`h-[24vh] w-[86vw] sm:w-[70vw] md:absolute md:bottom-[7vh] md:left-[5vw] md:h-[40vh] md:w-[44vw] ${heroVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
+          className={`h-[24vh] w-[86vw] sm:w-[70vw] md:absolute md:bottom-[7vh] md:left-[5vw] md:h-[40vh] md:w-[44vw] pointer-events-none`}
         >
           <h1 className="sr-only">Rafael Teixeira</h1>
           <LogoAccueil actif={heroVisible} />

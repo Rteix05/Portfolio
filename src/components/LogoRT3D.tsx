@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -24,23 +25,44 @@ const lireSombre = () => !document.documentElement.classList.contains('light');
 const REPOS = -1;
 const A_LANCER = -2;
 
-// Zone dans laquelle on peut déplacer le logo (unités de la scène), et réglages du rebond
-const LIMITE_X = 3.8;
-const LIMITE_HAUT = 6.5;
+// Réglages du rebond (unités du logo)
 const LIMITE_BAS = -0.3;
-const GRAVITE = 13; // faible : le logo retombe en douceur, il paraît léger
-const REBOND = 0.56; // part de la vitesse gardée à chaque rebond
+const GRAVITE = 18; // assez vive pour des rebonds toniques, le logo reste léger
+const REBOND = 0.72; // part de la vitesse gardée à chaque rebond : plusieurs rebonds avant de se poser
+const VITESSE_ARRET = 2.2; // en dessous, le logo se pose (pas de micro-rebonds interminables)
+const ATTENTE_RETOUR = 3000; // ms sans toucher le logo avant qu'il revienne à sa place
+const DELAI_ENTREE = 1000; // ms avant la première apparition, le temps que la page s'installe
+// Caméra fixe, droite, face à la scène : elle couvre tout l'écran
+const DISTANCE = 32;
+const FOV = 32;
+const DEMI_LARGEUR_LOGO = 4.4; // marge pour que le logo reste entier dans l'écran
+const DEMI_HAUTEUR_LOGO = 1.6;
+
+// Réglages de la matière et des lumières pour chaque thème : on glisse de l'un à l'autre
+const MATIERE = {
+  sombre: { couleur: new THREE.Color('#f4f4f2'), metal: 0.15, rugosite: 0.22, reflets: 1.1, lumiere: 1.2, contre: new THREE.Color('#9fb4ff') },
+  clair: { couleur: new THREE.Color('#141414'), metal: 0.45, rugosite: 0.28, reflets: 1.4, lumiere: 1.8, contre: new THREE.Color('#ffffff') },
+};
+
+/** Rectangle (en pixels de l'écran) qui donne la place et la taille du logo au repos. */
+type Cadre = { x: number; y: number; l: number; h: number };
 const borne = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 
-function Logo({ sombre, souris }: { sombre: boolean; souris: React.RefObject<{ x: number; y: number }> }) {
+function Logo({ sombre, souris, cadre, actif, entre }: { sombre: boolean; souris: React.RefObject<{ x: number; y: number }>; cadre: React.RefObject<Cadre>; actif: React.RefObject<boolean>; entre: React.RefObject<boolean> }) {
+  const ancre = useRef<THREE.Group>(null);
   const groupe = useRef<THREE.Group>(null);
+  const zone = useRef<THREE.Mesh>(null);
+  const matiere = useRef<THREE.MeshPhysicalMaterial>(null);
+  const lumiere = useRef<THREE.DirectionalLight>(null);
+  const contreJour = useRef<THREE.DirectionalLight>(null);
+  // Place de repos et échelle du logo à l'écran, plus les bords de l'écran en unités du logo
+  const repere = useRef({ x: 0, y: 0, s: 1, minX: -4, maxX: 4, haut: 6 });
   const orientation = useRef({ x: 0, y: 0 });
   const tour = useRef(REPOS);
   // Position et vitesse du logo, saisi ou en chute libre
-  const physique = useRef({ x: 0, y: 0, vx: 0, vy: 0, saisi: false, cibleX: 0, cibleY: 0, ecartX: 0, ecartY: 0, deplace: 0, flottement: 1 });
+  const physique = useRef({ x: 0, y: 0, vx: 0, vy: 0, saisi: false, cibleX: 0, cibleY: 0, ecartX: 0, ecartY: 0, flottement: 0, ecrase: 0, vEcrase: 0, calme: 0 });
   const plan = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const point = useMemo(() => new THREE.Vector3(), []);
-  const [curseur, setCurseur] = useState<'' | 'grab' | 'grabbing'>('');
 
   // Un seul volume pour tout le logo : les 21 cases extrudées ensemble, arêtes biseautées
   const geometrie = useMemo(() => {
@@ -60,58 +82,159 @@ function Logo({ sombre, souris }: { sombre: boolean; souris: React.RefObject<{ x
   }, []);
   useEffect(() => () => geometrie.dispose(), [geometrie]);
 
-  useEffect(() => {
-    document.body.style.cursor = curseur;
-    return () => {
-      document.body.style.cursor = '';
-    };
-  }, [curseur]);
-
-  // Glisser suivi sur toute la fenêtre : le logo ne « décroche » pas si la main va trop vite
-  const { camera, gl } = useThree();
+  // Le canvas couvre tout l'écran mais laisse passer les clics (menu, liens) : la saisie du logo
+  // est détectée sur la fenêtre, par un rayon lancé vers sa zone de saisie
+  const { camera, gl, size } = useThree();
   useEffect(() => {
     const rayon = new THREE.Raycaster();
     const ndc = new THREE.Vector2();
-    const bouge = (e: PointerEvent) => {
-      const ph = physique.current;
-      if (!ph.saisi) return;
+    let curseur = '';
+    let bloquerClic = false;
+    // Appui en cours sur le logo, pas encore une saisie : tant que la main ne bouge pas de
+    // quelques pixels, le logo garde son élan (un simple clic le fait tourner sans l'arrêter)
+    let appui: { x: number; y: number } | null = null;
+    const SEUIL_SAISIE = 6; // px
+    const changerCurseur = (c: string) => {
+      if (c === curseur) return;
+      curseur = c;
+      document.body.style.cursor = c;
+    };
+    const viser = (e: PointerEvent) => {
       const r = gl.domElement.getBoundingClientRect();
       ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
       rayon.setFromCamera(ndc, camera);
-      if (!rayon.ray.intersectPlane(plan, point)) return;
-      const nx = borne(point.x - ph.ecartX, -LIMITE_X, LIMITE_X);
-      const ny = borne(point.y - ph.ecartY, LIMITE_BAS, LIMITE_HAUT);
-      ph.deplace += Math.abs(nx - ph.cibleX) + Math.abs(ny - ph.cibleY);
+    };
+    // Point visé sur le plan du logo, converti en unités du logo
+    const pointLocal = () => {
+      if (!rayon.ray.intersectPlane(plan, point)) return null;
+      const rp = repere.current;
+      return { x: (point.x - rp.x) / rp.s, y: (point.y - rp.y) / rp.s };
+    };
+    const touche = () => !!zone.current && rayon.intersectObject(zone.current, false).length > 0;
+
+    const presser = (e: PointerEvent) => {
+      bloquerClic = false;
+      if (!actif.current || e.button > 0) return;
+      viser(e);
+      if (!touche()) return;
+      const p = pointLocal();
+      if (!p) return;
+      // Le logo passe devant : le clic ne va pas à ce qui se trouve dessous
+      e.preventDefault();
+      e.stopPropagation();
+      bloquerClic = true;
+      appui = { x: e.clientX, y: e.clientY };
+      physique.current.calme = performance.now();
+      changerCurseur('grabbing');
+    };
+    const bouge = (e: PointerEvent) => {
+      const ph = physique.current;
+      viser(e);
+      const p = pointLocal();
+      // La main a bougé : l'appui devient une saisie, le logo est pris là où il se trouve
+      if (appui && !ph.saisi && p && Math.hypot(e.clientX - appui.x, e.clientY - appui.y) > SEUIL_SAISIE) {
+        appui = null;
+        ph.saisi = true;
+        ph.ecartX = p.x - ph.x;
+        ph.ecartY = p.y - ph.y;
+        ph.cibleX = ph.x;
+        ph.cibleY = ph.y;
+      }
+      if (!ph.saisi) {
+        if (!appui) changerCurseur(actif.current && e.pointerType === 'mouse' && touche() ? 'grab' : '');
+        return;
+      }
+      if (!p) return;
+      const rp = repere.current;
+      const nx = borne(p.x - ph.ecartX, rp.minX, rp.maxX);
+      const ny = borne(p.y - ph.ecartY, LIMITE_BAS, rp.haut);
       ph.cibleX = nx;
       ph.cibleY = ny;
     };
     const lacher = () => {
       const ph = physique.current;
+      if (appui) {
+        // Simple clic : un tour complet, en plein vol s'il le faut, sans toucher à son élan
+        appui = null;
+        changerCurseur('');
+        if (tour.current === REPOS) tour.current = A_LANCER;
+        return;
+      }
       if (!ph.saisi) return;
       ph.saisi = false;
-      setCurseur('');
-      // Un clic sans déplacement garde son effet : un tour complet
-      if (ph.deplace < 0.08 && tour.current === REPOS) tour.current = A_LANCER;
+      ph.calme = performance.now();
+      changerCurseur('');
     };
+    const clic = (e: MouseEvent) => {
+      if (!bloquerClic) return;
+      bloquerClic = false;
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    window.addEventListener('pointerdown', presser, true);
+    window.addEventListener('click', clic, true);
     window.addEventListener('pointermove', bouge);
     window.addEventListener('pointerup', lacher);
     window.addEventListener('pointercancel', lacher);
     return () => {
+      window.removeEventListener('pointerdown', presser, true);
+      window.removeEventListener('click', clic, true);
       window.removeEventListener('pointermove', bouge);
       window.removeEventListener('pointerup', lacher);
       window.removeEventListener('pointercancel', lacher);
+      document.body.style.cursor = '';
     };
-  }, [camera, gl, plan, point]);
+  }, [actif, camera, gl, plan, point]);
 
   useFrame((state, dt) => {
     const g = groupe.current;
-    if (!g) return;
+    const an = ancre.current;
+    if (!g || !an) return;
     const t = state.clock.elapsedTime;
+
+    // Changement de thème : la matière et les lumières glissent vers leurs nouveaux réglages
+    const cibleTheme = MATIERE[sombre ? 'sombre' : 'clair'];
+    const kt = 1 - Math.pow(0.0015, Math.min(dt, 1 / 30));
+    const m = matiere.current;
+    if (m) {
+      m.color.lerp(cibleTheme.couleur, kt);
+      m.metalness += (cibleTheme.metal - m.metalness) * kt;
+      m.roughness += (cibleTheme.rugosite - m.roughness) * kt;
+      m.envMapIntensity += (cibleTheme.reflets - m.envMapIntensity) * kt;
+    }
+    if (lumiere.current) lumiere.current.intensity += (cibleTheme.lumiere - lumiere.current.intensity) * kt;
+    if (contreJour.current) contreJour.current.color.lerp(cibleTheme.contre, kt);
+
+    // Place et taille au repos d'après le cadre de l'accueil, recalculées à chaque image
+    // (redimensionnement, passage mobile) : même rendu qu'avant, mais l'écran entier est jouable
+    const hauteurMonde = 2 * DISTANCE * Math.tan(THREE.MathUtils.degToRad(FOV / 2));
+    const largeurMonde = (hauteurMonde * size.width) / size.height;
+    const pxParUnite = size.height / hauteurMonde;
+    const c = cadre.current;
+    const rp = repere.current;
+    if (c.l > 0 && c.h > 0) {
+      const largeurPx = Math.min(c.h * 1.1, c.l * 0.63);
+      rp.s = largeurPx / pxParUnite / 8.27;
+      rp.x = (c.x + c.l * 0.515 - size.width / 2) / pxParUnite;
+      rp.y = -(c.y + c.h * 0.06 - size.height / 2) / pxParUnite;
+    }
+    rp.minX = Math.min(0, (-largeurMonde / 2 - rp.x) / rp.s + DEMI_LARGEUR_LOGO);
+    rp.maxX = Math.max(0, (largeurMonde / 2 - rp.x) / rp.s - DEMI_LARGEUR_LOGO);
+    rp.haut = Math.max(0, (hauteurMonde / 2 - rp.y) / rp.s - DEMI_HAUTEUR_LOGO);
+    an.position.set(rp.x, rp.y, 0);
+    an.scale.setScalar(rp.s);
+    if (!actif.current && physique.current.saisi) physique.current.saisi = false;
     const d = Math.min(dt, 1 / 30);
     if (tour.current === A_LANCER) tour.current = t;
 
     const ph = physique.current;
-    if (ph.saisi) {
+    if (!entre.current) {
+      // Avant l'entrée : le logo attend juste au-dessus de l'écran, puis il tombe à sa place
+      ph.x = 0;
+      ph.y = rp.haut + 5;
+      ph.vx = 0;
+      ph.vy = 0;
+    } else if (ph.saisi) {
       // Le logo colle presque à la main (il paraît léger), sa vitesse sert à l'élan du lâcher
       const k = 1 - Math.pow(0.00002, d);
       const nx = ph.x + (ph.cibleX - ph.x) * k;
@@ -124,15 +247,38 @@ function Logo({ sombre, souris }: { sombre: boolean; souris: React.RefObject<{ x
       // Chute libre et rebonds sur le « sol » (sa hauteur de repos)
       ph.vy -= GRAVITE * d;
       ph.y += ph.vy * d;
+      // Plafond invisible au haut de l'écran : lancé trop fort, le logo y rebondit au lieu de sortir
+      // (seulement en montant : à son entrée, le logo tombe de plus haut et le traverse)
+      if (ph.y > rp.haut && ph.vy > 0) {
+        ph.y = rp.haut;
+        ph.vy = -Math.abs(ph.vy) * 0.4;
+      }
       if (ph.y < 0) {
         ph.y = 0;
-        ph.vy = ph.vy < -1.2 ? -ph.vy * REBOND : 0;
+        // Choc au sol : le logo s'écrase un peu puis reprend sa forme, comme une balle
+        if (ph.vy < -VITESSE_ARRET) {
+          ph.vEcrase += Math.min(-ph.vy, 26) * 0.32;
+          ph.vy = -ph.vy * REBOND;
+        } else ph.vy = 0;
       }
-      // Retour doux vers sa place à l'horizontale
-      ph.vx += -ph.x * 6 * d;
-      ph.vx *= Math.exp(-2.5 * d);
+      // Le logo glisse là où on l'a lancé, freiné surtout quand il touche le sol
+      const auSol = ph.y === 0 && ph.vy === 0;
+      ph.vx *= Math.exp(-(auSol ? 3.5 : 0.5) * d);
+      // Après 3 s sans y toucher, il revient lentement à sa place, sans à-coup
+      if (auSol && performance.now() - ph.calme > ATTENTE_RETOUR) ph.vx += (-ph.x * 1.2 - ph.vx * 2.2) * d;
       ph.x += ph.vx * d;
+      // Les bords de l'écran le renvoient, comme les murs d'une boîte
+      if (ph.x < rp.minX) {
+        ph.x = rp.minX;
+        ph.vx = Math.abs(ph.vx) * 0.4;
+      } else if (ph.x > rp.maxX) {
+        ph.x = rp.maxX;
+        ph.vx = -Math.abs(ph.vx) * 0.4;
+      }
     }
+    // Ressort de l'écrasement : il s'aplatit, s'étire un peu au rebond, puis se stabilise
+    ph.vEcrase += (-ph.ecrase * 320 - ph.vEcrase * 14) * d;
+    ph.ecrase = borne(ph.ecrase + ph.vEcrase * d, -0.18, 0.3);
     // Le flottement ne reprend qu'une fois le logo posé
     const pose = !ph.saisi && ph.y === 0 && ph.vy === 0;
     ph.flottement += ((pose ? 1 : 0) - ph.flottement) * (1 - Math.pow(0.05, d));
@@ -153,60 +299,59 @@ function Logo({ sombre, souris }: { sombre: boolean; souris: React.RefObject<{ x
 
     // Inclinaison selon la vitesse : le logo « réagit » quand on le lance ou qu'il rebondit
     g.rotation.set(o.x + borne(ph.vy * 0.02, -0.3, 0.3), o.y + tourComplet, borne(-ph.vx * 0.05, -0.35, 0.35));
-    g.position.set(ph.x, ph.y + Math.sin(t * 1.1) * 0.3 * ph.flottement, 0);
+    g.position.set(ph.x, ph.y - ph.ecrase * 1.2 + Math.sin(t * 1.1) * 0.3 * ph.flottement, 0);
+    g.scale.set(1 + ph.ecrase * 0.5, 1 - ph.ecrase, 1 + ph.ecrase * 0.5);
   });
 
   return (
-    <group ref={groupe}>
-      {/* Échelle du logo : un peu plus petit que sa première version */}
-      <group scale={0.76}>
-      {/* Zone de saisie invisible sur tout le rectangle du logo : on l'attrape même entre deux lettres */}
-      <mesh
-        onPointerOver={() => setCurseur((c) => (c === 'grabbing' ? c : 'grab'))}
-        onPointerOut={() => setCurseur((c) => (c === 'grabbing' ? c : ''))}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-          const ph = physique.current;
-          if (!e.ray.intersectPlane(plan, point)) return;
-          ph.saisi = true;
-          ph.ecartX = point.x - ph.x;
-          ph.ecartY = point.y - ph.y;
-          ph.cibleX = ph.x;
-          ph.cibleY = ph.y;
-          ph.deplace = 0;
-          setCurseur('grabbing');
-        }}
-      >
-        <boxGeometry args={[11.6, 4, 1.2]} />
-        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-      </mesh>
-      <mesh geometry={geometrie} scale={0.34}>
-        <meshPhysicalMaterial
-          color={sombre ? '#f4f4f2' : '#141414'}
-          metalness={sombre ? 0.15 : 0.45}
-          roughness={sombre ? 0.22 : 0.28}
-          clearcoat={1}
-          clearcoatRoughness={0.12}
-          envMapIntensity={sombre ? 1.1 : 1.4}
-        />
-      </mesh>
+    <>
+    <directionalLight ref={lumiere} position={[4, 6, 8]} args={['#ffffff', MATIERE[sombre ? 'sombre' : 'clair'].lumiere]} />
+    <directionalLight ref={contreJour} position={[-6, -2, 4]} args={[MATIERE[sombre ? 'sombre' : 'clair'].contre.clone(), 0.5]} />
+    <group ref={ancre}>
+      <group ref={groupe}>
+        {/* Échelle du logo : un peu plus petit que sa première version */}
+        <group scale={0.76}>
+          {/* Zone de saisie invisible sur tout le rectangle du logo : on l'attrape même entre deux lettres */}
+          <mesh ref={zone}>
+            <boxGeometry args={[11.6, 4, 1.2]} />
+            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+          </mesh>
+          <mesh geometry={geometrie} scale={0.34}>
+            {/* Réglages de départ seulement : ensuite ils glissent avec le thème (voir useFrame) */}
+            <meshPhysicalMaterial
+              ref={matiere}
+              args={[{ color: MATIERE[sombre ? 'sombre' : 'clair'].couleur.clone(), metalness: MATIERE[sombre ? 'sombre' : 'clair'].metal, roughness: MATIERE[sombre ? 'sombre' : 'clair'].rugosite, envMapIntensity: MATIERE[sombre ? 'sombre' : 'clair'].reflets }]}
+              clearcoat={1}
+              clearcoatRoughness={0.12}
+            />
+          </mesh>
+        </group>
       </group>
+      <ContactShadows position={[0, -2.1, 0]} opacity={sombre ? 0.55 : 0.35} scale={14} blur={2.6} far={4} resolution={256} color={sombre ? '#000000' : '#1b1a17'} />
     </group>
+    </>
   );
 }
 
 /**
  * Logo <RT> en 3D, objet flottant de l'accueil : il oscille, flotte, suit le curseur, fait
- * un tour complet au clic, et on peut l'attraper : lâché de haut, il retombe en rebondissant. Clair en thème sombre, foncé en thème clair. Le rendu est en pause
+ * un tour complet au clic, et on peut l'attraper et le lancer sur tout l'écran : lâché de haut, il retombe en rebondissant. Clair en thème sombre, foncé en thème clair. Le rendu est en pause
  * dès qu'il est masqué ou hors de l'écran, pour garder la page fluide.
  */
 export default function LogoRT3D({ actif, onPret }: { actif: boolean; onPret?: () => void }) {
   const sombre = useSyncExternalStore(suivreTheme, lireSombre, () => true);
   const souris = useRef({ x: 0, y: 0 });
   const conteneur = useRef<HTMLDivElement>(null);
+  const cadre = useRef<Cadre>({ x: 0, y: 0, l: 0, h: 0 });
+  const actifRef = useRef(actif);
+  const entre = useRef(false);
   const [visible, setVisible] = useState(true);
 
-  // Position du curseur sur toute la page : le logo le suit même hors de son cadre
+  useEffect(() => {
+    actifRef.current = actif;
+  }, [actif]);
+
+  // Position du curseur sur toute la page : le logo le suit partout
   useEffect(() => {
     const bouge = (e: PointerEvent) => {
       souris.current = { x: (e.clientX / window.innerWidth) * 2 - 1, y: (e.clientY / window.innerHeight) * 2 - 1 };
@@ -215,46 +360,63 @@ export default function LogoRT3D({ actif, onPret }: { actif: boolean; onPret?: (
     return () => window.removeEventListener('pointermove', bouge);
   }, []);
 
+  // Le cadre de l'accueil donne la place et la taille du logo : on le remesure au redimensionnement
   useEffect(() => {
     const el = conteneur.current;
     if (!el) return;
-    const o = new IntersectionObserver(([e]) => setVisible(e.isIntersecting));
-    o.observe(el);
-    return () => o.disconnect();
+    const mesurer = () => {
+      const r = el.getBoundingClientRect();
+      cadre.current = { x: r.left, y: r.top, l: r.width, h: r.height };
+    };
+    mesurer();
+    const ro = new ResizeObserver(mesurer);
+    ro.observe(el);
+    window.addEventListener('resize', mesurer);
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting));
+    io.observe(el);
+    return () => {
+      ro.disconnect();
+      io.disconnect();
+      window.removeEventListener('resize', mesurer);
+    };
   }, []);
 
   return (
-    // Le canvas déborde largement de son cadre : vers le haut jusqu'à la navigation, vers la
-    // droite jusqu'au texte de présentation, pour attraper et lancer le logo sans qu'il soit
-    // coupé. La caméra recule et se décale d'autant pour le garder à sa place
-    // Masqué (menu ouvert, projet survolé), le canvas ne doit plus capter aucun clic : sa grande
-    // zone recouvre les boutons du menu. React Three Fiber force pointer-events: auto sur son
-    // conteneur, on le neutralise donc explicitement ici et sur le canvas
-    <div
-      ref={conteneur}
-      className="absolute -bottom-[17.5%] -left-[11%] -right-[14%] -top-[107%] touch-none"
-      style={{ pointerEvents: actif ? 'auto' : 'none' }}
-    >
-      <Canvas
-        style={{ pointerEvents: actif ? 'auto' : 'none' }}
-        frameloop={actif && visible ? 'always' : 'never'}
-        dpr={[1, 1.75]}
-        gl={{ antialias: true, alpha: true, powerPreference: 'default' }}
-        camera={{ position: [0.2, 3.63, 29.2], fov: 32 }}
-        // Reflets : un studio généré sur place à la création de la scène (aucun fichier HDR à télécharger)
-        onCreated={({ gl, scene }) => {
-          const pmrem = new THREE.PMREMGenerator(gl);
-          scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-          pmrem.dispose();
-          onPret?.();
-        }}
-      >
-        <ambientLight intensity={0.25} />
-        <directionalLight position={[4, 6, 8]} intensity={sombre ? 1.2 : 1.8} />
-        <directionalLight position={[-6, -2, 4]} intensity={0.5} color={sombre ? '#9fb4ff' : '#ffffff'} />
-        <Logo sombre={sombre} souris={souris} />
-        <ContactShadows position={[0, -2.1, 0]} opacity={sombre ? 0.55 : 0.35} scale={14} blur={2.6} far={4} resolution={256} color={sombre ? '#000000' : '#1b1a17'} />
-      </Canvas>
-    </div>
+    <>
+      {/* Repère invisible à la place du logo dans l'accueil */}
+      <div ref={conteneur} className="pointer-events-none absolute inset-0" />
+      {/* La scène couvre tout l'écran, sous la navigation, sans jamais capter de clic :
+          React Three Fiber force pointer-events: auto, on le neutralise donc sur le canvas */}
+      {createPortal(
+        <div
+          className="pointer-events-none fixed inset-0 z-45 transition-opacity duration-500"
+          style={{ opacity: actif ? 1 : 0 }}
+          aria-hidden="true"
+        >
+          <Canvas
+            style={{ pointerEvents: 'none' }}
+            frameloop={actif && visible ? 'always' : 'never'}
+            dpr={[1, 1.75]}
+            gl={{ antialias: true, alpha: true, powerPreference: 'default' }}
+            camera={{ position: [0, 0, DISTANCE], fov: FOV }}
+            // Reflets : un studio généré sur place à la création de la scène (aucun fichier HDR à télécharger)
+            onCreated={({ gl, scene }) => {
+              const pmrem = new THREE.PMREMGenerator(gl);
+              scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+              pmrem.dispose();
+              onPret?.();
+              // Première apparition après un court délai : le logo tombe du haut de l'écran
+              window.setTimeout(() => {
+                entre.current = true;
+              }, DELAI_ENTREE);
+            }}
+          >
+            <ambientLight intensity={0.25} />
+            <Logo sombre={sombre} souris={souris} cadre={cadre} actif={actifRef} entre={entre} />
+          </Canvas>
+        </div>,
+        document.body,
+      )}
+    </>
   );
 }
