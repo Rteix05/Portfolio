@@ -14,7 +14,7 @@ function LogoPlat() {
 }
 
 // La 3D (Three.js) est chargée à part : elle ne retarde pas l'affichage de l'accueil
-const LogoRT3D = dynamic(() => import('@/components/LogoRT3D'), { ssr: false, loading: LogoPlat });
+const LogoRT3D = dynamic(() => import('@/components/LogoRT3D'), { ssr: false });
 
 const webglDisponible = () => {
   try {
@@ -27,15 +27,11 @@ const webglDisponible = () => {
 
 export default function LogoAccueil({ actif }: { actif: boolean }) {
   const [webgl] = useState(() => (typeof window === 'undefined' ? true : webglDisponible()));
-  const [pret, setPret] = useState(false);
   if (!webgl) return <LogoPlat />;
+  // Le logo 3D entre en tombant du haut de l'écran : aucun logo figé n'est affiché avant
   return (
     <div className="relative h-full w-full" role="img" aria-label="Logo RT de Rafael Teixeira">
-      {/* Le logo plat reste dessous jusqu'à la première image 3D, sans saut */}
-      <div className={`absolute inset-0 transition-opacity duration-500 ${pret ? 'opacity-0' : 'opacity-100'}`}>
-        <LogoPlat />
-      </div>
-      <LogoRT3D actif={actif} onPret={() => setPret(true)} />
+      <LogoRT3D actif={actif} />
     </div>
   );
 }
