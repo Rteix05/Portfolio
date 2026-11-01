@@ -53,6 +53,7 @@ const projects = [
     subtitle: 'Développeur Web Full Stack - UX/UI Designer',
     description: 'Rafael Teixeira — passionné par les interfaces modernes et la 3D interactive.',
     cardImage: rubriques['a-propos'].affiche,
+    cardVideo: rubriques['a-propos'].video,
   },
 ];
 

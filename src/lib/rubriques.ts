@@ -52,7 +52,9 @@ export const rubriques: Record<string, Rubrique> = {
   },
   'a-propos': {
     titre: 'À propos',
-    affiche: '/competences.webp',
+    // Extrait du CV vidéo : l'intro (logo, nom) puis la fiche contact
+    video: '/a-propos-accueil.mp4',
+    affiche: '/a-propos-accueil.webp',
     infos: [
       { label: 'Rôle', valeur: 'Développeur full-stack' },
       { label: 'Formation', valeur: 'BUT MMI · IUT de Troyes' },
