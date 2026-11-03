@@ -70,7 +70,7 @@ const links = [
   },
   { label: 'Email', value: 'contact@rafaelteixeira.fr', href: 'mailto:contact@rafaelteixeira.fr', arrow: '→' },
   { label: 'CV Profil Développeur Fullstack', value: 'Rafael Teixeira', href: '/CV_Rafael_Teixeira.pdf', arrow: '↓' },
-  { label: 'CV Profil UX/UI Designer', value: 'Teixeira Rafael', href: '/CV_Teixeira_Rafael.pdf', arrow: '↓' },
+  { label: 'CV Profil Développeur IA', value: 'Rafael Teixeira', href: '/CV_Rafael_Teixeira_IA.pdf', arrow: '↓' },
 ];
 
 export default function AProposPage() {
