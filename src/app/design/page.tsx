@@ -12,6 +12,7 @@ import Navbar from '@/components/Navbar';
 import HeroProjet from '@/components/HeroProjet';
 import { getTechIcon } from '@/lib/techIcons';
 import CarrouselProjet, { type Slide } from '@/components/CarrouselProjet';
+import CarrouselTelephones, { type ProjetTelephone } from '@/components/CarrouselTelephones';
 import GalerieProjets, { type EcranGalerie, type ProjetGalerie } from '@/components/GalerieProjets';
 import { useLenis } from 'lenis/react';
 
@@ -296,25 +297,60 @@ const projets: Projet[] = [
   },
 ];
 
-// Sections « savoir-faire » : du maquettage à l'intégration, avec les compétences associées
-const slidesMaquettes: Slide[] = [
-  { etape: 'Penderie · Mobile', titre: 'Générateur de tenues', texte: 'Parcours complet, des préférences à la tenue enregistrée.', image: '/design/penderie-tenues.webp', vignette: '/design/penderie-tenues.webp' },
-  { etape: 'Sommeval · Desktop', titre: 'Accueil de la mairie', texte: 'Hiérarchie de l’information et charte graphique appliquée.', image: '/design/sommeval.webp', vignette: '/design/sommeval.webp' },
-  { etape: 'Carb’On · Web', titre: 'Tableau de bord', texte: 'Gamification : score, points et classement entre amis.', image: '/design/carbon.webp', vignette: '/design/carbon.webp' },
-  { etape: 'Jeux de Niche · Prototype', titre: 'Bibliothèque', texte: 'Identité sombre et immersive pour une plateforme de jeux.', image: '/design/niche-bibliotheque.webp', vignette: '/design/niche-bibliotheque.webp' },
-  { etape: 'Jeux de Niche · Prototype', titre: 'Page d’un DLC', texte: 'Fiche produit, avis et parcours d’achat prototypé.', image: '/design/niche-dlc.webp', vignette: '/design/niche-dlc.webp' },
-  { etape: 'Sommeval · Desktop', titre: 'Actualités', texte: 'Grille de contenus pensée pour la mise à jour par la mairie.', image: '/design/sommeval-actus.webp', vignette: '/design/sommeval-actus.webp' },
+// Section « savoir-faire » : le maquettage, avec les compétences associées
+// Section 01 : les maquettes mobiles en éventail, comme dans le CV vidéo
+const projetsTelephone: ProjetTelephone[] = [
+  {
+    nom: 'Penderie',
+    etape: 'App mobile · Expo',
+    texte: 'Garde-robe intelligente : chaque vêtement rangé, retrouvé et associé en tenues.',
+    couleur: '#D31D66',
+    arriere: { src: '/design/penderie-2.webp', alt: 'Penderie — accueil en thème sombre', fond: '#141414', haut: true },
+    // Ajouter un vêtement : son type, ses infos, et il est rangé dans le dressing
+    parcours: {
+      alt: 'Penderie — parcours d’ajout d’un vêtement',
+      w: 393,
+      pad: 30,
+      fond: '#fbf8fb',
+      ecrans: ['/design/parcours/pen-1.webp', '/design/parcours/pen-2.webp', '/design/parcours/pen-3.webp', '/design/parcours/pen-4.webp'],
+      etapes: [{ tap: [288, 187], vers: 1 }, { tap: [75, 249] }, { tap: [197, 699], vers: 2 }, { defile: 396 }, { tap: [197, 776], vers: 3 }],
+    },
+  },
+  {
+    nom: 'Matos',
+    etape: 'Web app mobile · Symfony',
+    texte: 'Emprunter du matériel à l’IUT : une catégorie, un appareil, et c’est réservé.',
+    couleur: '#2563EB',
+    arriere: { src: '/design/matos-mobile-accueil.webp', alt: 'Matos — accueil mobile', fond: '#ffffff', haut: true },
+    // Emprunter un appareil : une catégorie, un appareil, et c'est réservé
+    parcours: {
+      alt: 'Matos — parcours d’emprunt d’un appareil',
+      w: 390,
+      pad: 0,
+      fond: '#ffffff',
+      ecrans: ['/design/parcours/mat-1.webp', '/design/parcours/mat-2.webp', '/design/parcours/mat-3.webp', '/design/parcours/mat-4.webp', '/design/parcours/mat-5.webp'],
+      etapes: [{ tap: [58, 390], vers: 1 }, { tap: [195, 404], vers: 2, fondu: true }, { tap: [194, 785], vers: 3, fondu: true }, { tap: [285, 785], vers: 4 }],
+    },
+  },
+  {
+    nom: 'Carb’On',
+    etape: 'Web app mobile · Vue 3',
+    texte: 'Ajouter une activité et voir tout de suite son empreinte carbone.',
+    couleur: '#16A34A',
+    arriere: { src: '/design/carbon-mobile.webp', alt: 'Carb’On — tableau de bord et score', fond: '#ffffff', haut: true },
+    // Prototype : ajouter une activité et voir tout de suite son empreinte carbone
+    parcours: {
+      alt: 'Carb’On — prototype d’ajout d’une activité',
+      w: 393,
+      pad: 30,
+      fond: '#ffffff',
+      ecrans: ['/design/parcours/car-2.webp', '/design/parcours/car-3.webp', '/design/parcours/car-4.webp', '/design/parcours/car-1.webp'],
+      etapes: [{ tap: [197, 290], vers: 1 }, { tap: [233, 635] }, { tap: [292, 782], vers: 2 }, { tap: [292, 783], vers: 3 }],
+    },
+  },
 ];
 
-const slidesIntegration: Slide[] = [
-  { etape: 'React Native · Expo', titre: 'Penderie', texte: 'Application mobile branchée sur une API Symfony.', video: '/projets/penderie.mp4', vignette: '/projets/penderie.webp', cadrage: 'entier' },
-  { etape: 'React · Symfony', titre: 'Sommeval', texte: 'Site headless intégré depuis la maquette, accessible (RGAA).', image: '/projets/sommeval-image.webp', vignette: '/projets/sommeval-image.webp', lien: { href: 'http://sae301.mmi24b11.mmi-troyes.fr/', label: 'Voir le site' } },
-  { etape: 'Vue 3 · Tailwind', titre: 'Carb’On', texte: 'Application mobile-first avec back-office EasyAdmin.', video: '/projets/carbon.mp4', vignette: '/projets/carbon.webp', lien: { href: 'https://sae401.mmi24b07.mmi-troyes.fr', label: 'Voir le site' } },
-  { etape: 'Symfony · Twig · Tailwind', titre: 'Matos', texte: 'Refonte responsive de l’app de prêt de matériel de l’IUT.', image: '/design/matos-accueil.webp', vignette: '/design/matos-accueil.webp' },
-  { etape: 'Next.js · GSAP · R3F', titre: 'Ce portfolio', texte: 'Animations au scroll, 3D temps réel et transitions entre pages.', video: '/projets/portfolio.mp4', vignette: '/projets/portfolio.webp', lien: { href: 'https://rafaelteixeira.fr', label: 'Voir le site' } },
-];
-
-function SectionSavoirFaire({ numero, surtitre, titre, texte, competences, outils, slides, accent, id }: { numero: string; surtitre: string; titre: string; texte: string; competences: string[]; outils: string[]; slides: Slide[]; accent: string; id: string }) {
+function SectionSavoirFaire({ numero, surtitre, titre, texte, competences, outils, visuel, accent, id }: { numero: string; surtitre: string; titre: string; texte: string; competences: string[]; outils: string[]; visuel: React.ReactNode; accent: string; id: string }) {
   return (
     <section aria-labelledby={`titre-${id}`} className="border-t border-black/10 dark:border-white/10 px-6 md:px-10 py-24 md:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
@@ -348,71 +384,147 @@ function SectionSavoirFaire({ numero, surtitre, titre, texte, competences, outil
           </div>
         </div>
         {/* Carrousel à droite */}
-        <CarrouselProjet id={id} slides={slides} accent={accent} large={false} />
+        {visuel}
       </div>
     </section>
   );
 }
 
-function CarteProjet({ projet, index, addRef }: { projet: Projet; index: number; addRef: (el: HTMLDivElement | null) => void }) {
+// Entrées de la fiche, calées sur les scènes projet du CV vidéo : surtitre qui monte, titre
+// qui sort d'un masque, cases d'infos puis étiquettes qui arrivent l'une après l'autre
+const easeFiche: [number, number, number, number] = [0.76, 0, 0.24, 1];
+const monte = (delai: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeFiche, delay: delai } },
+});
+
+function CarteProjet({ projet, index, total }: { projet: Projet; index: number; total: number }) {
+  const numero = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  const contexte = projet.infos.find((i) => i.label === 'Contexte')?.valeur;
+  const support = projet.infos.find((i) => i.label === 'Support')?.valeur;
+  // Étiquettes de la fiche : l'outil, puis les disciplines du projet
+  const etiquettes = [...(projet.figmaLink ? ['Figma'] : []), ...projet.tags];
+
   return (
-    <div ref={addRef} className={`group ${projet.large ? 'md:col-span-2' : ''}`}>
-      {/* En-tête : — Nom →, lien vers le fichier Figma, et ses étiquettes */}
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-          {projet.figmaLink ? (
-            <a href={projet.figmaLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3" aria-label={`${projet.name} — voir la maquette sur Figma (nouvel onglet)`}>
-              <span className="text-black/30 dark:text-white/30 font-mono text-sm">0{index + 1}</span>
-              <span>— {projet.name}</span>
-              <span aria-hidden="true" className="transition-transform duration-500 ease-out-soft group-hover:translate-x-1.5" style={{ color: projet.accent }}>
-                →
-              </span>
-            </a>
-          ) : (
-            <span className="flex items-center gap-3">
-              <span className="text-black/30 dark:text-white/30 font-mono text-sm">0{index + 1}</span>
-              <span>— {projet.name}</span>
-            </span>
-          )}
-        </h2>
-        <div className="hidden sm:flex flex-wrap justify-end gap-2">
-          {projet.tags.map((tag) => (
-            <span key={tag} className="rounded-full border border-black/15 dark:border-white/20 px-3 py-0.5 text-[11px] uppercase tracking-widest text-black/60 dark:text-white/60">
-              {tag}
-            </span>
-          ))}
+    <article aria-labelledby={`fiche-${projet.id}`}>
+      {/* Repère du projet, comme l'en-tête de la vidéo : numéro à droite et fine ligne de progression */}
+      <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.25em] text-black/45 dark:text-white/45">
+        <span>Projet</span>
+        <span className="tabular-nums">{numero}</span>
+      </div>
+      <div className="relative mt-3 h-px bg-black/10 dark:bg-white/15">
+        <motion.span
+          className="absolute inset-y-0 left-0 block origin-left"
+          style={{ background: projet.accent, width: `${((index + 1) / total) * 100}%` }}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1, transition: { duration: 1.1, ease: easeFiche } }}
+        />
+        <motion.span
+          aria-hidden="true"
+          className="absolute -top-[3px] block h-[7px] w-[7px] -translate-x-1/2"
+          style={{ background: projet.accent, left: `${((index + 1) / total) * 100}%` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { delay: 0.9 } }}
+        />
+      </div>
+
+      {/* Titre à gauche, présentation à droite */}
+      <div className="mt-10 grid gap-8 md:mt-14 md:grid-cols-[1.15fr_1fr] md:items-end md:gap-16">
+        <div>
+          <motion.p {...monte(0.05)} className="font-mono text-[11px] uppercase tracking-[0.25em] text-black/45 md:text-xs dark:text-white/45">
+            {[contexte, support].filter(Boolean).join(' · ')}
+          </motion.p>
+          <h2 id={`fiche-${projet.id}`} className="mt-3 overflow-hidden text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl lg:text-8xl">
+            <motion.span
+              className="block pb-[0.08em]"
+              initial={{ y: '105%' }}
+              animate={{ y: 0, transition: { duration: 0.9, ease: easeFiche, delay: 0.1 } }}
+            >
+              {projet.name}
+            </motion.span>
+          </h2>
         </div>
+        <motion.div {...monte(0.3)}>
+          <p className="text-base leading-relaxed text-black/65 md:text-lg dark:text-white/65">{projet.resume}</p>
+          {projet.figmaLink && (
+            <a
+              href={projet.figmaLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/figma mt-6 inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-transform duration-300 hover:scale-[1.03] dark:bg-white dark:text-black"
+            >
+              Voir la maquette sur Figma
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover/figma:translate-x-0.5 group-hover/figma:-translate-y-0.5">↗</span>
+              <span className="sr-only">(nouvel onglet)</span>
+            </a>
+          )}
+        </motion.div>
       </div>
 
-      {/* Carrousel : maquette, puis intégration et rendu (ou d'autres pages de la maquette) */}
-      <CarrouselProjet
-        id={projet.id}
-        accent={projet.accent}
-        large={projet.large}
-        slides={[
-          {
-            ...projet.premier,
-            etape: projet.premier.etape ?? 'Maquette',
-            composition: projet.maquettes,
-            lien: projet.figmaLink ? { href: projet.figmaLink, label: 'Voir sur Figma' } : undefined,
-          },
-          ...projet.etapes,
-        ]}
-      />
+      {/* Le carrousel posé dans une fenêtre, comme les captures de la vidéo */}
+      <motion.figure {...monte(0.45)} className="mt-10 overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-[0_40px_90px_-40px_rgba(0,0,0,0.55)] md:mt-14 md:rounded-3xl dark:ring-white/10">
+        <div className="flex items-center gap-2 border-b border-black/10 bg-neutral-100 px-4 py-2.5 dark:border-white/10 dark:bg-[#111]" aria-hidden="true">
+          <span className="h-2.5 w-2.5 rounded-full bg-black/15 dark:bg-white/20" />
+          <span className="h-2.5 w-2.5 rounded-full bg-black/15 dark:bg-white/20" />
+          <span className="h-2.5 w-2.5 rounded-full bg-black/15 dark:bg-white/20" />
+          <span className="ml-3 truncate font-mono text-[10px] uppercase tracking-[0.2em] text-black/45 md:text-[11px] dark:text-white/45">
+            Figma · {projet.name}
+          </span>
+        </div>
+        <div className="[&>div]:rounded-none!">
+          <CarrouselProjet
+            id={projet.id}
+            accent={projet.accent}
+            large={projet.large}
+            slides={[
+              {
+                ...projet.premier,
+                etape: projet.premier.etape ?? 'Maquette',
+                composition: projet.maquettes,
+                lien: projet.figmaLink ? { href: projet.figmaLink, label: 'Voir sur Figma' } : undefined,
+              },
+              ...projet.etapes,
+            ]}
+          />
+        </div>
+      </motion.figure>
 
-      {/* Infos en petit, à la manière d'un cartel */}
-      <div className={`mt-6 grid gap-6 ${projet.large ? 'md:grid-cols-[1.4fr_1fr]' : ''}`}>
-        <p className="text-sm md:text-base leading-relaxed text-black/65 dark:text-white/65 max-w-xl">{projet.resume}</p>
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
-          {projet.infos.map(({ label, valeur }) => (
-            <div key={label}>
-              <dt className="uppercase tracking-widest text-black/40 dark:text-white/40">{label}</dt>
-              <dd className="mt-1 text-sm text-black/80 dark:text-white/80">{valeur}</dd>
-            </div>
-          ))}
-        </dl>
+      {/* Infos en cases, comme les chiffres clés de la vidéo, puis les compétences mobilisées */}
+      <dl className="mt-8 grid grid-cols-2 gap-3 md:mt-10 md:grid-cols-4">
+        {projet.infos.map(({ label, valeur }, i) => (
+          <motion.div
+            key={label}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.55, ease: easeFiche, delay: 0.6 + i * 0.07 } }}
+            className="rounded-xl border border-black/10 bg-white/75 p-4 backdrop-blur-sm md:p-5 dark:border-white/10 dark:bg-[#0b0b0b]/75"
+          >
+            <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/45 dark:text-white/45">{label}</dt>
+            <dd className="mt-2 text-sm font-medium leading-snug text-black/85 md:text-base dark:text-white/85">{valeur}</dd>
+          </motion.div>
+        ))}
+      </dl>
+      <div className="mt-8">
+        <motion.p {...monte(0.85)} className="font-mono text-[10px] uppercase tracking-[0.25em] text-black/45 dark:text-white/45">
+          Compétences mobilisées
+        </motion.p>
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {etiquettes.map((e, i) => {
+            const icone = getTechIcon(e);
+            return (
+              <motion.li
+                key={e}
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1, transition: { duration: 0.35, ease: 'backOut', delay: 0.95 + i * 0.08 } }}
+                className="inline-flex items-center gap-2 border border-black/15 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-black/75 dark:border-white/15 dark:text-white/75"
+              >
+                {icone ? <span className="text-sm">{icone}</span> : <span aria-hidden="true" className="h-1.5 w-1.5" style={{ background: projet.accent }} />}
+                {e}
+              </motion.li>
+            );
+          })}
+        </ul>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -481,14 +593,14 @@ export default function DesignPage() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.35, ease: [0.33, 1, 0.68, 1] }}
               >
-                <CarteProjet projet={projet} index={choisi} addRef={() => {}} />
+                <CarteProjet projet={projet} index={choisi} total={projets.length} />
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
       </section>
 
-      {/* SAVOIR-FAIRE : maquettage puis intégration, compétences à gauche, carrousel à droite */}
+      {/* SAVOIR-FAIRE : maquettage, compétences à gauche, téléphones à droite */}
       <SectionSavoirFaire
         id="maquettage"
         numero="01"
@@ -497,19 +609,8 @@ export default function DesignPage() {
         texte="Je pars des besoins des utilisateurs pour construire des parcours clairs, puis je les mets en forme dans Figma jusqu’au prototype cliquable, avec un design system réutilisable."
         competences={['UX research : benchmark, personas, parcours', 'Wireframes et architecture de l’information', 'UI design desktop et mobile', 'Design system : composants, styles, variables', 'Prototypage interactif', 'Chartes graphiques et iconographie']}
         outils={['Figma', 'Prototypage', 'UX Research', 'UI Design']}
-        slides={slidesMaquettes}
+        visuel={<CarrouselTelephones projets={projetsTelephone} />}
         accent="#D31D66"
-      />
-      <SectionSavoirFaire
-        id="integration"
-        numero="02"
-        surtitre="Intégration front-end"
-        titre="De la maquette au code"
-        texte="Je transforme ces maquettes en interfaces réelles, fidèles au pixel près, responsives et accessibles, avec des animations qui servent l’expérience."
-        competences={['Intégration fidèle à la maquette', 'Responsive et mobile-first', 'Composants réutilisables et typés', 'Animations et transitions (GSAP, Framer Motion)', 'Accessibilité (RGAA) et performance', 'Branchement à une API (Symfony, API Platform)']}
-        outils={['Next.js', 'React', 'React Native', 'Expo', 'Vue.js', 'TypeScript', 'TailwindCSS', 'GSAP', 'Framer Motion', 'Symfony']}
-        slides={slidesIntegration}
-        accent="#0EA5E9"
       />
 
       {/* FOOTER NAV + COPYRIGHT */}
