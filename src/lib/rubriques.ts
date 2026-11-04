@@ -21,7 +21,7 @@ export const rubriques: Record<string, Rubrique> = {
   },
   projets: {
     titre: 'Projets',
-    // Montage des meilleurs sites (Sommeval, Matos, E.S.I.C., Montagne de la Prière)
+    // Extraits du CV vidéo : projets, design, compétences et à propos
     video: '/projets-accueil.mp4',
     affiche: '/projets-accueil.webp',
     infos: [
