@@ -350,14 +350,14 @@ const projetsTelephone: ProjetTelephone[] = [
   },
 ];
 
-function SectionSavoirFaire({ numero, surtitre, titre, texte, competences, outils, visuel, accent, id }: { numero: string; surtitre: string; titre: string; texte: string; competences: string[]; outils: string[]; visuel: React.ReactNode; accent: string; id: string }) {
+function SectionSavoirFaire({ surtitre, titre, texte, competences, outils, visuel, accent, id }: { surtitre: string; titre: string; texte: string; competences: string[]; outils: string[]; visuel: React.ReactNode; accent: string; id: string }) {
   return (
     <section aria-labelledby={`titre-${id}`} className="border-t border-black/10 dark:border-white/10 px-6 md:px-10 py-24 md:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
         {/* Texte et compétences à gauche */}
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-black/45 dark:text-white/45">
-            {numero} — {surtitre}
+            {surtitre}
           </p>
           <h2 id={`titre-${id}`} className="mt-4 text-4xl md:text-6xl font-semibold tracking-tight leading-[1.02]">
             {titre}
@@ -603,7 +603,6 @@ export default function DesignPage() {
       {/* SAVOIR-FAIRE : maquettage, compétences à gauche, téléphones à droite */}
       <SectionSavoirFaire
         id="maquettage"
-        numero="01"
         surtitre="Création de maquettes"
         titre="De l’idée à la maquette"
         texte="Je pars des besoins des utilisateurs pour construire des parcours clairs, puis je les mets en forme dans Figma jusqu’au prototype cliquable, avec un design system réutilisable."
