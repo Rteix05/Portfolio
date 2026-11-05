@@ -6,6 +6,7 @@ import { Space_Grotesk } from 'next/font/google';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import WaveMesh from '@/components/WaveMesh';
+import ChiffresCles from '@/components/ChiffresCles';
 import LogoAccueil from '@/components/LogoAccueil';
 import { SiGithub } from 'react-icons/si';
 import { LuMail, LuLinkedin } from 'react-icons/lu';
@@ -246,7 +247,7 @@ export default function Home() {
             Les deux s’effacent dès qu’un projet prend le dessus ou que le menu s’ouvre.
             Sur mobile, les deux blocs s’empilent dans une colonne pour ne jamais se chevaucher ;
             à partir de md, le conteneur disparaît (display: contents) et chacun reprend sa place. */}
-        <div className="absolute left-6 right-6 bottom-20 flex flex-col gap-8 md:contents">
+        <div className="absolute left-6 right-6 bottom-20 flex flex-col gap-5 md:contents">
         {/* Logo <RT> en 3D, objet flottant à la place du nom. Toujours monté (la 3D ne se recharge
             jamais) : il s'efface seulement, et son rendu se met en pause, quand un projet ou le menu prend la place */}
         <motion.div
@@ -267,7 +268,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={fondu}
-              className={`md:absolute md:right-[8vw] md:bottom-[48vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
+              className={`md:absolute md:right-[8vw] md:bottom-[36vh] md:w-[32rem] md:text-right ${spaceGrotesk.className}`}
             >
               <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-black/50 dark:text-white/50 mb-4">
                 <span className="relative flex h-1.5 w-1.5">
@@ -286,9 +287,12 @@ export default function Home() {
                 jusqu’à la mise en ligne et son référencement.
               </p>
 
-              <p className="mt-6 text-[10px] font-mono uppercase tracking-[0.15em] text-black/40 dark:text-white/30 leading-relaxed md:whitespace-nowrap">
+              <p className="mt-6 hidden text-[10px] font-mono uppercase tracking-[0.15em] text-black/40 dark:text-white/30 leading-relaxed md:block md:whitespace-nowrap">
                 React · Next.js · TypeScript · Symfony · Docker · Three.js · SEO
               </p>
+
+              {/* Points clés : le compteur défile à chaque retour de l'accroche */}
+              <ChiffresCles className="mt-6" />
             </motion.div>
           )}
         </AnimatePresence>
