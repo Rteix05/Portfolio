@@ -1,23 +1,61 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLenis } from 'lenis/react';
 import { rubriques, CLE_REPRISE_VIDEO } from '@/lib/rubriques';
 
 const ease: [number, number, number, number] = [0.76, 0, 0.24, 1];
+// Pause après l'arrivée du titre, le temps de le lire, puis durée du défilement qui traverse
+// le média jusqu'au contenu de la page
+const ATTENTE_DEFILEMENT = 500;
+const DUREE_DEFILEMENT = 2.4;
+const douceur = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 /**
  * Ouverture des pages, calée sur metalab.com : la page commence sur le média de la carte
  * en plein écran (là où s'arrête la transition de l'accueil), puis un bandeau descend du
  * haut avec le titre et pousse le média vers le bas ; les infos apparaissent en dernier.
+ * Enfin la page défile d'elle-même à travers le média jusqu'au contenu, si le visiteur n'a
+ * encore touché à rien.
  */
 export default function HeroProjet({ id }: { id: string }) {
   const rubrique = rubriques[id];
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const mediaRef = useRef<HTMLDivElement | null>(null);
+  const lenis = useLenis();
+  const [banniereFinie, setBanniereFinie] = useState(false);
+  // Le visiteur a pris la main (molette, toucher, clavier, clic) : on ne défile plus à sa place
+  const aPrisLaMain = useRef(false);
+
+  useEffect(() => {
+    const prendre = () => {
+      aPrisLaMain.current = true;
+    };
+    const evenements = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const;
+    evenements.forEach((e) => window.addEventListener(e, prendre, { passive: true }));
+    return () => evenements.forEach((e) => window.removeEventListener(e, prendre));
+  }, []);
+
+  // Défilement automatique à travers le média jusqu'au contenu, une fois le bandeau du titre en place
+  useEffect(() => {
+    if (!banniereFinie) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const minuterie = setTimeout(() => {
+      const cible = mediaRef.current;
+      // Page déjà défilée (retour arrière) ou visiteur déjà actif : on le laisse faire
+      if (!cible || aPrisLaMain.current || window.scrollY > 20) return;
+      // Arrivée sous le média : le vrai contenu de la page commence là
+      const bas = cible.getBoundingClientRect().bottom + window.scrollY;
+      if (lenis) lenis.scrollTo(bas, { duration: DUREE_DEFILEMENT, easing: douceur });
+      else window.scrollTo({ top: bas, behavior: 'smooth' });
+    }, ATTENTE_DEFILEMENT);
+    return () => clearTimeout(minuterie);
+  }, [banniereFinie, lenis]);
 
   // Arrivée depuis l'accueil : l'image capturée au clic recouvre la vidéo pendant qu'on la cale
   // au même moment que la carte ; on ne la retire qu'une fois la bonne image affichée par la
@@ -77,6 +115,7 @@ export default function HeroProjet({ id }: { id: string }) {
           ScrollTrigger.refresh();
           // framer-motion (useScroll) ne remesure ses repères qu'au redimensionnement
           window.dispatchEvent(new Event('resize'));
+          setBanniereFinie(true);
         }}
         className="overflow-hidden"
       >
@@ -102,7 +141,7 @@ export default function HeroProjet({ id }: { id: string }) {
 
       {/* Même cadrage que la carte agrandie de l'accueil : plein cadre sur ordinateur,
           vidéo entière sur fond flou sur téléphone */}
-      <div className="relative h-svh w-full overflow-hidden bg-black">
+      <div ref={mediaRef} className="relative h-svh w-full overflow-hidden bg-black">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={rubrique.affiche} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover blur-2xl scale-125 opacity-70 md:hidden" />
         {rubrique.video ? (
