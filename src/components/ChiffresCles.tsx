@@ -13,7 +13,10 @@ const CHIFFRES = [
   { valeur: 20, suffixe: '', label: 'modules CRUD' },
   // Fichiers des dossiers components : Penderie, E.S.I.C., PS5, ce portfolio, MDLP
   { valeur: 99, suffixe: '+', label: 'composants créés' },
-  { valeur: 87, suffixe: '', label: 'litres de café' },
+  // Endpoints d'API : 42 (MDLP) + 30+ (E.S.I.C.) + 25 (Sommeval)
+  { valeur: 90, suffixe: '+', label: 'endpoints API' },
+  // Commits à mon nom dans mes dépôts (Penderie, E.S.I.C., ce portfolio, MDLP…) : 427
+  { valeur: 400, suffixe: '+', label: 'commits' },
 ];
 
 const DUREE = 1400;
